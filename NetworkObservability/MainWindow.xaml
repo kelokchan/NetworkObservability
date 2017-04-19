@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkObservability"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="460.369" Width="777.557" AllowDrop="True" MouseMove="Window_MouseMove">
     <Grid>
-        
+        <Label Content="Drag from here" Background="LavenderBlush"
+       HorizontalAlignment="Center" Margin="325,93,259,195" Padding="10"
+       MouseDown="Label_MouseDown"
+       QueryContinueDrag="Label_QueryContinueDrag" RenderTransformOrigin="1.365,-4.955" Width="186"/>
+        <Label Content="To here" Background="SandyBrown" AllowDrop="True"
+       HorizontalAlignment="Center" Margin="531,93,10,200" Padding="10"
+       Drop="Label_Drop" Width="229"/>
+        <StackPanel HorizontalAlignment="Left" Height="219" Margin="10,10,0,0" VerticalAlignment="Top" Width="344">
+            <Label Name="lblInfo2" Content="Info 2"/>
+        </StackPanel>
     </Grid>
 </Window>
