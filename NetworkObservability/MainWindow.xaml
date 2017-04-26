@@ -7,8 +7,12 @@
         mc:Ignorable="d"
         WindowState="Maximized"
         Title="MainWindow"  AllowDrop="True">
-    <StackPanel>
-        <Menu>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
             <MenuItem Header="_File">
                 <MenuItem Header="_Open"/>
                 <MenuItem Header="_Close"/>
@@ -20,7 +24,7 @@
                 <MenuItem Header="_Arc"/>
             </MenuItem>
         </Menu>
-        <Grid>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -31,8 +35,8 @@
                   Grid.Column="1" ResizeBehavior="PreviousAndNext"
                   Width="5" Background="#FFBCBCBC"/>
             <Label Content="Right" Grid.Column="2" />
-        <Grid Grid.Column="0">
-            <GridSplitter VerticalAlignment="Bottom" Grid.Row="1" Height="5" Background="#FFBCBCBC" HorizontalAlignment="Stretch"/>
+            <Grid Grid.Column="0">
+                <GridSplitter VerticalAlignment="Center" Grid.Row="1" Height="5" Background="#FFBCBCBC" HorizontalAlignment="Stretch"/>
                 <Label Content="Bottom Panel" Grid.Row="2" />
                 <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                     <Canvas Background="AliceBlue" Width="3500" Height="1200">
@@ -45,5 +49,6 @@
                 </Grid.RowDefinitions>
             </Grid>
         </Grid>
-    </StackPanel>
+    </Grid>
+    
 </Window>
