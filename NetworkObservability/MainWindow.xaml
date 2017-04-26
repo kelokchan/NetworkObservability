@@ -5,25 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkObservability"
         mc:Ignorable="d"
-        WindowState="Maximized"
+        WindowState="Normal"
         Title="MainWindow"  AllowDrop="True">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Open"/>
-                <MenuItem Header="_Close"/>
-                <MenuItem Header="_Save"/>
-            </MenuItem>
+        <StackPanel Grid.Row="0">
+            <Menu Padding="5 0 5 0">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open"/>
+                    <MenuItem Header="_Close"/>
+                    <MenuItem Header="_Save"/>
+                </MenuItem>
 
-            <MenuItem Header="_Add">
-                <MenuItem Header="_Node"/>
-                <MenuItem Header="_Arc"/>
-            </MenuItem>
-        </Menu>
+                <MenuItem Header="_Add">
+                    <MenuItem Header="_Node"/>
+                    <MenuItem Header="_Arc"/>
+                </MenuItem>
+            </Menu>
+            <ToolBar>
+                <Button Margin="20 0 0 0" Content="Start" Width="50" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}"/>
+            </ToolBar>
+        </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
@@ -34,26 +40,56 @@
                   VerticalAlignment="Stretch" 
                   Grid.Column="1" ResizeBehavior="PreviousAndNext"
                   Width="5" Background="#FFBCBCBC"/>
-            <Label Content="Right" Grid.Column="2" />
+            <StackPanel Grid.Column="2">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Height="Auto">
+
+                        <!-- Right panel -->
+                        <Label Content="Right" />
+                        <!-- Right panel -->
+
+                    </Grid>
+                </ScrollViewer>
+            </StackPanel>
             <Grid Grid.Column="0">
-                <GridSplitter VerticalAlignment="Center" Grid.Row="1" Height="5" Background="#FFBCBCBC" HorizontalAlignment="Stretch"/>
+                <GridSplitter VerticalAlignment="Center" Grid.Row="1" 
+                              Height="5" Background="#FFBCBCBC" HorizontalAlignment="Stretch"/>
                 <!--<Label Content="Bottom Panel" Grid.Row="2" /> -->
                 <Border Grid.Row="2" Margin="1 0 0 0">
                     <TabControl TabStripPlacement="Bottom" BorderThickness="1,0,1,1" >
                         <TabItem Header="Components">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <Grid Height="500">
-                                    
+
+                                    <!-- Components panel -->
+                                    <Label Content="::: Choose components from here:::" />
+                                    <!-- Code here -->
+                                    <!-- Components panel -->
+
                                 </Grid>
                             </ScrollViewer>
                         </TabItem>
                         <!-- <TabItem Header="Description"></TabItem> -->
-                        <TabItem Header="Log"></TabItem>
+                        <TabItem Header="Log">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <Grid Height="Auto">
+
+                                    <!-- Log panel -->
+                                    <Label Content="> See log messages here..." />
+                                    <!-- Code here -->
+                                    <!-- Log panel -->
+
+                                </Grid>
+                            </ScrollViewer>
+                        </TabItem>
                     </TabControl>
                 </Border>
-                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-                    <Canvas Background="AliceBlue" Width="3500" Height="1200">
-                    </Canvas>
+                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" 
+                              VerticalScrollBarVisibility="Visible">
+                    <!-- Canvas -->
+                    <InkCanvas Background="AliceBlue" Width="3500" Height="1200">
+                    </InkCanvas>
+                    <!-- Canvas -->
                 </ScrollViewer>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*"/>
