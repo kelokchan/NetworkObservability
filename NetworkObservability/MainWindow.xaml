@@ -5,17 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkObservability"
         mc:Ignorable="d"
-        Title="MainWindow" Height="460.369" Width="777.557" AllowDrop="True" MouseMove="Window_MouseMove">
-    <Grid>
-        <Label Content="Drag from here" Background="LavenderBlush"
-       HorizontalAlignment="Center" Margin="325,93,259,195" Padding="10"
-       MouseDown="Label_MouseDown"
-       QueryContinueDrag="Label_QueryContinueDrag" RenderTransformOrigin="1.365,-4.955" Width="186"/>
-        <Label Content="To here" Background="SandyBrown" AllowDrop="True"
-       HorizontalAlignment="Center" Margin="531,93,10,200" Padding="10"
-       Drop="Label_Drop" Width="229"/>
-        <StackPanel HorizontalAlignment="Left" Height="219" Margin="10,10,0,0" VerticalAlignment="Top" Width="344">
-            <Label Name="lblInfo2" Content="Info 2"/>
-        </StackPanel>
-    </Grid>
+        WindowState="Maximized"
+        Title="MainWindow"  AllowDrop="True">  
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter HorizontalAlignment="Right" 
+                  VerticalAlignment="Stretch" 
+                  Grid.Column="1" ResizeBehavior="PreviousAndNext"
+                  Width="5" Background="#FFBCBCBC"/>
+            <Label Content="Right" Grid.Column="2" />
+            <Grid Grid.Column="0">
+            <!-- MenuBar -->
+            <DockPanel Grid.Row="0" Grid.ColumnSpan="3">
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="_File">
+                        <MenuItem Header="_Open"/>
+                        <MenuItem Header="_Close"/>
+                        <MenuItem Header="_Save"/>
+                    </MenuItem>
+
+                    <MenuItem Header="_Add">
+                        <MenuItem Header="_Node"/>
+                        <MenuItem Header="_Arc"/>
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
+            <GridSplitter VerticalAlignment="Bottom" Grid.Row="2" Height="5" Background="#FFBCBCBC" HorizontalAlignment="Stretch"/>
+                <Label Content="Bottom Panel" Grid.Row="3" />
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                    <Canvas Background="AliceBlue" Width="3500" Height="1200">
+                    </Canvas>
+                </ScrollViewer>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+            </Grid>
+        </Grid>
 </Window>
