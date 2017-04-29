@@ -42,7 +42,7 @@ namespace NetworkObservability
 
         private void Label_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {
-
+            //front end
         }
 
         private void Canvas_Drop(object sender, DragEventArgs e)
