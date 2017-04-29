@@ -20,6 +20,11 @@ namespace NetworkObservability
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Stores a reference to the UIElement which the Canvas's context menu currently targets.
+        /// </summary>
+        private UIElement elementForContextMenu;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,29 +37,75 @@ namespace NetworkObservability
             };
         }
 
-        private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        void OnContextMenuOpened(object sender, RoutedEventArgs e)
         {
-            DataObject data = new DataObject(DataFormats.Serializable, "Hi");
-
-            DragDrop.DoDragDrop((DependencyObject)e.Source, data, DragDropEffects.Copy);
 
         }
 
-        private void Label_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
+        /// <summary>
+        /// Handles the Click event of both menu items in the context menu.
+        /// </summary>
+        void OnMenuItemClick(object sender, RoutedEventArgs e)
         {
-            //front end
+            if (this.elementForContextMenu == null)
+                return;
+
+            if (e.Source == this.menuItemBringToFront ||
+                e.Source == this.menuItemSendToBack)
+            {
+                bool bringToFront = e.Source == this.menuItemBringToFront;
+
+                if (bringToFront)
+                    this.canvas.BringToFront(this.elementForContextMenu);
+                else
+                    this.canvas.SendToBack(this.elementForContextMenu);
+            }
+            else
+            {
+                bool canBeDragged = DragCanvas.GetCanBeDragged(this.elementForContextMenu);
+                DragCanvas.SetCanBeDragged(this.elementForContextMenu, !canBeDragged);
+                (e.Source as MenuItem).IsChecked = !canBeDragged;
+            }
+
         }
 
-        private void Canvas_Drop(object sender, DragEventArgs e)
+        private void canvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            String test = (String)e.Data.GetData(DataFormats.Serializable);
-            Point p = Mouse.GetPosition(this);
+            // If the user right-clicks while dragging an element, assume that they want 
+            // to manipulate the z-index of the element being dragged (even if it is  
+            // behind another element at the time).
+            if (this.canvas.ElementBeingDragged != null)
+                this.elementForContextMenu = this.canvas.ElementBeingDragged;
+            else
+                this.elementForContextMenu =
+                    this.canvas.FindCanvasChild(e.Source as DependencyObject);
+        }
 
-            Canvas.SetLeft(canvas, p.X);
-            Canvas.SetTop(canvas, p.Y);
+        private void Image_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DragDrop.DoDragDrop((DependencyObject)sender, ((Image)sender).Source, DragDropEffects.Copy);
+        }
 
+        private void canvas_Drop(object sender, DragEventArgs e)
+        {
+            foreach (var format in e.Data.GetFormats())
+            {
+                ImageSource imageSource = e.Data.GetData(format) as ImageSource;
+                if (imageSource != null)
+                {
+                    Image img = new Image();
+                    img.Height = 50;
+                    img.Width = 50;
+                    img.Source = imageSource;
 
-           // canvas.Children.Add(test);
+                    ((Canvas)sender).Children.Add(img);
+
+                    Point p = e.GetPosition(canvas);
+                    
+                    Canvas.SetLeft(img, p.X);
+                    Canvas.SetTop(img, p.Y);
+                }
+            }
         }
     }
 
