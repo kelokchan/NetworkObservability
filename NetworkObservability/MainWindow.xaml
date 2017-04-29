@@ -52,6 +52,18 @@
                 </ScrollViewer>
             </StackPanel>
             <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" 
+                              VerticalScrollBarVisibility="Visible">
+                    <!-- Canvas -->
+                    <Canvas Name="canvas" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="True" Drop="Canvas_Drop">
+                    </Canvas>
+                    <!-- Canvas -->
+                </ScrollViewer>
                 <GridSplitter VerticalAlignment="Center" Grid.Row="1" 
                               Height="5" Background="#FFBCBCBC" HorizontalAlignment="Stretch"/>
                 <!--<Label Content="Bottom Panel" Grid.Row="2" /> -->
@@ -59,21 +71,20 @@
                     <TabControl TabStripPlacement="Bottom" BorderThickness="1,0,1,1" >
                         <TabItem Header="Components">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <Grid Height="500">
-
-                                    <!-- Components panel -->
-                                    <Label Content="::: Choose components from here:::" />
-                                    <!-- Code here -->
-                                    <!-- Components panel -->
-
-                                </Grid>
+                                <!--<UniformGrid Rows="3" Columns="1" HorizontalAlignment="Left" Height="Auto">
+                                    <Grid Name="Blob">
+                                        <Ellipse Fill="Black" Height="30" Stroke="Black" Width="30"  HorizontalAlignment="Center" Margin="30 10 30 10"/>
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Blob" Margin="0,50,0,0"/>
+                                    </Grid>
+                                </UniformGrid>-->
+                                <Label Content="Test Drag" MouseDown="Label_MouseDown"/>
+                                <!--<ItemsControl ItemsSource="{Binding}" />-->
                             </ScrollViewer>
                         </TabItem>
                         <!-- <TabItem Header="Description"></TabItem> -->
                         <TabItem Header="Log">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <Grid Height="Auto">
-
                                     <!-- Log panel -->
                                     <Label Content="> See log messages here..." />
                                     <!-- Code here -->
@@ -84,18 +95,6 @@
                         </TabItem>
                     </TabControl>
                 </Border>
-                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" 
-                              VerticalScrollBarVisibility="Visible">
-                    <!-- Canvas -->
-                    <InkCanvas Background="AliceBlue" Width="3500" Height="1200">
-                    </InkCanvas>
-                    <!-- Canvas -->
-                </ScrollViewer>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
             </Grid>
         </Grid>
     </Grid>
