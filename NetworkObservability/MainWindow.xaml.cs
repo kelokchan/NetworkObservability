@@ -52,7 +52,7 @@ namespace NetworkObservability
 
             Canvas.SetLeft(canvas, p.X);
             Canvas.SetTop(canvas, p.Y);
-
+             
 
            // canvas.Children.Add(test);
         }
