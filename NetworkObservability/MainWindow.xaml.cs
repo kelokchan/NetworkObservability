@@ -28,18 +28,11 @@ namespace NetworkObservability
         public MainWindow()
         {
             InitializeComponent();
-
-            this.DataContext = new List<DateTime>
-            {
-                DateTime.Now,
-                new DateTime(2013, 02, 13),
-                new DateTime(2004, 12, 31)
-            };
         }
 
         void OnContextMenuOpened(object sender, RoutedEventArgs e)
         {
-
+           
         }
 
         /// <summary>
@@ -60,13 +53,6 @@ namespace NetworkObservability
                 else
                     this.canvas.SendToBack(this.elementForContextMenu);
             }
-            else
-            {
-                bool canBeDragged = DragCanvas.GetCanBeDragged(this.elementForContextMenu);
-                DragCanvas.SetCanBeDragged(this.elementForContextMenu, !canBeDragged);
-                (e.Source as MenuItem).IsChecked = !canBeDragged;
-            }
-
         }
 
         private void canvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
