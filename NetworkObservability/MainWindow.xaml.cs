@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -96,6 +97,21 @@ namespace NetworkObservability
                     Canvas.SetLeft(node, p.X);
                     Canvas.SetTop(node, p.Y);
                 }
+            }
+        }
+
+        private void MenuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            //Open file from anywhere
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = false;
+            fileDialog.Filter = "XML Files|*.xml|Textfiles|*.txt|All Files|*.*";
+            fileDialog.DefaultExt = ".xml";
+            Nullable<bool> dialogOK = fileDialog.ShowDialog();
+
+            if (dialogOK == true)
+            {
+                //TODO 
             }
         }
     }

@@ -17,7 +17,7 @@
         <StackPanel Grid.Row="0">
             <Menu Padding="5 0 5 0">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Open"/>
+                    <MenuItem Header="_Open" Click="MenuOpen_Click"/>
                     <MenuItem Header="_Close"/>
                     <MenuItem Header="_Save"/>
                 </MenuItem>
