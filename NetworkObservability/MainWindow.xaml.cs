@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,13 +106,14 @@ namespace NetworkObservability
             //Open file from anywhere
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Multiselect = false;
-            fileDialog.Filter = "XML Files|*.xml|Textfiles|*.txt|All Files|*.*";
+            fileDialog.Filter = "XML Files(*.xml)|*.xml|Textfiles(*.txt)|*.txt|All Files(*.*)|*.*";
             fileDialog.DefaultExt = ".xml";
-            Nullable<bool> dialogOK = fileDialog.ShowDialog();
+            Nullable<bool> getFile = fileDialog.ShowDialog();
 
-            if (dialogOK == true)
+            if (getFile == true)
             {
                 //TODO 
+                Stream contents = fileDialog.OpenFile();
             }
         }
     }
