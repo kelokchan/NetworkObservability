@@ -68,7 +68,11 @@
                                 <MenuItem Header="Send To Back" Name="menuItemSendToBack" />
                             </ContextMenu>
                         </custom:DragCanvas.ContextMenu>
-
+                        <Line
+    X1="120" Y1="120"
+    X2="250" Y2="250"
+    Stroke="Black"
+    StrokeThickness="4" />
                     </custom:DragCanvas>
                     <!-- Canvas -->
                 </ScrollViewer>
@@ -79,7 +83,7 @@
                     <TabControl TabStripPlacement="Bottom" BorderThickness="1,0,1,1" >
                         <TabItem Header="Components">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <Image Height="50" Width="50" Source="Images/circle.gif" PreviewMouseDown="Image_PreviewMouseDown" VerticalAlignment="Top"/>
+                                <Image Height="50" Width="50" Source="Images/circle.gif" PreviewMouseDown="Image_PreviewMouseDown" VerticalAlignment="Top" Margin="0,20,0,0"/>
                                 <!--<UniformGrid Rows="3" Columns="1" HorizontalAlignment="Left" Height="Auto">
                                     <Grid Name="Blob">
                                         <Ellipse Fill="Black" Height="30" Stroke="Black" Width="30"  HorizontalAlignment="Center" Margin="30 10 30 10"/>
