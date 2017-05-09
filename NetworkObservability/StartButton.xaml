@@ -6,7 +6,7 @@
     <SolidColorBrush x:Key="ToolBarButtonPressedBorder" Color="#90006CD9"/>
     <SolidColorBrush x:Key="ToolBarButtonPressed" Color="#400080FF"/>
     <Style x:Key="ButtonStyleForStart" TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -18,10 +18,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid Height="18.232" Margin="0,0,0,0" Width="68">
+                    <Grid x:Name="grid" Height="18.232" Margin="0,0,0,0" Width="68" Background="#FFEEF5FD">
                         <Grid Height="Auto" Width="Auto">
-                            <Rectangle Fill="AliceBlue" Stroke="Black" StrokeThickness="1" Margin="0"/>
-                            <Path Data="M10.44,0.5 L10.44,10.439 0.5,10.439 z" Fill="#FF149A14" HorizontalAlignment="Left" Margin="2.857,4.632,0,4.633" Stretch="Fill" Stroke="Black" Width="8.968" RenderTransformOrigin="0.5,0.5" StrokeThickness="0" Height="Auto" VerticalAlignment="Stretch" d:LayoutOverrides="HorizontalAlignment, LeftMargin, RightMargin">
+                            <Rectangle x:Name="rectangle" Fill="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" Stroke="Black" StrokeThickness="1" Margin="0"/>
+                            <Path x:Name="path" Data="M10.44,0.5 L10.44,10.439 0.5,10.439 z" Fill="#FF149A14" HorizontalAlignment="Left" Margin="2.857,4.632,0,4.633" Stretch="Fill" Stroke="Black" Width="8.968" RenderTransformOrigin="0.5,0.5" StrokeThickness="0" Height="Auto" VerticalAlignment="Stretch" d:LayoutOverrides="HorizontalAlignment, LeftMargin, RightMargin">
                                 <Path.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -35,11 +35,9 @@
                         </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true"/>
-                        <Trigger Property="IsKeyboardFocused" Value="true"/>
-                        <Trigger Property="IsPressed" Value="true"/>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Fill" TargetName="path" Value="#FF19C319"/>
+                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource ToolBarButtonHover}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
