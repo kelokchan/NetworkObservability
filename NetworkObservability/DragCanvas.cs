@@ -259,6 +259,9 @@ namespace NetworkObservability
             if (this.ElementBeingDragged == null)
                 return;
 
+            // Test get new Node
+
+
             // Get the element's offsets from the four sides of the Canvas.
             double left = Canvas.GetLeft(this.ElementBeingDragged);
             double right = Canvas.GetRight(this.ElementBeingDragged);

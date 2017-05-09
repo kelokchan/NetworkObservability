@@ -80,16 +80,21 @@ namespace NetworkObservability
                 if (imageSource != null)
                 {
                     Image img = new Image();
-                    img.Height = 50;
-                    img.Width = 50;
                     img.Source = imageSource;
-
-                    ((Canvas)sender).Children.Add(img);
 
                     Point p = e.GetPosition(canvas);
                     
-                    Canvas.SetLeft(img, p.X);
-                    Canvas.SetTop(img, p.Y);
+                    Node node = new Node("Test", 1);
+                    node.Height = 50;
+                    node.Width = 50;
+                    node.X = p.X;
+                    node.Y = p.Y;
+                    node.Source = imageSource;
+
+                    ((Canvas)sender).Children.Add(node);
+
+                    Canvas.SetLeft(node, p.X);
+                    Canvas.SetTop(node, p.Y);
                 }
             }
         }
