@@ -28,7 +28,7 @@
                 </MenuItem>
             </Menu>
             <ToolBar>
-                <Button Margin="20 0 0 0" Content="Start" Width="50" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}"/>
+                <Button Margin="20 0 0 0" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}"/>
             </ToolBar>
         </StackPanel>
         <Grid Grid.Row="1">
