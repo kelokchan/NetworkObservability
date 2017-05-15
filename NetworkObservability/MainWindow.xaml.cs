@@ -101,6 +101,9 @@ namespace NetworkObservability
 
                     nodeList.Add(node);
 
+                    nodePropertiesPanel.DataContext = node;
+                    nodePropertiesPanel.Focus();
+
                     Canvas.SetLeft(node, p.X);
                     Canvas.SetTop(node, p.Y);
                 }

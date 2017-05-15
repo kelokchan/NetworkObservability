@@ -57,7 +57,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>-->
-                <Grid Name="nodePropertiesPanel" Margin="2 5 2 2">
+                <Grid x:Name="PropertiesPanel" Margin="2 5 2 2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -82,7 +82,7 @@
                 <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" 
                               VerticalScrollBarVisibility="Visible">
                     <!-- Canvas -->
-                    <custom:DragCanvas x:Name="canvas" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="True" AllowDragging="True" PreviewMouseRightButtonDown="canvas_PreviewMouseRightButtonDown" Drop="canvas_Drop">
+                    <custom:DragCanvas x:Name="MainCanvas" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="True" AllowDragging="True" PreviewMouseRightButtonDown="canvas_PreviewMouseRightButtonDown" Drop="canvas_Drop">
                         <custom:DragCanvas.ContextMenu>
                             <ContextMenu Opened="OnContextMenuOpened"  MenuItem.Click="OnMenuItemClick">
                                 <MenuItem Header="Bring To Front" Name="menuItemBringToFront" />
