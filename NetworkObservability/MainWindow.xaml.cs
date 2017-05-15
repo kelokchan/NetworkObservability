@@ -96,7 +96,7 @@ namespace NetworkObservability
 
                     ((Canvas)sender).Children.Add(node);
 
-                    node.Label = "Node_" + nodeList.Count;
+                    node.Label = "node_" + nodeList.Count;
                     node.ID = nodeList.Count;
 
                     nodeList.Add(node);
