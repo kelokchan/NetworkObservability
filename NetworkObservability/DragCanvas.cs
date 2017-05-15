@@ -262,7 +262,7 @@ namespace NetworkObservability
 
             // Test get new Node
             Node node = (Node) this.elementBeingDragged;
-            NetworkObservability.MainWindow.AppWindow.nodePropertiesPanel.DataContext = node;
+            NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = node;
 
             // Get the element's offsets from the four sides of the Canvas.
             double left = Canvas.GetLeft(this.ElementBeingDragged);

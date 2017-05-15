@@ -44,7 +44,7 @@
             <StackPanel Grid.Column="2">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <!-- Right panel -->
-                        <Label Content="Properties: " BorderThickness="0,0,0,1" BorderBrush="Gray" />
+                        <Label Content="Properties: " BorderThickness="0,0,0,2" BorderBrush="#FFB9B8B8" />
                         <!-- Right panel -->
                 </ScrollViewer>
                 <!--<ListView Height="100" Name="nodePropertiesListView">
@@ -57,7 +57,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>-->
-                <Grid x:Name="PropertiesPanel" Margin="2 5 2 2">
+                <Grid x:Name="PropertiesPanel" Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>

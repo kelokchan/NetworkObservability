@@ -52,9 +52,9 @@ namespace NetworkObservability
                 bool bringToFront = e.Source == this.menuItemBringToFront;
 
                 if (bringToFront)
-                    this.canvas.BringToFront(this.elementForContextMenu);
+                    this.MainCanvas.BringToFront(this.elementForContextMenu);
                 else
-                    this.canvas.SendToBack(this.elementForContextMenu);
+                    this.MainCanvas.SendToBack(this.elementForContextMenu);
             }
         }
 
@@ -63,11 +63,11 @@ namespace NetworkObservability
             // If the user right-clicks while dragging an element, assume that they want 
             // to manipulate the z-index of the element being dragged (even if it is  
             // behind another element at the time).
-            if (this.canvas.ElementBeingDragged != null)
-                this.elementForContextMenu = this.canvas.ElementBeingDragged;
+            if (this.MainCanvas.ElementBeingDragged != null)
+                this.elementForContextMenu = this.MainCanvas.ElementBeingDragged;
             else
                 this.elementForContextMenu =
-                    this.canvas.FindCanvasChild(e.Source as DependencyObject);
+                    this.MainCanvas.FindCanvasChild(e.Source as DependencyObject);
         }
 
         private void Image_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -85,7 +85,7 @@ namespace NetworkObservability
                     Image img = new Image();
                     img.Source = imageSource;
 
-                    Point p = e.GetPosition(canvas);
+                    Point p = e.GetPosition(MainCanvas);
 
                     Node node = new Node();
                     node.Height = 50;
@@ -101,8 +101,8 @@ namespace NetworkObservability
 
                     nodeList.Add(node);
 
-                    nodePropertiesPanel.DataContext = node;
-                    nodePropertiesPanel.Focus();
+                    PropertiesPanel.DataContext = node;
+                    PropertiesPanel.Focus();
 
                     Canvas.SetLeft(node, p.X);
                     Canvas.SetTop(node, p.Y);
