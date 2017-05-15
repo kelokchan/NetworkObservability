@@ -43,14 +43,35 @@
                   Width="5" Background="#FFBCBCBC"/>
             <StackPanel Grid.Column="2">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <Grid Height="Auto">
-
+                    <!-- Right panel -->
+                        <Label Content="Properties: " BorderThickness="0,0,0,1" BorderBrush="Gray" />
                         <!-- Right panel -->
-                        <Label Content="Right" />
-                        <!-- Right panel -->
-
-                    </Grid>
                 </ScrollViewer>
+                <!--<ListView Height="100" Name="nodePropertiesListView">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Name: " FontWeight="Bold"></TextBlock>
+                                <TextBox Text="{Binding x}"></TextBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>-->
+                <Grid Name="nodePropertiesPanel" Margin="2 5 2 2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="ID: "/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0 0 0 5" Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Label: "/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </Grid>
             </StackPanel>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -68,11 +89,6 @@
                                 <MenuItem Header="Send To Back" Name="menuItemSendToBack" />
                             </ContextMenu>
                         </custom:DragCanvas.ContextMenu>
-                        <Line
-    X1="120" Y1="120"
-    X2="250" Y2="250"
-    Stroke="Black"
-    StrokeThickness="4" />
                     </custom:DragCanvas>
                     <!-- Canvas -->
                 </ScrollViewer>
@@ -84,13 +100,6 @@
                         <TabItem Header="Components">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <Image Height="50" Width="50" Source="Images/circle.gif" PreviewMouseDown="Image_PreviewMouseDown" VerticalAlignment="Top" Margin="0,20,0,0"/>
-                                <!--<UniformGrid Rows="3" Columns="1" HorizontalAlignment="Left" Height="Auto">
-                                    <Grid Name="Blob">
-                                        <Ellipse Fill="Black" Height="30" Stroke="Black" Width="30"  HorizontalAlignment="Center" Margin="30 10 30 10"/>
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Blob" Margin="0,50,0,0"/>
-                                    </Grid>
-                                </UniformGrid>-->
-                                <!--<ItemsControl ItemsSource="{Binding}" />-->
                             </ScrollViewer>
                         </TabItem>
                         <!-- <TabItem Header="Description"></TabItem> -->

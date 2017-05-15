@@ -30,6 +30,7 @@ namespace NetworkObservability
         // True if a drag operation is underway, else false.
         private bool isDragInProgress;
 
+
         #endregion // Data
 
         #region Attached Properties
@@ -260,7 +261,8 @@ namespace NetworkObservability
                 return;
 
             // Test get new Node
-
+            Node node = (Node) this.elementBeingDragged;
+            NetworkObservability.MainWindow.AppWindow.nodePropertiesPanel.DataContext = node;
 
             // Get the element's offsets from the four sides of the Canvas.
             double left = Canvas.GetLeft(this.ElementBeingDragged);

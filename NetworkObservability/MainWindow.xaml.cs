@@ -24,10 +24,13 @@ namespace NetworkObservability
         /// Stores a reference to the UIElement which the Canvas's context menu currently targets.
         /// </summary>
         private UIElement elementForContextMenu;
+        public static MainWindow AppWindow;
+        List<Node> nodeList = new List<Node>();
 
         public MainWindow()
         {
             InitializeComponent();
+            AppWindow = this;
         }
 
         void OnContextMenuOpened(object sender, RoutedEventArgs e)
@@ -83,8 +86,8 @@ namespace NetworkObservability
                     img.Source = imageSource;
 
                     Point p = e.GetPosition(canvas);
-                    
-                    Node node = new Node("Test", 1);
+
+                    Node node = new Node();
                     node.Height = 50;
                     node.Width = 50;
                     node.X = p.X;
@@ -92,6 +95,11 @@ namespace NetworkObservability
                     node.Source = imageSource;
 
                     ((Canvas)sender).Children.Add(node);
+
+                    node.Label = "Node_" + nodeList.Count;
+                    node.ID = nodeList.Count;
+
+                    nodeList.Add(node);
 
                     Canvas.SetLeft(node, p.X);
                     Canvas.SetTop(node, p.Y);
