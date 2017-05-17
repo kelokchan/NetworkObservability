@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NetworkObservability.resources;
 
 namespace NetworkObservability
 {
@@ -33,6 +34,13 @@ namespace NetworkObservability
         {
             InitializeComponent();
             AppWindow = this;
+
+            visibleObserver.PreviewMouseDown += Component_MouseDown;
+            invisibleObserver.PreviewMouseDown += Component_MouseDown;
+            visibleNode.PreviewMouseDown += Component_MouseDown;
+            invisibleNode.PreviewMouseDown += Component_MouseDown;
+            endNode.PreviewMouseDown += Component_MouseDown;
+            customNode.PreviewMouseDown += Component_MouseDown;
         }
 
         void OnContextMenuOpened(object sender, RoutedEventArgs e)
@@ -60,11 +68,8 @@ namespace NetworkObservability
             }
         }
 
-        private void canvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // If the user right-clicks while dragging an element, assume that they want 
-            // to manipulate the z-index of the element being dragged (even if it is  
-            // behind another element at the time).
             if (this.MainCanvas.ElementBeingDragged != null)
                 this.elementForContextMenu = this.MainCanvas.ElementBeingDragged;
             else
@@ -72,44 +77,50 @@ namespace NetworkObservability
                     this.MainCanvas.FindCanvasChild(e.Source as DependencyObject);
         }
 
-        private void Image_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+
+        private void Component_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            DragDrop.DoDragDrop((DependencyObject)sender, ((Image)sender).Source, DragDropEffects.Copy);
+            DataObject data = new DataObject();
+            data.SetData("Type", sender.GetType().Name);
+            DragDrop.DoDragDrop((DependencyObject)sender, data, DragDropEffects.Copy);
         }
 
-        private void canvas_Drop(object sender, DragEventArgs e)
+        private void MainCanvas_Drop(object sender, DragEventArgs e)
         {
-            //foreach (var format in e.Data.GetFormats())
-            //{
-            //    ImageSource imageSource = e.Data.GetData(format) as ImageSource;
-            //    if (imageSource != null)
-            //    {
-            //        Image img = new Image();
-            //        img.Source = imageSource;
+            Node node;
 
-            //        Point p = e.GetPosition(MainCanvas);
+            switch (e.Data.GetData("Type"))
+            {
+                case "VisibleObserver":
+                    node = new VisibleObserver();
+                    break;
+                case "InvisibleObserver":
+                    node = new InvisibleObserver();       
+                    break;
+                case "VisibleNode":
+                    node = new VisibleNode();
+                    break;
+                case "InvisibleNode":
+                    node = new InvisibleNode();
+                    break;
+                case "EndNode":
+                    node = new EndNode();
+                    break;
+                case "CustomNode":
+                    node = new CustomNode();
+                    break;
+                default:
+                    throw new Exception("Invalid node type");
+            }
 
-            //        Node node = new Node();
-            //        node.Height = 50;
-            //        node.Width = 50;
-            //        node.X = p.X;
-            //        node.Y = p.Y;
-            //        node.Source = imageSource;
+            node.Label = "node_" + nodeList.Count;
+            node.ID = nodeList.Count;
+            nodeList.Add(node);
 
-            //        ((Canvas)sender).Children.Add(node);
-
-            //        node.Label = "node_" + nodeList.Count;
-            //        node.ID = nodeList.Count;
-
-            //        nodeList.Add(node);
-
-            //        PropertiesPanel.DataContext = node;
-            //        PropertiesPanel.Focus();
-
-            //        Canvas.SetLeft(node, p.X);
-            //        Canvas.SetTop(node, p.Y);
-            //    }
-            //}
+            ((Canvas)sender).Children.Add(node);
+            Point p = e.GetPosition(MainCanvas);
+            Canvas.SetLeft(node, p.X);
+            Canvas.SetTop(node, p.Y);
         }
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)

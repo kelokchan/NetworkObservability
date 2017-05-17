@@ -1,0 +1,37 @@
+﻿<base:Node x:Class="NetworkObservability.resources.EndNode"
+             xmlns:base="clr-namespace:NetworkObservability"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid ToolTip="An end node that is only connected one and only one node!">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Margin="0 0 0 15">
+            <Button.Template>
+                <ControlTemplate>
+                    <Rectangle Height="20" Width="20" RadiusX="5" RadiusY="5" HorizontalAlignment="Center"
+                               Stroke="Beige" StrokeThickness="5"
+                               Margin="0">
+                        <Rectangle.Style>
+                            <Style TargetType="{x:Type Rectangle}">
+                                <Setter Property="Fill" Value="Green" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Fill" Value="LightGreen" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Rectangle.Style>
+                    </Rectangle>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <TextBlock Grid.Row="1" Text="{Binding Label}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="11" VerticalAlignment="Top"/>
+    </Grid>
+</base:Node>

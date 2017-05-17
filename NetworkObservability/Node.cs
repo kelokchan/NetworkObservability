@@ -10,17 +10,17 @@ using System.Windows.Media;
 
 namespace NetworkObservability
 {
-    class Node : Button, INotifyPropertyChanged
+    public class Node : UserControl, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;    
+        public event PropertyChangedEventHandler PropertyChanged;
         private string _Label;
         private int _ID;
         private double _X;
         private double _Y;
 
-        public Node()
+        protected Node()
         {
-
+            
         }
 
         public string Label
@@ -50,11 +50,7 @@ namespace NetworkObservability
 
         protected void OnPropertyChanged(string key)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(key));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));
         }
     }
 }

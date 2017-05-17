@@ -7,10 +7,10 @@
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="resources/StartButton.xaml"/>
-                <ResourceDictionary Source="resources/PauseButton.xaml"/>
-                <ResourceDictionary Source="resources/StopButton.xaml"/>
-                <ResourceDictionary Source="resources/DeleteButton.xaml"/>
+                <ResourceDictionary Source="resources/Toolbar/StartButton.xaml"/>
+                <ResourceDictionary Source="resources/Toolbar/PauseButton.xaml"/>
+                <ResourceDictionary Source="resources/Toolbar/StopButton.xaml"/>
+                <ResourceDictionary Source="resources/Toolbar/DeleteButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

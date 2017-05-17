@@ -13,15 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NetworkObservability
+namespace NetworkObservability.resources
 {
     /// <summary>
     /// Interaction logic for VisibleNode.xaml
     /// </summary>
-    public partial class VisibleNode : UserControl
+    public partial class VisibleNode : Node
     {
         public VisibleNode()
         {
+            base.Label = "Visible Node";
             InitializeComponent();
         }
     }
