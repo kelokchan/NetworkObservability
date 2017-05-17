@@ -17,7 +17,7 @@
         <StackPanel Grid.Row="0">
             <Menu Padding="5 0 5 0">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Open"/>
+                    <MenuItem Header="_Open" Click="MenuOpen_Click"/>
                     <MenuItem Header="_Close"/>
                     <MenuItem Header="_Save"/>
                 </MenuItem>
@@ -27,9 +27,40 @@
                     <MenuItem Header="_Arc"/>
                 </MenuItem>
             </Menu>
-            <ToolBar>
-                <Button Margin="20 0 0 0" Content="Start" Width="50" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}"/>
-            </ToolBar>
+
+            <!-- Grid to place two toolbars -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <!-- Left toolbar -->
+                <ToolBar Grid.Column="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="5 0 0 0" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}"/>
+                        <Button x:Name="___Button___Pause_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStylePause}" IsEnabled="False" />
+                        <Button x:Name="___Button___Stop_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleStop}" IsEnabled="False" />
+                    </StackPanel>
+                </ToolBar>
+                <!-- Left toolbar -->
+                <!-- Right toolbar -->
+                <ToolBar Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                    <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                        <Label Margin="0 0 0 0" Content="Arc type:" />
+                        <ComboBox Margin="3 0 0 0" Width="150" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" BorderBrush="#00ACACAC" >
+                            <ComboBoxItem Content="Undirected lines" Selector.IsSelected="True" Background="{DynamicResource ToolBarButtonPressed}" />
+                            <ComboBoxItem Content="Directed lines"/>
+                        </ComboBox>
+                        <!-- Add the image label for the arrows here! -->
+                        <Label Margin="2 0 0 0" Width="150" />
+                        <Button x:Name="___Button___Delete_" Margin="10 0 0 0" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleDelete}" />
+                    </StackPanel>
+                </ToolBar>
+                <!-- Right toolbar -->
+            </Grid>
+            <!-- Grid to place two toolbars -->
+
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -43,35 +74,14 @@
                   Width="5" Background="#FFBCBCBC"/>
             <StackPanel Grid.Column="2">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <!-- Right panel -->
-                        <Label Content="Properties: " BorderThickness="0,0,0,2" BorderBrush="#FFB9B8B8" />
+                    <Grid Height="Auto">
+
                         <!-- Right panel -->
+                        <Label Content="Right" />
+                        <!-- Right panel -->
+
+                    </Grid>
                 </ScrollViewer>
-                <!--<ListView Height="100" Name="nodePropertiesListView">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Name: " FontWeight="Bold"></TextBlock>
-                                <TextBox Text="{Binding x}"></TextBox>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>-->
-                <Grid x:Name="PropertiesPanel" Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="ID: "/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0 0 0 5" Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Label: "/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                </Grid>
             </StackPanel>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -82,13 +92,18 @@
                 <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" 
                               VerticalScrollBarVisibility="Visible">
                     <!-- Canvas -->
-                    <custom:DragCanvas x:Name="MainCanvas" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="True" AllowDragging="True" PreviewMouseRightButtonDown="canvas_PreviewMouseRightButtonDown" Drop="canvas_Drop">
+                    <custom:DragCanvas x:Name="canvas" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="True" AllowDragging="True" PreviewMouseRightButtonDown="canvas_PreviewMouseRightButtonDown" Drop="canvas_Drop">
                         <custom:DragCanvas.ContextMenu>
                             <ContextMenu Opened="OnContextMenuOpened"  MenuItem.Click="OnMenuItemClick">
                                 <MenuItem Header="Bring To Front" Name="menuItemBringToFront" />
                                 <MenuItem Header="Send To Back" Name="menuItemSendToBack" />
                             </ContextMenu>
                         </custom:DragCanvas.ContextMenu>
+                        <Line
+    X1="120" Y1="120"
+    X2="250" Y2="250"
+    Stroke="Black"
+    StrokeThickness="4" />
                     </custom:DragCanvas>
                     <!-- Canvas -->
                 </ScrollViewer>
@@ -97,9 +112,207 @@
                 <!--<Label Content="Bottom Panel" Grid.Row="2" /> -->
                 <Border Grid.Row="2" Margin="1 0 0 0">
                     <TabControl TabStripPlacement="Bottom" BorderThickness="1,0,1,1" >
-                        <TabItem Header="Components">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <Image Height="50" Width="50" Source="Images/circle.gif" PreviewMouseDown="Image_PreviewMouseDown" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                        <TabItem Header="Components" >
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0" Padding="0">
+                                <!--<Image Height="50" Width="50" Source="Images/circle.gif" PreviewMouseDown="Image_PreviewMouseDown" VerticalAlignment="Top" Margin="0,20,0,0"/> -->
+                                <!--<UniformGrid Rows="3" Columns="1" HorizontalAlignment="Left" Height="Auto">
+                                    <Grid Name="Blob">
+                                        <Ellipse Fill="Black" Height="30" Stroke="Black" Width="30"  HorizontalAlignment="Center" Margin="30 10 30 10"/>
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Blob" Margin="0,50,0,0"/>
+                                    </Grid>
+                                </UniformGrid>-->
+                                <!--<ItemsControl ItemsSource="{Binding}" />-->
+
+                                <UniformGrid Columns="7" Background="LightBlue">
+                                    <!-- Visible Observer -->
+                                    <StackPanel Height="100" Width="150" 
+                                                ToolTip="An active observer that can also be a node in the network">
+                                        <Button Height="70" Width="80">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <StackPanel Margin="0">
+                                                        <Ellipse Height="30" Width="30" StrokeThickness="5" Stroke="BlueViolet"
+                                                                 Margin="20 20 20 0">
+                                                            <Ellipse.Style>
+                                                                <Style TargetType="{x:Type Ellipse}">
+                                                                    <Setter Property="Fill" Value="#FF5050" />
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Fill" Value="#FF0000" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Ellipse.Style>
+                                                        </Ellipse>
+                                                        <Label Content="noName" Height="15" Padding="0" Visibility="Hidden" />
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <Label Content="Visible observer" Height="15" Padding="0"
+                                               FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                    <!-- Visible Observer -->
+
+                                    <!-- Invisible Observer -->
+                                    <StackPanel Height="100" Width="150" 
+                                                ToolTip="A passive observer that does not involve itself in the network and serves the rule of a pure observer">
+                                        <Button Height="70" Width="80">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <StackPanel Margin="0">
+                                                        <Ellipse Height="30" Width="30" 
+                                                                 StrokeThickness="5" Stroke="Beige"
+                                                                 Margin="20 20 20 0">
+                                                            <Ellipse.Style>
+                                                                <Style TargetType="{x:Type Ellipse}">
+                                                                    <Setter Property="Fill" Value="#FF5050" />
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Fill" Value="#FF0000" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Ellipse.Style>
+                                                        </Ellipse>
+                                                        <Label Content="noName" Height="15" Padding="0" Visibility="Hidden" />
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <Label Content="Invisible observer" Height="15" Padding="0"
+                                               FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                    <!-- Invisible Observer -->
+
+                                    <!-- Visible node -->
+                                    <StackPanel Height="100" Width="150"
+                                                ToolTip="A node that sees what is being passed around in the network">
+                                        <Button Height="70" Width="80">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <StackPanel Margin="0">
+                                                        <Rectangle Height="20" Width="20" 
+                                                                 Margin="40 25 20 0">
+                                                            <Rectangle.RenderTransform>
+                                                                <RotateTransform Angle="45" />
+                                                            </Rectangle.RenderTransform>
+                                                            <Rectangle.Style>
+                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                    <Setter Property="Fill" Value="Black" />
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Fill" Value="#444444" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Rectangle.Style>
+                                                        </Rectangle>
+                                                        <Label Content="noName" Height="15" Padding="0" Visibility="Hidden" />
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <Label Content="Visible node" Height="15" Padding="0"
+                                               FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                    <!-- Visible node -->
+
+                                    <!-- Invisible node -->
+                                    <StackPanel Height="100" Width="150"
+                                                ToolTip="A node that does not see what is being passed around.">
+                                        <Button Height="70" Width="80">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <StackPanel Margin="0">
+                                                        <Rectangle Height="20" Width="20" Stroke="Beige" StrokeThickness="5"
+                                                                 Margin="40 25 20 0">
+                                                            <Rectangle.RenderTransform>
+                                                                <RotateTransform Angle="45" />
+                                                            </Rectangle.RenderTransform>
+                                                            <Rectangle.Style>
+                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                    <Setter Property="Fill" Value="Black" />
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Fill" Value="#444444" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Rectangle.Style>
+                                                        </Rectangle>
+                                                        <Label Content="noName" Height="15" Padding="0" Visibility="Hidden" />
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <Label Content="Invisible node" Height="15" Padding="0"
+                                               FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                    <!-- Invisible node -->
+
+                                    <!-- End node -->
+                                    <StackPanel Height="100" Width="150"
+                                                ToolTip="An end node that is only connected one and only one node!">
+                                        <Button Height="70" Width="80">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <StackPanel Margin="0">
+                                                        <Rectangle Height="20" Width="20" RadiusX="5" RadiusY="5"
+                                                                   Stroke="Beige" StrokeThickness="5"
+                                                                 Margin="20 25 20 0">
+                                                            <Rectangle.Style>
+                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                    <Setter Property="Fill" Value="Green" />
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Fill" Value="LightGreen" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Rectangle.Style>
+                                                        </Rectangle>
+                                                        <Label Content="noName" Height="15" Padding="0" Visibility="Hidden" />
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <Label Content="End node" Height="15" Padding="0"
+                                               FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                    <!-- End node -->
+
+                                    <!-- Custom node -->
+                                    <StackPanel Height="100" Width="150" 
+                                                ToolTip="Select this component if you'd like to specify certain attributes">
+                                        <Button Height="70" Width="80" >
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <StackPanel Margin="0">
+                                                        <Rectangle Height="20" Width="20"
+                                                                 Margin="20 25 20 0">
+                                                            <Rectangle.Style>
+                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                    <Setter Property="Fill" Value="Maroon" />
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Fill" Value="DarkMagenta" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Rectangle.Style>
+                                                        </Rectangle>
+                                                        <Label Content="noName" Height="15" Padding="0" Visibility="Hidden" />
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <Label Content="Custom node" Height="15" Padding="0"
+                                               FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                    <!-- Custom node -->
+
+                                </UniformGrid>
                             </ScrollViewer>
                         </TabItem>
                         <!-- <TabItem Header="Description"></TabItem> -->
