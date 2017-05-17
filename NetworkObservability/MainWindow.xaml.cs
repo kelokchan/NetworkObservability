@@ -79,37 +79,37 @@ namespace NetworkObservability
 
         private void canvas_Drop(object sender, DragEventArgs e)
         {
-            foreach (var format in e.Data.GetFormats())
-            {
-                ImageSource imageSource = e.Data.GetData(format) as ImageSource;
-                if (imageSource != null)
-                {
-                    Image img = new Image();
-                    img.Source = imageSource;
+            //foreach (var format in e.Data.GetFormats())
+            //{
+            //    ImageSource imageSource = e.Data.GetData(format) as ImageSource;
+            //    if (imageSource != null)
+            //    {
+            //        Image img = new Image();
+            //        img.Source = imageSource;
 
-                    Point p = e.GetPosition(MainCanvas);
+            //        Point p = e.GetPosition(MainCanvas);
 
-                    Node node = new Node();
-                    node.Height = 50;
-                    node.Width = 50;
-                    node.X = p.X;
-                    node.Y = p.Y;
-                    node.Source = imageSource;
+            //        Node node = new Node();
+            //        node.Height = 50;
+            //        node.Width = 50;
+            //        node.X = p.X;
+            //        node.Y = p.Y;
+            //        node.Source = imageSource;
 
-                    ((Canvas)sender).Children.Add(node);
+            //        ((Canvas)sender).Children.Add(node);
 
-                    node.Label = "node_" + nodeList.Count;
-                    node.ID = nodeList.Count;
+            //        node.Label = "node_" + nodeList.Count;
+            //        node.ID = nodeList.Count;
 
-                    nodeList.Add(node);
+            //        nodeList.Add(node);
 
-                    PropertiesPanel.DataContext = node;
-                    PropertiesPanel.Focus();
+            //        PropertiesPanel.DataContext = node;
+            //        PropertiesPanel.Focus();
 
-                    Canvas.SetLeft(node, p.X);
-                    Canvas.SetTop(node, p.Y);
-                }
-            }
+            //        Canvas.SetLeft(node, p.X);
+            //        Canvas.SetTop(node, p.Y);
+            //    }
+            //}
         }
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)

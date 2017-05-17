@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace NetworkObservability
 {
-    class Node : Image, INotifyPropertyChanged
+    class Node : Button, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;    
         private string _Label;
