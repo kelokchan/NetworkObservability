@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NetworkObservability.core
+namespace NetworkObservability
 {
-    [Serializable]
-    internal class OutOFNodeInterfaces : Exception
+    namespace Core
     {
-        public OutOFNodeInterfaces()
+        [Serializable]
+        public class OutOFNodeInterfacesException : Exception
         {
-        }
+            public OutOFNodeInterfacesException()
+            {
+            }
 
-        public OutOFNodeInterfaces(string message) : base(message)
-        {
-        }
+            public OutOFNodeInterfacesException(string message) : base(message)
+            {
+            }
 
-        public OutOFNodeInterfaces(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+            public OutOFNodeInterfacesException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
 
-        protected OutOFNodeInterfaces(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
+            protected OutOFNodeInterfacesException(SerializationInfo info, StreamingContext context) : base(info, context)
+            {
+            }
         }
     }
 }

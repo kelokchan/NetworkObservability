@@ -5,126 +5,194 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetworkObservability.core
+namespace NetworkObservability
 {
-    class Graph : IEnumerable<Node>
+    namespace Core
     {
-        private List<Node> nodes;
-        private List<Arc> arcs;
-
-        public Graph(Node firstNode)
+        public class Graph : IEnumerable<Node>
         {
-            nodes = new List<Node>();
-            nodes.Add(firstNode);
-        }
+            private HashSet<Node> nodes;
+            private HashSet<Arc> arcs;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<Node>)nodes).GetEnumerator();
-        }
-
-        IEnumerator<Node> IEnumerable<Node>.GetEnumerator()
-        {
-            return new GraphEnum(nodes);
-        }
-
-        private class GraphEnum : IEnumerator<Node>
-        {
-            private Int32 position;
-            private IList<Node> nodes;
-
-            public GraphEnum(IList<Node> nodes)
+            public Graph(Node firstNode)
             {
-                this.nodes = nodes;
-                Reset();
+				nodes = new HashSet<Node> { firstNode };
+			}
+
+            public void Add(Node @from, Node @to, Arc through, bool blockLeft = false, bool blockRight = false, bool blocked = false)
+            {
+                through.AttachTo(@from, @to, blockLeft, blockRight, blocked);
             }
 
-            public bool MoveNext()
+            /// <summary>
+            /// This method returns a <see cref="IEnumerable{Node}"/> that
+            /// iterate in Breadth First sequence.
+            /// </summary>
+            public IEnumerable<Node> BreadthFirstTraversal()
             {
-                return ++position < nodes.Count;
-            }
+                var explored = new HashSet<Node>();
+                var frontier = new Queue<Node>();
+                frontier.Enqueue(nodes.First());
 
-            public void Reset()
-            {
-                position = -1;
-            }
-
-            public Node Current
-            {
-                get
+                while (frontier.Count != 0)
                 {
-                    try
+                    var current = frontier.Dequeue();
+                    yield return current;
+
+                    explored.Add(current);
+                    var childrenLink = current.GetAdjacencies;
+                    foreach (var childLink in childrenLink)
                     {
-                        return nodes[position];
-                    }
-                    catch (IndexOutOfRangeException e)
-                    {
-                        throw new InvalidOperationException();
+                        var child = childLink.AnotherEnd(current);
+                        if (!explored.Contains(child))
+                            frontier.Enqueue(child);
                     }
                 }
+
             }
 
-            object IEnumerator.Current => throw new NotImplementedException();
-
-            #region IDisposable Support
-            private bool disposedValue = false; // To detect redundant calls
-
-            protected virtual void Dispose(bool disposing)
+            /// <summary>
+            /// This method returns a <see cref="IEnumerable{Node}"/> that
+            /// iterate in Depth First sequence.
+            /// </summary>
+            /// <returns></returns>
+            public IEnumerable<Node> DepthFirstTraversal()
             {
-                if (!disposedValue)
+                var explored = new HashSet<Node>();
+                var frontier = new Stack<Node>();
+                frontier.Push(nodes.First());
+                
+                while (frontier.Count != 0)
                 {
-                    if (disposing)
+                    var current = frontier.Pop();
+                    yield return current;
+
+                    explored.Add(current);
+                    var childrenLink = current.GetAdjacencies;
+                    foreach (var childLink in childrenLink)
                     {
-                        // TODO: dispose managed state (managed objects).
-                    }
-
-                    // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                    nodes = null;
-                    disposedValue = true;
-                }
-            }
-
-            // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-            // ~GraphEnum() {
-            //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            //   Dispose(false);
-            // }
-
-            // This code added to correctly implement the disposable pattern.
-            public void Dispose()
-            {
-                // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-                Dispose(true);
-                // TODO: uncomment the following line if the finalizer is overridden above.
-                GC.SuppressFinalize(this);
-            }
-            #endregion
-        }
-
-        public static bool BFS(Node root, Node target)
-        {
-            var explored = new HashSet<Node>();
-            var frontier = new Queue<Node>();
-            frontier.Enqueue(root);
-
-            while (frontier.Count != 0)
-            {
-                var node = frontier.Dequeue();
-                if (node.Equals(target))
-                {
-                    return true;
-                }
-                else
-                {
-                    explored.Add(node);
-                    foreach (var child in node.GetAdjacencies)
-                    {
-                        frontier.Enqueue(child);
+                        var child = childLink.AnotherEnd(current);
+                        if (!explored.Contains(child))
+                            frontier.Push(child);
                     }
                 }
             }
-            return false;
+
+            public Node BreadthFirstSearchByName(String name)
+            {
+                var explored = new HashSet<Node>(new NodeNameComparer());
+                var frontier = new Queue<Node>();
+                frontier.Enqueue(nodes.First());
+
+                while (frontier.Count != 0)
+                {
+                    var current = frontier.Dequeue();
+                    explored.Add(current);
+                    if (current.Name == name)
+                    {
+                        return current;
+                    }
+                    else
+                    {
+                        var childrenLink = current.GetAdjacencies;
+                        foreach (var childLink in childrenLink)
+                        {
+                            var child = childLink.AnotherEnd(current);
+                            if (!explored.Contains(child))
+                                frontier.Enqueue(child);
+                        }
+                    }
+                }
+
+                return null;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return (nodes as IEnumerable<Node>).GetEnumerator();
+            }
+
+            IEnumerator<Node> IEnumerable<Node>.GetEnumerator()
+            {
+                return new GraphEnum(nodes.ToList());
+            }
+
+            /// <summary>
+            /// This class is a helper class of <see cref="Graph"/> to enumerate through
+            /// all the nodes.
+            /// </summary>
+            private class GraphEnum : IEnumerator<Node>
+            {
+                private Int32 position;
+                private IList<Node> nodes;
+
+                public GraphEnum(IList<Node> nodes)
+                {
+                    this.nodes = nodes;
+                    Reset();
+                }
+
+                public bool MoveNext()
+                {
+                    return ++position < nodes.Count;
+                }
+
+                public void Reset()
+                {
+                    position = -1;
+                }
+
+                public Node Current
+                {
+                    get
+                    {
+                        try
+                        {
+                            return nodes[position];
+                        }
+                        catch (IndexOutOfRangeException e)
+                        {
+                            throw new InvalidOperationException();
+                        }
+                    }
+                }
+
+                object IEnumerator.Current => throw new NotImplementedException();
+
+                #region IDisposable Support
+                private bool disposedValue = false; // To detect redundant calls
+
+                protected virtual void Dispose(bool disposing)
+                {
+                    if (!disposedValue)
+                    {
+                        if (disposing)
+                        {
+                            // TODO: dispose managed state (managed objects).
+                        }
+
+                        // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                        nodes = null;
+                        disposedValue = true;
+                    }
+                }
+
+                // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+                // ~GraphEnum() {
+                //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+                //   Dispose(false);
+                // }
+
+                // This code added to correctly implement the disposable pattern.
+                public void Dispose()
+                {
+                    // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+                    Dispose(true);
+                    // TODO: uncomment the following line if the finalizer is overridden above.
+                    GC.SuppressFinalize(this);
+                }
+                #endregion
+            }
         }
     }
-
 }

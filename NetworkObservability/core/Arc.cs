@@ -4,68 +4,133 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetworkObservability.core
+namespace NetworkObservability
 {
-    class Arc
+    namespace Core
     {
-        private Node[] nodePoints;
-        private static UInt32 iDCounter = 0;
-        public static int WEIGHT = 1;
-        private String ID;
-
-        public Arc(Node a, Node b)
+        public class Arc
         {
-            nodePoints = new Node[2];
-            this.ID = String.Format("ARC{0:X8}", iDCounter++);
-            nodePoints[0] = a;
-            nodePoints[1] = b;
-        }
+			protected bool blockLeftFlow, blockRightFlow;
+            protected Node leftNode, rightNode;
 
-        public Arc()
-        {
-            nodePoints = null;
-        }
+            private readonly String id;
+            private static UInt32 iDCounter = 0;
+            public static int WEIGHT = 1;
 
-        public bool attachTo(Node a, Node b)
-        {
-            try {
-                if (nodePoints == null)
-                {
-                    nodePoints = new Node[2];
-                    nodePoints[0] = a;
-                    a.addArc(this);
-                    nodePoints[1] = b;
-                    b.addArc(this);
-                }
-                nodePoints[0] = a;
-                a.addArc(this);
-                nodePoints[1] = b;
-                b.addArc(this);
-                return true;
-            } catch(Exception e) {
-                /// TODO
-                /// handling exceptiion
-                /// by sending a message to message queue and 
-                /// the frontend should display the message
-                return false;
+
+            // Constructors
+
+            public Arc(Node a, Node b)
+            {
+                id = String.Format("ARC{0:X8}", iDCounter++);
+                Name = String.Copy(id);
+				leftNode = a;
+				rightNode = b;
+				Blocked = false;
             }
 
-        }
+            public Arc()
+            {
+				leftNode = null; rightNode = null;
+                id = String.Format("ARC{0:X8}", iDCounter++);
+                Name = String.Copy(id);
+				Blocked = false;
+            }
 
-        public void detach()
-        {
-            nodePoints[0].disconnect(this);
-            nodePoints[1].disconnect(this);
-        }
+            // Properties
 
-        public override bool Equals(object arc)
-        {
-            return ((Arc)arc).ID.Equals(this.ID);
-        }
+            public String ID
+            {
+                get { return id; }
+            }
 
-        public override int GetHashCode()
-        {
-            return this.ID.GetHashCode();
+            public String Name
+            {
+                get; set;
+            }
+
+            public IList<Node> Nodes
+            {
+                get
+                {
+                    return Array.AsReadOnly(new Node[] { leftNode, rightNode });
+                }
+            }
+
+            // Public member methods
+
+			/// <summary>
+			/// This method will link <see cref="Node"/> a and <see cref="Node"/> b with this <see cref="Arc"/>.
+			/// </summary>
+			/// <param name="a"><see cref="Node"/>a</param>
+			/// <param name="b"><see cref="Node"/>b</param>
+			/// <exception cref="OutOFNodeInterfacesException"></exception>
+            public void AttachTo(Node a, Node b, bool blockLeft, bool blockRight, bool blocked)
+            {
+				Blocked = blocked;
+				if (leftNode == null && rightNode == null)
+				{
+					leftNode = a;
+					leftNode.AddArc(this);
+					blockLeftFlow = blockLeft;
+					rightNode = b;
+					rightNode.AddArc(this);
+					blockRightFlow = blockRight;
+				}
+				else
+				{
+					leftNode.Disconnect(this);
+					leftNode = a;
+					leftNode.AddArc(this);
+					rightNode.Disconnect(this);
+					rightNode = b;
+					rightNode.AddArc(this);
+				}
+            }
+
+            public void Detach()
+            {
+                leftNode.Disconnect(this);
+                rightNode.Disconnect(this);
+				leftNode = rightNode = null;
+            }
+
+            public Node AnotherEnd(Node node)
+            {
+				if (!Blocked)
+				{
+					if (leftNode.Equals(node))
+					{
+						return blockLeftFlow ? null : rightNode;
+					}
+					else
+					{
+						return blockRightFlow ? null : leftNode;
+					}
+				}
+				else
+				{
+					return null;
+				}
+            }
+
+			public bool Blocked
+			{
+				get;
+				set;
+			}
+
+            // Equatable overriden methods
+
+            public override bool Equals(object arc)
+            {
+                return (arc as Arc).id.Equals(ID);
+            }
+
+            public override int GetHashCode()
+            {
+                return this.id.GetHashCode();
+            }
         }
     }
 
