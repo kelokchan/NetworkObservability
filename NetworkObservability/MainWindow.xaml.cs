@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NetworkObservability.resources;
+using System.Windows.Threading;
 
 namespace NetworkObservability
 {
@@ -66,6 +67,25 @@ namespace NetworkObservability
                 else
                     this.MainCanvas.SendToBack(this.elementForContextMenu);
             }
+
+            if (e.Source == this.menuAddArc)
+            {
+                Node selectedNode = this.elementForContextMenu as Node;
+
+                // Test Arc draw
+                Line myLine = new Line()
+                {
+                    Stroke = System.Windows.Media.Brushes.DarkGray,
+                    X1 = selectedNode.X,
+                    X2 = 50,
+                    Y1 = selectedNode.Y,
+                    Y2 = 50,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    StrokeThickness = 2
+                };
+                MainCanvas.Children.Add(myLine);
+            }
         }
 
         private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -88,6 +108,7 @@ namespace NetworkObservability
         private void MainCanvas_Drop(object sender, DragEventArgs e)
         {
             Node node;
+            Point p = e.GetPosition(MainCanvas);
 
             switch (e.Data.GetData("Type"))
             {
@@ -113,14 +134,32 @@ namespace NetworkObservability
                     throw new Exception("Invalid node type");
             }
 
-            node.Label = "node_" + nodeList.Count;
-            node.ID = nodeList.Count;
-            nodeList.Add(node);
+            node.Label = "Node " + (int) Node.counter;
+            node.ID = (int) Node.counter;
+            node.X = p.X;
+            node.Y = p.Y;
 
             ((Canvas)sender).Children.Add(node);
-            Point p = e.GetPosition(MainCanvas);
+
+            // As the component is actually a Grid, calculation is needed to obtain the center of the Component in the background
+            //MainCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (Object state)
+            //{
+            //    double widthOffset = node.ActualWidth / 2;
+            //    double heightOffset = node.ActualHeight / 2;
+            //    double actualX = p.X - widthOffset;
+            //    double actualY = p.Y - heightOffset;
+            //    Canvas.SetLeft(node, actualX);
+            //    Canvas.SetTop(node, actualY);
+
+            //    return null;
+            //}), null);
             Canvas.SetLeft(node, p.X);
             Canvas.SetTop(node, p.Y);
+            MainCanvas.ElementBeingDragged = node;
+
+            // Set autofocus to right panel
+            PropertiesPanel.DataContext = node;
+            PropertiesPanel.Focus();
         }
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)

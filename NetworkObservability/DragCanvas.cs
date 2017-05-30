@@ -18,6 +18,9 @@ namespace NetworkObservability
         // Stores a reference to the UIElement currently being dragged by the user.
         private UIElement elementBeingDragged;
 
+        // Stores a Node reference upcast from elementBeingDragged
+        private Node node;
+
         // Keeps track of where the mouse cursor was when a drag operation began.		
         private Point origCursorLocation;
 
@@ -183,7 +186,7 @@ namespace NetworkObservability
                 else
                     return this.elementBeingDragged;
             }
-            protected set
+            set
             {
                 if (this.elementBeingDragged != null)
                     this.elementBeingDragged.ReleaseMouseCapture();
@@ -261,8 +264,11 @@ namespace NetworkObservability
                 return;
 
             // Test get new Node
-            Node node = (Node) this.elementBeingDragged;
-            NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = node;
+            if (this.elementBeingDragged is Node)
+            {
+                node = (Node) this.elementBeingDragged;
+                NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = node;
+            }
 
             // Get the element's offsets from the four sides of the Canvas.
             double left = Canvas.GetLeft(this.ElementBeingDragged);
@@ -359,6 +365,9 @@ namespace NetworkObservability
             else
                 Canvas.SetBottom(this.ElementBeingDragged, newVerticalOffset);
 
+
+            node.X = newHorizontalOffset;
+            node.Y = newVerticalOffset;
             #endregion // Move Drag Element
         }
 

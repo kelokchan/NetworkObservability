@@ -12,10 +12,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Margin="0 0 0 15">
+        <Button Margin="0 0 0 5">
             <Button.Template>
                 <ControlTemplate>
-                    <Ellipse Height="20" Width="20" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Center" StrokeThickness="5" Stroke="Beige">
+                    <Ellipse Height="25" Width="25" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Center" StrokeThickness="5" Stroke="Beige">
                             <Ellipse.Style>
                                 <Style TargetType="{x:Type Ellipse}">
                                     <Setter Property="Fill" Value="#FF5050" />

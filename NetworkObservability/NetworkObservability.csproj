@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Arc.cs" />
+    <Compile Include="Graph.cs" />
+    <Compile Include="PriorityQueue.cs" />
     <Compile Include="resources\CustomNode.xaml.cs">
       <DependentUpon>CustomNode.xaml</DependentUpon>
     </Compile>

@@ -22,7 +22,7 @@ namespace NetworkObservability.resources
     {
         public VisibleObserver()
         {
-            base.Label = "Visible Observer";
+            this.Label = "Visible Observer";
             InitializeComponent();
         }
     }
