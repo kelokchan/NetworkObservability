@@ -30,6 +30,7 @@ namespace NetworkObservability
         private UIElement elementForContextMenu;
         public static MainWindow AppWindow;
         List<Node> nodeList = new List<Node>();
+        Point startPoint, endPoint;
 
         public MainWindow()
         {
@@ -68,23 +69,37 @@ namespace NetworkObservability
                     this.MainCanvas.SendToBack(this.elementForContextMenu);
             }
 
-            if (e.Source == this.menuAddArc)
+            if (e.Source == this.menuStartArc || e.Source == this.menuEndArc)
             {
                 Node selectedNode = this.elementForContextMenu as Node;
+                bool startDrawing = e.Source == this.menuStartArc;
 
-                // Test Arc draw
-                Line myLine = new Line()
+                if (startDrawing)
                 {
-                    Stroke = System.Windows.Media.Brushes.DarkGray,
-                    X1 = selectedNode.X,
-                    X2 = 50,
-                    Y1 = selectedNode.Y,
-                    Y2 = 50,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    StrokeThickness = 2
-                };
-                MainCanvas.Children.Add(myLine);
+                    startPoint = new Point(selectedNode.X, selectedNode.Y);
+                    this.menuStartArc.Visibility = Visibility.Collapsed;
+                    this.menuEndArc.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    endPoint = new Point(selectedNode.X, selectedNode.Y);
+                    this.menuStartArc.Visibility = Visibility.Visible;
+                    this.menuEndArc.Visibility = Visibility.Collapsed;
+
+                    // Test Arc draw
+                    Line arc = new Line()
+                    {
+                        Stroke = System.Windows.Media.Brushes.DarkGray,
+                        X1 = startPoint.X,
+                        X2 = endPoint.X,
+                        Y1 = startPoint.Y,
+                        Y2 = endPoint.Y,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        StrokeThickness = 2
+                    };
+                    MainCanvas.Children.Add(arc);
+                }
             }
         }
 
@@ -138,28 +153,29 @@ namespace NetworkObservability
             node.ID = (int) Node.counter;
             node.X = p.X;
             node.Y = p.Y;
-
             ((Canvas)sender).Children.Add(node);
 
             // As the component is actually a Grid, calculation is needed to obtain the center of the Component in the background
-            //MainCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (Object state)
-            //{
-            //    double widthOffset = node.ActualWidth / 2;
-            //    double heightOffset = node.ActualHeight / 2;
-            //    double actualX = p.X - widthOffset;
-            //    double actualY = p.Y - heightOffset;
-            //    Canvas.SetLeft(node, actualX);
-            //    Canvas.SetTop(node, actualY);
+            MainCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (Object state)
+            {
+                double widthOffset = node.ActualWidth / 2;
+                double heightOffset = node.ActualHeight / 2;
+                double actualX = p.X - widthOffset;
+                double actualY = p.Y - heightOffset;
 
-            //    return null;
-            //}), null);
-            Canvas.SetLeft(node, p.X);
-            Canvas.SetTop(node, p.Y);
-            MainCanvas.ElementBeingDragged = node;
 
-            // Set autofocus to right panel
-            PropertiesPanel.DataContext = node;
-            PropertiesPanel.Focus();
+
+                Canvas.SetLeft(node, actualX);
+                Canvas.SetTop(node, actualY);
+
+                // Set autofocus to right panel
+                PropertiesPanel.DataContext = node;
+                PropertiesPanel.Focus();
+
+                return null;
+            }), null);
+            //Canvas.SetLeft(node, p.X);
+            //Canvas.SetTop(node, p.Y);
         }
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
