@@ -29,8 +29,12 @@ namespace NetworkObservability
         /// </summary>
         private UIElement elementForContextMenu;
         public static MainWindow AppWindow;
+		Graph graph = new Graph();
+
         List<Node> nodeList = new List<Node>();
         Point startPoint, endPoint;
+		Node startNode;
+		Node findPathNodeFrom, findPathNodeTo;
 
         public MainWindow()
         {
@@ -69,6 +73,22 @@ namespace NetworkObservability
                     this.MainCanvas.SendToBack(this.elementForContextMenu);
             }
 
+			if (e.Source == this.menuFindPathStart || e.Source == this.menuFindPathEnd)
+			{
+				Node selectedNode = this.elementForContextMenu as Node;
+				bool startFindingPath = e.Source == this.menuFindPathStart;
+
+				if (startFindingPath)
+				{
+					findPathNodeFrom = selectedNode;
+				}
+				else
+				{
+					findPathNodeTo = selectedNode;
+
+				}
+			}
+
             if (e.Source == this.menuStartArc || e.Source == this.menuEndArc)
             {
                 Node selectedNode = this.elementForContextMenu as Node;
@@ -77,6 +97,7 @@ namespace NetworkObservability
                 if (startDrawing)
                 {
                     startPoint = new Point(selectedNode.X, selectedNode.Y);
+					startNode = selectedNode;
                     this.menuStartArc.Visibility = Visibility.Collapsed;
                     this.menuEndArc.Visibility = Visibility.Visible;
                 }
@@ -85,6 +106,9 @@ namespace NetworkObservability
                     endPoint = new Point(selectedNode.X, selectedNode.Y);
                     this.menuStartArc.Visibility = Visibility.Visible;
                     this.menuEndArc.Visibility = Visibility.Collapsed;
+
+					// Try Adding Arc
+					startNode.AddArc(selectedNode, 1);
 
                     // Test Arc draw
                     Line arc = new Line()
@@ -149,11 +173,12 @@ namespace NetworkObservability
                     throw new Exception("Invalid node type");
             }
 
-            node.Label = "Node " + (int) Node.counter;
+            node.Label = "Node " + Node.counter;
             node.ID = (int) Node.counter;
             node.X = p.X;
             node.Y = p.Y;
-            ((Canvas)sender).Children.Add(node);
+			graph.AddNode(node);
+            (sender as Canvas).Children.Add(node);
 
             // As the component is actually a Grid, calculation is needed to obtain the center of the Component in the background
             MainCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (Object state)
@@ -178,7 +203,14 @@ namespace NetworkObservability
             //Canvas.SetTop(node, p.Y);
         }
 
-        private void MenuOpen_Click(object sender, RoutedEventArgs e)
+		private void Start_Click(object sender, RoutedEventArgs e)
+		{
+			var adjMatrix = graph.GetAdjMatrix();
+
+			graph.FindShortestPath(adjMatrix, findPathNodeTo);
+		}
+
+		private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
             //Open file from anywhere
             OpenFileDialog fileDialog = new OpenFileDialog();

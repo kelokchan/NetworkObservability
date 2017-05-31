@@ -36,7 +36,7 @@
                 <!-- Left toolbar -->
                 <ToolBar Grid.Column="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <Button Margin="5 0 0 0" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}"/>
+                        <Button Margin="5 0 0 0" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}" Click="Start_Click"/>
                         <Button x:Name="___Button___Pause_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStylePause}" IsEnabled="False" />
                         <Button x:Name="___Button___Stop_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleStop}" IsEnabled="False" />
                     </StackPanel>
@@ -104,6 +104,8 @@
                             <ContextMenu Opened="OnContextMenuOpened"  MenuItem.Click="OnMenuItemClick">
                                 <MenuItem Header="Connect From Here" Name="menuStartArc" />
                                 <MenuItem Header="Connect To Here" Name="menuEndArc" Visibility="Collapsed"/>
+                                <MenuItem Header="Find Path From Here" Name="menuFindPathStart"/>
+                                <MenuItem Header="Find Path To Here" Name="menuFindPathEnd"/>
                                 <MenuItem Header="Bring To Front" Name="menuItemBringToFront" />
                                 <MenuItem Header="Send To Back" Name="menuItemSendToBack" />
                             </ContextMenu>

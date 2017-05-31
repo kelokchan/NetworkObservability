@@ -20,6 +20,11 @@ namespace NetworkObservability
             return Root;
         }
 
+		public void AddNode(Node node)
+		{
+			AllNodes.Add(node);
+		}
+
         public Node CreateNode()
         {
             var n = new Node();
