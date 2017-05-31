@@ -22,7 +22,17 @@ namespace NetworkObservability.Core.Properties
 		{
 			if (other is BiDirectionalProperty)
 			{
-				if 
+				var temp = other as BiDirectionalProperty;
+				if (LeftFlowBlocked == temp.LeftFlowBlocked && RightFLowBlocked == temp.RightFLowBlocked)
+					return 0;
+				else if (LeftFlowBlocked == temp.LeftFlowBlocked && RightFLowBlocked != temp.RightFLowBlocked)
+					return 1;
+				else
+					return -1;
+			}
+			else
+			{
+				throw new NotSupportedException();
 			}
 		}
 	}

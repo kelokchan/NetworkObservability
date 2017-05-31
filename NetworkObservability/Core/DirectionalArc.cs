@@ -8,7 +8,7 @@ namespace NetworkObservability
 {
 	namespace Core
 	{
-		class DirectionalArc : Arc
+		class DirectionalArc : ExtendableArc
 		{
 			public DirectionalArc() : base()
 			{
