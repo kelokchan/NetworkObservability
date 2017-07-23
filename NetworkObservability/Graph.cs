@@ -49,7 +49,7 @@ namespace NetworkObservability
                 {
                     Node n2 = AllNodes[j];
 
-                    var arc = n1.Arcs.Find(a => a.Head == n2 && a.Tail == n1);
+                    var arc = n1.Arcs.Find(a => a.To == n2 && a.From == n1);
 
                     if (arc != null)
                     {
@@ -60,7 +60,7 @@ namespace NetworkObservability
                     {
                         adj[i, j] = new Arc
                         {
-                            Weigth = 99999,
+                            Weight = 99999,
                             Distance = 99999
                         };
                     }
@@ -74,49 +74,32 @@ namespace NetworkObservability
             return AllNodes.IndexOf(u);
         }
 
+		public Dictionary<Tuple<Node, Node>, bool> ObserveConnectivity(List<Node> observers)
+		{
+			var result = new Dictionary<Tuple<Node, Node>, bool>();
+			var adjMatrix = GetAdjMatrix();
 
-        public List<Node> FindShortestPath(Arc[,] A, Node U)
-        {
-            List<Node> S = new List<Node>();
-            S.Add(U);
-            PriorityQueue arcs = new PriorityQueue(GetArcsOfU(U));
-            int[] W = new int[AllNodes.Count];
+			foreach (var from in AllNodes)
+			{
+				if (observers.Contains(from))
+					continue;
 
-            //shortest.Add();
+				Dijkstra dijkstra = new Dijkstra(this, from);
 
-            int n = A.GetLength(0);
-            int temp = GetIndexOf(U);
-            for (int j = 0; j < n; j++)
-            {
-                W[j] = A[temp, j].Weigth;
-            }
-            for (int i = 2; i <= n; i++)
-            {
-                //find smallest W[v] that is not in the S
-                var v = arcs.Pop();
-                if (v != null)
-                {
-                    S.Add(v.Head);
-                    foreach (var x in AllNodes)
-                    {
-                        if (!S.Contains(x))
-                        {
-                            int temp1 = GetIndexOf(x);
-                            int temp2 = GetIndexOf(v.Head);
-                            if (W[temp1] > (W[temp2] + A[temp2, temp1].Weigth))
-                            {
-                                W[temp1] = (W[temp2] + A[temp2, temp1].Weigth);
-                                arcs.Add(temp1, (W[temp2] + A[temp2, temp1].Weigth));
-                            }
-                        }
-                    }
-                }
-            }
+				foreach (var to in AllNodes)
+				{
 
+					foreach (var observer in observers)
+					{
+						bool flag = dijkstra.PathTo(to).Contains(observer);
+						result[new Tuple<Node, Node>(from, to)] = flag;
+					}
+				}
+			}
 
-            this.costOfS = W;
-            return S;
-        }
+			return result;
+		}
+
 
         public Arc[] GetArcsOfU(Node u)
         {
@@ -124,16 +107,16 @@ namespace NetworkObservability
             Arc[] output = new Arc[AllNodes.Count];
             for (int i = 0; i < AllNodes.Count; i++)
             {
-                var tempArc = arcs.Find(p => p.Tail == u && p.Head == AllNodes[i]);
+                var tempArc = arcs.Find(p => p.From == u && p.To == AllNodes[i]);
                 if (AllNodes[i] != u)
                 {
                     if (tempArc == null)
                     {
                         tempArc = new Arc
                         {
-                            Tail = u,
-                            Head = AllNodes[i],
-                            Weigth = 99999
+                            From = u,
+                            To = AllNodes[i],
+                            Weight = 99999
                         };
                     }
                     output[i] = tempArc;

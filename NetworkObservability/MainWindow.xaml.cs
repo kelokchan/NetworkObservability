@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,7 +35,6 @@ namespace NetworkObservability
         List<Node> nodeList = new List<Node>();
         Point startPoint, endPoint;
 		Node startNode;
-		Node findPathNodeFrom, findPathNodeTo;
 
         public MainWindow()
         {
@@ -73,22 +73,6 @@ namespace NetworkObservability
                     this.MainCanvas.SendToBack(this.elementForContextMenu);
             }
 
-			if (e.Source == this.menuFindPathStart || e.Source == this.menuFindPathEnd)
-			{
-				Node selectedNode = this.elementForContextMenu as Node;
-				bool startFindingPath = e.Source == this.menuFindPathStart;
-
-				if (startFindingPath)
-				{
-					findPathNodeFrom = selectedNode;
-				}
-				else
-				{
-					findPathNodeTo = selectedNode;
-
-				}
-			}
-
             if (e.Source == this.menuStartArc || e.Source == this.menuEndArc)
             {
                 Node selectedNode = this.elementForContextMenu as Node;
@@ -109,6 +93,9 @@ namespace NetworkObservability
 
 					// Try Adding Arc
 					startNode.AddArc(selectedNode, 1);
+					if ((ArcType.SelectedItem as ComboBoxItem).Equals(UndirectedArc))
+						selectedNode.AddArc(startNode, 1);
+					
 
                     // Test Arc draw
                     Line arc = new Line()
@@ -205,9 +192,23 @@ namespace NetworkObservability
 
 		private void Start_Click(object sender, RoutedEventArgs e)
 		{
-			var adjMatrix = graph.GetAdjMatrix();
+			logTab.IsSelected = true;
+			logger.Content += "\nStart Checking observability....\n";
+			
+			var observers = graph.AllNodes.FindAll(node => node.IsObserver);
 
-			graph.FindShortestPath(adjMatrix, findPathNodeTo);
+			var result = graph.ObserveConnectivity(observers);
+
+			logger.Content += "Observation Completed.\n";
+
+			foreach (var pair in result)
+			{
+				Node from = pair.Key.Item1, to = pair.Key.Item2;
+				bool isObserved = pair.Value;
+				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.ID, to.ID, isObserved ? "Observed" : "Unobserved");
+			}
+
+			logger.Content += "Task Finished.";
 		}
 
 		private void MenuOpen_Click(object sender, RoutedEventArgs e)

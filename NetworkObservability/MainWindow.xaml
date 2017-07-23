@@ -36,7 +36,7 @@
                 <!-- Left toolbar -->
                 <ToolBar Grid.Column="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
                     <StackPanel Orientation="Horizontal">
-                        <Button Margin="5 0 0 0" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}" Click="Start_Click"/>
+                        <Button Margin="5,0,0,4" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}" Click="Start_Click" VerticalAlignment="Bottom"/>
                         <Button x:Name="___Button___Pause_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStylePause}" IsEnabled="False" />
                         <Button x:Name="___Button___Stop_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleStop}" IsEnabled="False" />
                     </StackPanel>
@@ -46,8 +46,8 @@
                 <ToolBar Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
                     <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
                         <Label Margin="0 0 0 0" Content="Arc type:" />
-                        <ComboBox Margin="3 0 0 0" Width="150" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" BorderBrush="#00ACACAC" >
-                            <ComboBoxItem Content="Undirected lines" Selector.IsSelected="True" Background="{DynamicResource ToolBarButtonPressed}" />
+                        <ComboBox x:Name="ArcType" Margin="3 0 0 0" Width="150" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" BorderBrush="#00ACACAC" >
+                            <ComboBoxItem x:Name="UndirectedArc" Content="Undirected lines" Selector.IsSelected="True" Background="{DynamicResource ToolBarButtonPressed}" />
                             <ComboBoxItem Content="Directed lines"/>
                         </ComboBox>
                         <!-- Add the image label for the arrows here! -->
@@ -84,10 +84,12 @@
                         <TextBox Grid.Row="0" Grid.Column="1" Margin="0 0 0 5" Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Label: "/>
                         <TextBox Grid.Row="1" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="X: "/>
-                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0 0 0 5" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Y: "/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Y, StringFormat=N0,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Has Observer: "/>
+                        <CheckBox Grid.Row="2" Grid.Column="1" Margin="0 0 0 5" IsChecked="{Binding IsObserver, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="X: "/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Margin="0 0 0 5" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Y: "/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Y, StringFormat=N0,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
                     </Grid>
                 </TabItem>
             </TabControl>
@@ -104,8 +106,6 @@
                             <ContextMenu Opened="OnContextMenuOpened"  MenuItem.Click="OnMenuItemClick">
                                 <MenuItem Header="Connect From Here" Name="menuStartArc" />
                                 <MenuItem Header="Connect To Here" Name="menuEndArc" Visibility="Collapsed"/>
-                                <MenuItem Header="Find Path From Here" Name="menuFindPathStart"/>
-                                <MenuItem Header="Find Path To Here" Name="menuFindPathEnd"/>
                                 <MenuItem Header="Bring To Front" Name="menuItemBringToFront" />
                                 <MenuItem Header="Send To Back" Name="menuItemSendToBack" />
                             </ContextMenu>
@@ -129,10 +129,10 @@
                         </ScrollViewer>
                     </TabItem>
 
-                    <TabItem Header="Log">
+                    <TabItem Header="Log" Name="logTab">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <Grid Height="Auto">
-                                <Label Content="> See log messages here..." />
+                                <Label Content="> See log messages here..." Name="logger"/>
                             </Grid>
                         </ScrollViewer>
                     </TabItem>

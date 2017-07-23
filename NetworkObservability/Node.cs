@@ -23,6 +23,20 @@ namespace NetworkObservability
         private int id;
         private double x;
         private double y;
+		private bool isObserver = false;
+
+		public bool IsObserver
+		{
+			get
+			{
+				return isObserver;
+			}
+			set
+			{
+				isObserver = value;
+				OnPropertyChanged("IsObserver");
+			}
+		}
 
         public Node()
         {
@@ -62,13 +76,13 @@ namespace NetworkObservability
         {
             Arcs.Add(new Arc
             {
-                Tail = this,
-                Head = child,
-                Weigth = w,
+                From = this,
+                To = child,
+                Weight = w,
                 Distance = 1
             });
 
-            //if (!child.Arcs.Exists(a => a.Tail == child && a.Head == this))
+            //if (!child.Arcs.Exists(a => a.From == child && a.To == this))
             //{
             //    //child.AddArc(this, w);
             Adjacency.Add(child);
@@ -84,14 +98,14 @@ namespace NetworkObservability
 
         public Arc GetArc(Node a)
         {
-            Arc connectedArc = Arcs.Find(q => q.Tail == this && q.Head == a);
+            Arc connectedArc = Arcs.Find(q => q.From == this && q.To == a);
             if (connectedArc == null)
             {
                 return new Arc
                 {
-                    Tail = a,
-                    Head = this,
-                    Weigth = 0,// int.MaxValue,
+                    From = a,
+                    To = this,
+                    Weight = 0,// int.MaxValue,
                     Distance = int.MaxValue
                 };
             }

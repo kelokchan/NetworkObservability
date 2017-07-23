@@ -8,9 +8,9 @@ namespace NetworkObservability
 {
     public class Arc
     {
-        public int Weigth { get; set; }
-        public Node Tail { get; set; }
-        public Node Head { get; set; }
+        public int Weight { get; set; }
+        public Node From { get; set; }
+        public Node To { get; set; }
         public bool flagged { get; set; } = false;
         public int Distance { get; set; }
         private static int id = 0;
@@ -27,7 +27,7 @@ namespace NetworkObservability
 
         public override string ToString()
         {
-            return Weigth.ToString();
+            return Weight.ToString();
         }
     }
 }
