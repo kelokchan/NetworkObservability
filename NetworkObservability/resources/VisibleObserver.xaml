@@ -1,0 +1,35 @@
+﻿<base:Node x:Class="NetworkObservability.resources.VisibleObserver"
+             xmlns:base="clr-namespace:NetworkObservability"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             d:DesignHeight="100" d:DesignWidth="150">
+    <Grid ToolTip="An active observer that can also be a node in the network">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Margin="0 0 0 5">
+            <Button.Template>
+                <ControlTemplate>
+                        <Ellipse Height="25" Width="25" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Center" StrokeThickness="5" Stroke="BlueViolet">
+                            <Ellipse.Style>
+                                <Style TargetType="{x:Type Ellipse}">
+                                    <Setter Property="Fill" Value="#FF5050" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Fill" Value="#FF0000" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <TextBlock Grid.Row="1" Text="{Binding Label}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="11" VerticalAlignment="Top"/>
+    </Grid>
+</base:Node>

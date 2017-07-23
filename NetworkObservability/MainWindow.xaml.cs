@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NetworkObservability.resources;
+using System.Windows.Threading;
 
 namespace NetworkObservability
 {
@@ -20,41 +25,206 @@ namespace NetworkObservability
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Stores a reference to the UIElement which the Canvas's context menu currently targets.
+        /// </summary>
+        private UIElement elementForContextMenu;
+        public static MainWindow AppWindow;
+		Graph graph = new Graph();
+
+        List<Node> nodeList = new List<Node>();
+        Point startPoint, endPoint;
+		Node startNode;
+
         public MainWindow()
         {
             InitializeComponent();
+            AppWindow = this;
 
-            this.DataContext = new List<DateTime>
+            visibleObserver.PreviewMouseDown += Component_MouseDown;
+            invisibleObserver.PreviewMouseDown += Component_MouseDown;
+            visibleNode.PreviewMouseDown += Component_MouseDown;
+            invisibleNode.PreviewMouseDown += Component_MouseDown;
+            endNode.PreviewMouseDown += Component_MouseDown;
+            customNode.PreviewMouseDown += Component_MouseDown;
+        }
+
+        void OnContextMenuOpened(object sender, RoutedEventArgs e)
+        {
+           
+        }
+
+        /// <summary>
+        /// Handles the Click event of both menu items in the context menu.
+        /// </summary>
+        void OnMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            if (this.elementForContextMenu == null)
+                return;
+
+            if (e.Source == this.menuItemBringToFront ||
+                e.Source == this.menuItemSendToBack)
             {
-                DateTime.Now,
-                new DateTime(2013, 02, 13),
-                new DateTime(2004, 12, 31)
-            };
+                bool bringToFront = e.Source == this.menuItemBringToFront;
+
+                if (bringToFront)
+                    this.MainCanvas.BringToFront(this.elementForContextMenu);
+                else
+                    this.MainCanvas.SendToBack(this.elementForContextMenu);
+            }
+
+            if (e.Source == this.menuStartArc || e.Source == this.menuEndArc)
+            {
+                Node selectedNode = this.elementForContextMenu as Node;
+                bool startDrawing = e.Source == this.menuStartArc;
+
+                if (startDrawing)
+                {
+                    startPoint = new Point(selectedNode.X, selectedNode.Y);
+					startNode = selectedNode;
+                    this.menuStartArc.Visibility = Visibility.Collapsed;
+                    this.menuEndArc.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    endPoint = new Point(selectedNode.X, selectedNode.Y);
+                    this.menuStartArc.Visibility = Visibility.Visible;
+                    this.menuEndArc.Visibility = Visibility.Collapsed;
+
+					// Try Adding Arc
+					startNode.AddArc(selectedNode, 1);
+					if ((ArcType.SelectedItem as ComboBoxItem).Equals(UndirectedArc))
+						selectedNode.AddArc(startNode, 1);
+					
+
+                    // Test Arc draw
+                    Line arc = new Line()
+                    {
+                        Stroke = System.Windows.Media.Brushes.DarkGray,
+                        X1 = startPoint.X,
+                        X2 = endPoint.X,
+                        Y1 = startPoint.Y,
+                        Y2 = endPoint.Y,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        StrokeThickness = 2
+                    };
+                    MainCanvas.Children.Add(arc);
+                }
+            }
         }
 
-        private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DataObject data = new DataObject(DataFormats.Serializable, "Hi");
-
-            DragDrop.DoDragDrop((DependencyObject)e.Source, data, DragDropEffects.Copy);
-
+            if (this.MainCanvas.ElementBeingDragged != null)
+                this.elementForContextMenu = this.MainCanvas.ElementBeingDragged;
+            else
+                this.elementForContextMenu =
+                    this.MainCanvas.FindCanvasChild(e.Source as DependencyObject);
         }
 
-        private void Label_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
+
+        private void Component_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //test
+            DataObject data = new DataObject();
+            data.SetData("Type", sender.GetType().Name);
+            DragDrop.DoDragDrop((DependencyObject)sender, data, DragDropEffects.Copy);
         }
 
-        private void Canvas_Drop(object sender, DragEventArgs e)
+        private void MainCanvas_Drop(object sender, DragEventArgs e)
         {
-            String test = (String)e.Data.GetData(DataFormats.Serializable);
-            Point p = Mouse.GetPosition(this);
+            Node node;
+            Point p = e.GetPosition(MainCanvas);
 
-            Canvas.SetLeft(canvas, p.X);
-            Canvas.SetTop(canvas, p.Y);
+            switch (e.Data.GetData("Type"))
+            {
+                case "VisibleObserver":
+                    node = new VisibleObserver();
+                    break;
+                case "InvisibleObserver":
+                    node = new InvisibleObserver();       
+                    break;
+                case "VisibleNode":
+                    node = new VisibleNode();
+                    break;
+                case "InvisibleNode":
+                    node = new InvisibleNode();
+                    break;
+                case "EndNode":
+                    node = new EndNode();
+                    break;
+                case "CustomNode":
+                    node = new CustomNode();
+                    break;
+                default:
+                    throw new Exception("Invalid node type");
+            }
+
+            node.Label = "Node " + Node.counter;
+            node.ID = (int) Node.counter;
+            node.X = p.X;
+            node.Y = p.Y;
+			graph.AddNode(node);
+            (sender as Canvas).Children.Add(node);
+
+            // As the component is actually a Grid, calculation is needed to obtain the center of the Component in the background
+            MainCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (Object state)
+            {
+                double widthOffset = node.ActualWidth / 2;
+                double heightOffset = node.ActualHeight / 2;
+                double actualX = p.X - widthOffset;
+                double actualY = p.Y - heightOffset;
 
 
-           // canvas.Children.Add(test);
+
+                Canvas.SetLeft(node, actualX);
+                Canvas.SetTop(node, actualY);
+
+                // Set autofocus to right panel
+                PropertiesPanel.DataContext = node;
+                PropertiesPanel.Focus();
+
+                return null;
+            }), null);
+            //Canvas.SetLeft(node, p.X);
+            //Canvas.SetTop(node, p.Y);
+        }
+
+		private void Start_Click(object sender, RoutedEventArgs e)
+		{
+			logTab.IsSelected = true;
+			logger.Content += "\nStart Checking observability....\n";
+			
+			var observers = graph.AllNodes.FindAll(node => node.IsObserver);
+
+			var result = graph.ObserveConnectivity(observers);
+
+			logger.Content += "Observation Completed.\n";
+
+			foreach (var pair in result)
+			{
+				Node from = pair.Key.Item1, to = pair.Key.Item2;
+				bool isObserved = pair.Value;
+				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.ID, to.ID, isObserved ? "Observed" : "Unobserved");
+			}
+
+			logger.Content += "Task Finished.";
+		}
+
+		private void MenuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            //Open file from anywhere
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = false;
+            fileDialog.Filter = "XML Files(*.xml)|*.xml|Textfiles(*.txt)|*.txt|All Files(*.*)|*.*";
+            fileDialog.DefaultExt = ".xml";
+            Nullable<bool> getFile = fileDialog.ShowDialog();
+
+            if (getFile == true)
+            {
+                //TODO 
+                Stream contents = fileDialog.OpenFile();
+            }
         }
     }
 
