@@ -18,7 +18,7 @@ namespace NetworkObservability.resources
     /// <summary>
     /// Interaction logic for VisibleObserver.xaml
     /// </summary>
-    public partial class VisibleObserver : Node
+    public partial class VisibleObserver : CanvasNode
     {
         public VisibleObserver()
         {

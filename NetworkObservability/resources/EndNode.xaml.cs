@@ -18,7 +18,7 @@ namespace NetworkObservability.resources
     /// <summary>
     /// Interaction logic for EndNode.xaml
     /// </summary>
-    public partial class EndNode : Node
+    public partial class EndNode : CanvasNode
     {
         public EndNode()
         {

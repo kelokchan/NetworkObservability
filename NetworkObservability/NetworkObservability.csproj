@@ -36,8 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PriorityQueue">
-      <HintPath>..\..\..\Visual Studio 2017\Projects\PriorityQueue\PriorityQueue\bin\Release\netstandard1.4\PriorityQueue.dll</HintPath>
+    <Reference Include="NetworkObservabilityCore">
+      <HintPath>..\..\..\Visual Studio 2017\Projects\NetworkObservabilityCore\NetworkObservabilityCore\bin\Release\netstandard1.4\NetworkObservabilityCore.dll</HintPath>
+    </Reference>
+    <Reference Include="PriorityQueue, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Visual Studio 2017\Projects\NetworkObservabilityCore\NetworkObservabilityCore\bin\Release\netstandard1.4\PriorityQueue.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -59,9 +63,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Arc.cs" />
-    <Compile Include="Dijkstra.cs" />
-    <Compile Include="Graph.cs" />
+    <Compile Include="CanvasGraph.cs" />
     <Compile Include="resources\CustomNode.xaml.cs">
       <DependentUpon>CustomNode.xaml</DependentUpon>
     </Compile>
@@ -135,7 +137,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Node.cs" />
+    <Compile Include="CanvasNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

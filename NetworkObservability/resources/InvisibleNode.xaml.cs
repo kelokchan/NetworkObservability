@@ -18,7 +18,7 @@ namespace NetworkObservability.resources
     /// <summary>
     /// Interaction logic for InvisibleNode.xaml
     /// </summary>
-    public partial class InvisibleNode : Node
+    public partial class InvisibleNode : CanvasNode
     {
         public InvisibleNode()
         {

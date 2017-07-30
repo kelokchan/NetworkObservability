@@ -18,7 +18,7 @@ namespace NetworkObservability.resources
     /// <summary>
     /// Interaction logic for CustomNode.xaml
     /// </summary>
-    public partial class CustomNode : Node
+    public partial class CustomNode : CanvasNode
     {
         public CustomNode()
         {

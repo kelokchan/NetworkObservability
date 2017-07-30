@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NetworkObservability.resources;
 using System.Windows.Threading;
+using NetworkObservabilityCore;
 
 namespace NetworkObservability
 {
@@ -30,11 +31,11 @@ namespace NetworkObservability
         /// </summary>
         private UIElement elementForContextMenu;
         public static MainWindow AppWindow;
-		Graph graph = new Graph();
+		CanvasGraph<Node, Edge> graph = new CanvasGraph<Node, Edge>();
 
-        List<Node> nodeList = new List<Node>();
+        List<CanvasNode> nodeList = new List<CanvasNode>();
         Point startPoint, endPoint;
-		Node startNode;
+		CanvasNode startNode;
 
         public MainWindow()
         {
@@ -75,7 +76,7 @@ namespace NetworkObservability
 
             if (e.Source == this.menuStartArc || e.Source == this.menuEndArc)
             {
-                Node selectedNode = this.elementForContextMenu as Node;
+                CanvasNode selectedNode = this.elementForContextMenu as CanvasNode;
                 bool startDrawing = e.Source == this.menuStartArc;
 
                 if (startDrawing)
@@ -91,14 +92,23 @@ namespace NetworkObservability
                     this.menuStartArc.Visibility = Visibility.Visible;
                     this.menuEndArc.Visibility = Visibility.Collapsed;
 
-					// Try Adding Arc
-					startNode.AddArc(selectedNode, 1);
+					// Try Adding Edge
+					Edge edge = new Edge(1);
+					graph.Call(graph => {
+						graph.ConnectNodeToWith(startNode.nodeImpl, selectedNode.nodeImpl, edge);
+					});
+					/* 
 					if ((ArcType.SelectedItem as ComboBoxItem).Equals(UndirectedArc))
-						selectedNode.AddArc(startNode, 1);
-					
+					{
+						graph.Call(graph =>
+						{
+							graph.ConnectNodeToWith(selectedNode.nodeImpl, startNode.nodeImpl, new Edge(1));
+						});
+					}
+					*/
 
                     // Test Arc draw
-                    Line arc = new Line()
+                    Line line = new Line()
                     {
                         Stroke = System.Windows.Media.Brushes.DarkGray,
                         X1 = startPoint.X,
@@ -109,7 +119,8 @@ namespace NetworkObservability
                         VerticalAlignment = VerticalAlignment.Center,
                         StrokeThickness = 2
                     };
-                    MainCanvas.Children.Add(arc);
+					graph[line] = edge;
+                    MainCanvas.Children.Add(line);
                 }
             }
         }
@@ -133,7 +144,7 @@ namespace NetworkObservability
 
         private void MainCanvas_Drop(object sender, DragEventArgs e)
         {
-            Node node;
+            CanvasNode node;
             Point p = e.GetPosition(MainCanvas);
 
             switch (e.Data.GetData("Type"))
@@ -160,11 +171,10 @@ namespace NetworkObservability
                     throw new Exception("Invalid node type");
             }
 
-            node.Label = "Node " + Node.counter;
-            node.ID = (int) Node.counter;
             node.X = p.X;
             node.Y = p.Y;
 			graph.AddNode(node);
+			graph[node.nodeImpl] = node;
             (sender as Canvas).Children.Add(node);
 
             // As the component is actually a Grid, calculation is needed to obtain the center of the Component in the background
@@ -194,18 +204,18 @@ namespace NetworkObservability
 		{
 			logTab.IsSelected = true;
 			logger.Content += "\nStart Checking observability....\n";
-			
-			var observers = graph.AllNodes.FindAll(node => node.IsObserver);
 
-			var result = graph.ObserveConnectivity(observers);
+			var observers = graph.Call(graph => graph.AllNodes.Where(node => node.IsObserver)).ToArray();
+
+			var result = graph.Call(graph => graph.ObserveConnectivity(observers));
 
 			logger.Content += "Observation Completed.\n";
 
 			foreach (var pair in result)
 			{
-				Node from = pair.Key.Item1, to = pair.Key.Item2;
+				INode from = pair.Key.Item1, to = pair.Key.Item2;
 				bool isObserved = pair.Value;
-				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.ID, to.ID, isObserved ? "Observed" : "Unobserved");
+				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
 			}
 
 			logger.Content += "Task Finished.";

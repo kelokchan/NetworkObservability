@@ -19,7 +19,7 @@ namespace NetworkObservability
         private UIElement elementBeingDragged;
 
         // Stores a Node reference upcast from elementBeingDragged
-        private Node node;
+        private CanvasNode node;
 
         // Keeps track of where the mouse cursor was when a drag operation began.		
         private Point origCursorLocation;
@@ -264,9 +264,9 @@ namespace NetworkObservability
                 return;
 
             // Test get new Node
-            if (this.elementBeingDragged is Node)
+            if (this.elementBeingDragged is CanvasNode)
             {
-                node = (Node) this.elementBeingDragged;
+                node = (CanvasNode) this.elementBeingDragged;
                 NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = node;
             }
 
