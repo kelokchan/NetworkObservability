@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using System.Windows.Shapes;
 
 namespace NetworkObservability
 {
@@ -260,7 +261,7 @@ namespace NetworkObservability
             // Walk up the visual tree from the element that was clicked, 
             // looking for an element that is a direct child of the Canvas.
             this.ElementBeingDragged = this.FindCanvasChild(e.Source as DependencyObject);
-            if (this.ElementBeingDragged == null)
+            if (this.ElementBeingDragged == null || this.elementBeingDragged is Line)
                 return;
 
             // Test get new Node
@@ -365,9 +366,11 @@ namespace NetworkObservability
             else
                 Canvas.SetBottom(this.ElementBeingDragged, newVerticalOffset);
 
-
-            node.X = newHorizontalOffset;
-            node.Y = newVerticalOffset;
+            if (node != null)
+            {
+                node.X = newHorizontalOffset;
+                node.Y = newVerticalOffset;
+            }
             #endregion // Move Drag Element
         }
 

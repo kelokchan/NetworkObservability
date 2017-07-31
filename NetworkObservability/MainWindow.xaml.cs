@@ -121,6 +121,7 @@ namespace NetworkObservability
                     };
 					graph[line] = edge;
                     MainCanvas.Children.Add(line);
+                    Canvas.SetZIndex(line, -1);
                 }
             }
         }
@@ -130,8 +131,7 @@ namespace NetworkObservability
             if (this.MainCanvas.ElementBeingDragged != null)
                 this.elementForContextMenu = this.MainCanvas.ElementBeingDragged;
             else
-                this.elementForContextMenu =
-                    this.MainCanvas.FindCanvasChild(e.Source as DependencyObject);
+                this.elementForContextMenu = this.MainCanvas.FindCanvasChild(e.Source as DependencyObject);
         }
 
 
@@ -147,6 +147,7 @@ namespace NetworkObservability
             CanvasNode node;
             Point p = e.GetPosition(MainCanvas);
 
+            // TODO Make this into CanvasNodeBuilder class
             switch (e.Data.GetData("Type"))
             {
                 case "VisibleObserver":
@@ -184,8 +185,6 @@ namespace NetworkObservability
                 double heightOffset = node.ActualHeight / 2;
                 double actualX = p.X - widthOffset;
                 double actualY = p.Y - heightOffset;
-
-
 
                 Canvas.SetLeft(node, actualX);
                 Canvas.SetTop(node, actualY);

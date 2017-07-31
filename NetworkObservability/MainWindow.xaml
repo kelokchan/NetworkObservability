@@ -81,7 +81,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="ID: "/>
-                        <TextBox Grid.Row="0" Grid.Column="1" Margin="0 0 0 5" Text="{Binding ID, Mode=OneTime}" IsEnabled="False"></TextBox>
+                        <TextBox Grid.Row="0" Grid.Column="1" Margin="0 0 0 5" Text="{Binding ID, Mode=OneWay}" IsReadOnly="True"></TextBox>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Label: "/>
                         <TextBox Grid.Row="1" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Has Observer: "/>
