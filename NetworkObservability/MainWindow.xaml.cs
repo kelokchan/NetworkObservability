@@ -205,7 +205,7 @@ namespace NetworkObservability
 			logTab.IsSelected = true;
 			logger.Content += "\nStart Checking observability....\n";
 
-			var observers = graph.Call(graph => graph.AllNodes.Where(node => node.IsObserver)).ToArray();
+			var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
 
 			var result = graph.Call(graph => graph.ObserveConnectivity(observers));
 

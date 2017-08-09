@@ -77,11 +77,6 @@ namespace NetworkObservability
 			nodeImpl = new Node();
         }
 
-		public CanvasNode(String label)
-		{
-			nodeImpl = new Node(label);
-		}
-
 		public void Call(Action<INode> func)
 		{
 			func(nodeImpl);
