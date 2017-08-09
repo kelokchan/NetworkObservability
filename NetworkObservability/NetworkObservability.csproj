@@ -36,11 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NetworkObservabilityCore">
-      <HintPath>..\..\NetworkObservabilityCore\NetworkObservabilityCore\bin\Release\netstandard1.4\NetworkObservabilityCore.dll</HintPath>
-    </Reference>
-    <Reference Include="PriorityQueue">
-      <HintPath>..\..\NetworkObservabilityCore\NetworkObservabilityCore\bin\Release\netstandard1.4\PriorityQueue.dll</HintPath>
+    <Reference Include="NOCoreForFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NOCoreForFramework\NOCoreForFramework\bin\Release\NOCoreForFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
