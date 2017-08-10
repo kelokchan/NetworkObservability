@@ -15,7 +15,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using NetworkObservability.resources;
 using System.Windows.Threading;
 using NetworkObservabilityCore;
 
@@ -42,12 +41,14 @@ namespace NetworkObservability
             InitializeComponent();
             AppWindow = this;
 
-            visibleObserver.PreviewMouseDown += Component_MouseDown;
-            invisibleObserver.PreviewMouseDown += Component_MouseDown;
-            visibleNode.PreviewMouseDown += Component_MouseDown;
-            invisibleNode.PreviewMouseDown += Component_MouseDown;
-            endNode.PreviewMouseDown += Component_MouseDown;
-            customNode.PreviewMouseDown += Component_MouseDown;
+            canvasNodeButton.PreviewMouseDown += Component_MouseDown;
+
+            //visibleObserver.PreviewMouseDown += Component_MouseDown;
+            //invisibleObserver.PreviewMouseDown += Component_MouseDown;
+            //visibleNode.PreviewMouseDown += Component_MouseDown;
+            //invisibleNode.PreviewMouseDown += Component_MouseDown;
+            //endNode.PreviewMouseDown += Component_MouseDown;
+            //customNode.PreviewMouseDown += Component_MouseDown;
         }
 
         void OnContextMenuOpened(object sender, RoutedEventArgs e)
@@ -144,33 +145,8 @@ namespace NetworkObservability
 
         private void MainCanvas_Drop(object sender, DragEventArgs e)
         {
-            CanvasNode node;
+            CanvasNode node = new CanvasNode();
             Point p = e.GetPosition(MainCanvas);
-
-            // TODO Make this into CanvasNodeBuilder class
-            switch (e.Data.GetData("Type"))
-            {
-                case "VisibleObserver":
-                    node = new VisibleObserver();
-                    break;
-                case "InvisibleObserver":
-                    node = new InvisibleObserver();       
-                    break;
-                case "VisibleNode":
-                    node = new VisibleNode();
-                    break;
-                case "InvisibleNode":
-                    node = new InvisibleNode();
-                    break;
-                case "EndNode":
-                    node = new EndNode();
-                    break;
-                case "CustomNode":
-                    node = new CustomNode();
-                    break;
-                default:
-                    throw new Exception("Invalid node type");
-            }
 
             node.X = p.X;
             node.Y = p.Y;
