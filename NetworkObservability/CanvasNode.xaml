@@ -23,7 +23,7 @@
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Fill" Value="#444444" />
                                     </Trigger>
-                                    <DataTrigger Binding="{Binding IsVisible}" Value="False">
+                                    <DataTrigger Binding="{Binding IsNodeVisible}" Value="False">
                                         <Setter Property="Fill" Value="Gray"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsObserver}" Value="True">
@@ -44,6 +44,10 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Label}" Value="N0000000">
                             <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                            <Setter Property="Background" Value="LightGreen"/>
+                            <Setter Property="Foreground" Value="White"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

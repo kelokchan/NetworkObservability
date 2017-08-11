@@ -219,8 +219,14 @@ namespace NetworkObservability
             }
             set
             {
+                if (this.node != null)
+                {
+                    this.node.IsSelected = false;
+                }
+
                 this.node = value;
-                NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = node;
+                NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = this.node;
+                this.node.IsSelected = true;
             }
         }
 
@@ -284,7 +290,7 @@ namespace NetworkObservability
             // Test get new Node
             if (this.elementBeingDragged is CanvasNode)
             {
-                this.SelectedNode= (CanvasNode) this.elementBeingDragged;
+                this.SelectedNode = (CanvasNode) this.elementBeingDragged;             
             }
 
             // Get the element's offsets from the four sides of the Canvas.

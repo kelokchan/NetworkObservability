@@ -27,11 +27,25 @@ namespace NetworkObservability
         internal Node nodeImpl;
 
         public bool isInSet { get; set; }
+        private bool isSelected;
         private double x;
         private double y;
 
         public List<LineGeometry> EndLines { get; private set; }
         public List<LineGeometry> StartLines { get; private set; }
+
+        public bool IsSelected
+        {
+            get
+            {
+                return isSelected;
+            }
+            set
+            {
+                isSelected = value;
+                OnPropertyChanged("IsSelected");
+            }
+        }
 
         public bool IsObserver
         {
