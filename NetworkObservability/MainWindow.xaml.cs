@@ -178,6 +178,9 @@ namespace NetworkObservability
 
 		private void Start_Click(object sender, RoutedEventArgs e)
 		{
+            // Create a resultGraph instance
+            ResultGraph resultGraph = new ResultGraph();
+
 			logTab.IsSelected = true;
             logger.Content = "";
 			logger.Content += "\nStart Checking observability....\n";
@@ -188,14 +191,26 @@ namespace NetworkObservability
 
 			logger.Content += "Observation Completed.\n";
 
-			foreach (var pair in result)
+            // This section needs to be manipulated -------------------------//
+            CanvasNode tempNode = new CanvasNode();
+            tempNode.X = 400;
+            tempNode.Y = 5000;
+            tempNode.IsObserver = true;
+            resultGraph.ResultCanvas.Children.Add(tempNode);
+            //---------------------------------------------------------------//
+
+            foreach (var pair in result)
 			{
 				INode from = pair.Key.Item1, to = pair.Key.Item2;
 				bool isObserved = pair.Value;
 				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
 			}
 
-			logger.Content += "Task Finished.";
+            // Display the resultGraph window
+            resultGraph.ResultCanvas.IsEnabled = false;
+            resultGraph.Show();
+
+            logger.Content += "Task Finished.";
 		}
 
         private void ___Button___Delete__Click(object sender, RoutedEventArgs e)
