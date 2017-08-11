@@ -386,12 +386,29 @@ namespace NetworkObservability
             {
                 node.X = newHorizontalOffset;
                 node.Y = newVerticalOffset;
+                UpdateLines(node);
                // TODO add arc list to node
             }
             #endregion // Move Drag Element
         }
 
         #endregion // OnPreviewMouseMove
+
+        #region UpdateLines
+
+        public void UpdateLines(CanvasNode node)
+        {
+            double left = Canvas.GetLeft(node);
+            double top = Canvas.GetTop(node);
+
+            for (int i = 0; i < node.StartLines.Count; i++)
+                node.StartLines[i].StartPoint = new Point(left + node.ActualWidth / 2, top + node.ActualHeight / 2);
+
+            for (int i = 0; i < node.EndLines.Count; i++)
+                node.EndLines[i].EndPoint = new Point(left + node.ActualWidth / 2, top + node.ActualHeight / 2);
+        }
+
+        #endregion
 
         #region OnHostPreviewMouseUp
 

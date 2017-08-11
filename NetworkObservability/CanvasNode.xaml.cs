@@ -30,6 +30,9 @@ namespace NetworkObservability
         private double x;
         private double y;
 
+        public List<LineGeometry> EndLines { get; private set; }
+        public List<LineGeometry> StartLines { get; private set; }
+
         public bool IsObserver
         {
             get
@@ -89,8 +92,10 @@ namespace NetworkObservability
             set { y = value; OnPropertyChanged("Y"); }
         }
 
-        public CanvasNode()
+        public CanvasNode() : base()
         {
+            StartLines = new List<LineGeometry>();
+            EndLines = new List<LineGeometry>();
             nodeImpl = new Node();
             InitializeComponent();
         }

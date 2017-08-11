@@ -1,22 +1,14 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using NetworkObservabilityCore;
+using System.Windows.Media;
 
 namespace NetworkObservability
 {
@@ -33,7 +25,7 @@ namespace NetworkObservability
 		CanvasGraph<Node, Edge> graph = new CanvasGraph<Node, Edge>();
 
         Point startPoint, endPoint;
-		CanvasNode startNode;
+        CanvasNode startNode, endNode;
 
         public MainWindow()
         {
@@ -81,14 +73,15 @@ namespace NetworkObservability
 
                 if (startDrawing)
                 {
-                    startPoint = new Point(selectedNode.X, selectedNode.Y);
 					startNode = selectedNode;
+                    startPoint = new Point(startNode.X, startNode.Y);
                     this.menuStartArc.Visibility = Visibility.Collapsed;
                     this.menuEndArc.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    endPoint = new Point(selectedNode.X, selectedNode.Y);
+                    endNode = selectedNode;
+                    endPoint = new Point(endNode.X, endNode.Y);
                     this.menuStartArc.Visibility = Visibility.Visible;
                     this.menuEndArc.Visibility = Visibility.Collapsed;
 
@@ -97,7 +90,7 @@ namespace NetworkObservability
 					graph.Call(graph => {
 						graph.ConnectNodeToWith(startNode.nodeImpl, selectedNode.nodeImpl, edge);
 					});
-					/* 
+                    /* 
 					if ((ArcType.SelectedItem as ComboBoxItem).Equals(UndirectedArc))
 					{
 						graph.Call(graph =>
@@ -108,20 +101,24 @@ namespace NetworkObservability
 					*/
 
                     // Test Arc draw
-                    Line line = new Line()
-                    {
-                        Stroke = System.Windows.Media.Brushes.DarkGray,
-                        X1 = startPoint.X,
-                        X2 = endPoint.X,
-                        Y1 = startPoint.Y,
-                        Y2 = endPoint.Y,
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Center,
-                        StrokeThickness = 2
-                    };
-					graph[line] = edge;
-                    MainCanvas.Children.Add(line);
-                    Canvas.SetZIndex(line, -1);
+                    System.Windows.Shapes.Path arc = new System.Windows.Shapes.Path();
+                    arc.Stroke = Brushes.DarkGray;
+                    arc.HorizontalAlignment = HorizontalAlignment.Left;
+                    arc.VerticalAlignment = VerticalAlignment.Center;
+                    arc.StrokeThickness = 1;
+
+                    MainCanvas.Children.Add(arc);
+                    Canvas.SetZIndex(arc, -1);
+
+                    LineGeometry line = new LineGeometry();
+                    arc.Data = line;
+                    startNode.StartLines.Add(line);
+                    endNode.EndLines.Add(line);
+
+                    MainCanvas.UpdateLines(startNode);
+                    MainCanvas.UpdateLines(endNode);
+
+					graph[arc] = edge;
                 }
             }
         }
@@ -176,7 +173,7 @@ namespace NetworkObservability
             //Canvas.SetTop(node, p.Y);
         }
 
-		private void Start_Click(object sender, RoutedEventArgs e)
+        private void Start_Click(object sender, RoutedEventArgs e)
 		{
 			logTab.IsSelected = true;
             logger.Content = "";
