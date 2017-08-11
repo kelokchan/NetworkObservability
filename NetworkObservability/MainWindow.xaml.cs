@@ -32,7 +32,6 @@ namespace NetworkObservability
         public static MainWindow AppWindow;
 		CanvasGraph<Node, Edge> graph = new CanvasGraph<Node, Edge>();
 
-        List<CanvasNode> nodeList = new List<CanvasNode>();
         Point startPoint, endPoint;
 		CanvasNode startNode;
 
@@ -150,9 +149,11 @@ namespace NetworkObservability
 
             node.X = p.X;
             node.Y = p.Y;
+
 			graph.AddNode(node);
 			graph[node.nodeImpl] = node;
             (sender as Canvas).Children.Add(node);
+            MainCanvas.SelectedNode = node;
 
             // As the component is actually a Grid, calculation is needed to obtain the center of the Component in the background
             MainCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (Object state)
@@ -178,6 +179,7 @@ namespace NetworkObservability
 		private void Start_Click(object sender, RoutedEventArgs e)
 		{
 			logTab.IsSelected = true;
+            logger.Content = "";
 			logger.Content += "\nStart Checking observability....\n";
 
 			var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
@@ -196,7 +198,13 @@ namespace NetworkObservability
 			logger.Content += "Task Finished.";
 		}
 
-		private void MenuOpen_Click(object sender, RoutedEventArgs e)
+        private void ___Button___Delete__Click(object sender, RoutedEventArgs e)
+        {
+            CanvasNode node = MainCanvas.SelectedNode;
+            MainCanvas.Children.Remove(node);
+        }
+
+        private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
             //Open file from anywhere
             OpenFileDialog fileDialog = new OpenFileDialog();

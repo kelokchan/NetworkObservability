@@ -23,8 +23,12 @@
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Fill" Value="#444444" />
                                     </Trigger>
+                                    <DataTrigger Binding="{Binding IsVisible}" Value="False">
+                                        <Setter Property="Fill" Value="Gray"/>
+                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding IsObserver}" Value="True">
-                                        <Setter Property="Fill" Value="#5fba7d"/>
+                                        <Setter Property="Stroke" Value="Red"/>
+                                        <Setter Property="StrokeThickness" Value="5"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

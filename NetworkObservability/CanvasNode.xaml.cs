@@ -26,14 +26,9 @@ namespace NetworkObservability
 
         internal Node nodeImpl;
 
-        // to accomodate the first 6 nodes populated on the Components tab
-        public static Int64 counter = -6;
         public bool isInSet { get; set; }
-        private string label;
-        private int id;
         private double x;
         private double y;
-        private bool isObserver = false;
 
         public bool IsObserver
         {
@@ -45,6 +40,19 @@ namespace NetworkObservability
             {
                 nodeImpl.IsObserver = value;
                 OnPropertyChanged("IsObserver");
+            }
+        }
+
+        public bool IsNodeVisible
+        {
+            get
+            {
+                return nodeImpl.IsVisible;
+            }
+            set
+            {
+                nodeImpl.IsVisible = value;
+                OnPropertyChanged("IsNodeVisible");
             }
         }
 

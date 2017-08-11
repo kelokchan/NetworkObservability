@@ -209,6 +209,23 @@ namespace NetworkObservability
 
         #endregion // ElementBeingDragged
 
+        #region SelectedNode
+
+        public CanvasNode SelectedNode
+        {
+            get
+            {
+                return this.node;
+            }
+            set
+            {
+                this.node = value;
+                NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = node;
+            }
+        }
+
+        #endregion
+
         #region FindCanvasChild
 
         /// <summary>
@@ -267,8 +284,7 @@ namespace NetworkObservability
             // Test get new Node
             if (this.elementBeingDragged is CanvasNode)
             {
-                node = (CanvasNode) this.elementBeingDragged;
-                NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = node;
+                this.SelectedNode= (CanvasNode) this.elementBeingDragged;
             }
 
             // Get the element's offsets from the four sides of the Canvas.
@@ -370,6 +386,7 @@ namespace NetworkObservability
             {
                 node.X = newHorizontalOffset;
                 node.Y = newVerticalOffset;
+               // TODO add arc list to node
             }
             #endregion // Move Drag Element
         }

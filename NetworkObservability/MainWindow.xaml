@@ -53,7 +53,7 @@
                         </ComboBox>
                         <!-- Add the image label for the arrows here! -->
                         
-                        <Button x:Name="___Button___Delete_" Margin="10 0 0 0" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleDelete}" />
+                        <Button x:Name="___Button___Delete_" Margin="10 0 0 0" Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleDelete}" Click="___Button___Delete__Click" />
                     </StackPanel>
                 </ToolBar>
                 <!-- Right toolbar -->
@@ -76,6 +76,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
@@ -85,12 +86,14 @@
                         <TextBox Grid.Row="0" Grid.Column="1" Margin="0 0 0 5" Text="{Binding ID, Mode=OneWay}" IsReadOnly="True"></TextBox>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Label: "/>
                         <TextBox Grid.Row="1" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Has Observer: "/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Observer: "/>
                         <CheckBox Grid.Row="2" Grid.Column="1" Margin="0 0 0 5" IsChecked="{Binding IsObserver, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="X: "/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Margin="0 0 0 5" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
-                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Y: "/>
-                        <TextBox Grid.Row="4" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Y, StringFormat=N0,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Visible: "/>
+                        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0 0 0 5" IsChecked="{Binding IsNodeVisible, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="X: "/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Margin="0 0 0 5" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Y: "/>
+                        <TextBox Grid.Row="5" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Y, StringFormat=N0,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
                     </Grid>
                 </TabItem>
             </TabControl>
