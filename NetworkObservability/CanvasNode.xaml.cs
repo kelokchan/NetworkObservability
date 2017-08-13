@@ -110,6 +110,21 @@ namespace NetworkObservability
             return nodeImpl.ToString();
         }
 
+        public CanvasNode Clone()
+        {
+            CanvasNode copy = new CanvasNode()
+            {
+                isInSet = isInSet,
+                Label = Label,
+                X = X,
+                Y = Y,
+                nodeImpl = nodeImpl,
+                IsNodeVisible = IsNodeVisible,
+                IsObserver = IsObserver,
+            };
+            return copy;
+        }
+
         protected void OnPropertyChanged(string key)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));

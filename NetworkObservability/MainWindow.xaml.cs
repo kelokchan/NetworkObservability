@@ -192,25 +192,38 @@ namespace NetworkObservability
 			logger.Content += "Observation Completed.\n";
 
             // This section needs to be manipulated -------------------------//
-            CanvasNode tempNode = new CanvasNode();
-            tempNode.X = 400;
-            tempNode.Y = 5000;
-            tempNode.IsObserver = true;
-            resultGraph.ResultCanvas.Children.Add(tempNode);
+            //CanvasNode tempNode = new CanvasNode();
+            //tempNode.X = 400;
+            //tempNode.Y = 400;
+            //resultGraph.ResultCanvas.Children.Add(tempNode);
             //---------------------------------------------------------------//
 
             foreach (var pair in result)
-			{
-				INode from = pair.Key.Item1, to = pair.Key.Item2;
-				bool isObserved = pair.Value;
-				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
-			}
+            {
+                INode from = pair.Key.Item1, to = pair.Key.Item2;
+                bool isObserved = pair.Value;
+                logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
 
+                CanvasNode tempNode = graph[from].Clone();
+                if (tempNode == null)
+                {
+                    throw new Exception("null Canvas Node!");
+                }
+                else
+                {
+                    if (tempNode.X != 0 && tempNode.Y != 0)
+                        resultGraph.ResultCanvas.Children.Add(tempNode);
+                    else
+                        throw new Exception("X and Y undefined!");
+                }
+
+            }
+
+            logger.Content += "Task Finished.";
             // Display the resultGraph window
             resultGraph.ResultCanvas.IsEnabled = false;
             resultGraph.Show();
 
-            logger.Content += "Task Finished.";
 		}
 
         private void ___Button___Delete__Click(object sender, RoutedEventArgs e)

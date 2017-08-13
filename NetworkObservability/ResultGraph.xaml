@@ -26,9 +26,7 @@
         </StackPanel>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
             <custom:DragCanvas x:Name="ResultCanvas" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="False" >
-                
             </custom:DragCanvas>
-            <!--<Canvas Grid.Row="0" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="True"></Canvas>-->
         </ScrollViewer>
 
     </Grid>
