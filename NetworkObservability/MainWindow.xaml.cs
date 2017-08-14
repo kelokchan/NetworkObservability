@@ -212,7 +212,11 @@ namespace NetworkObservability
                 else
                 {
                     if (tempNode.X != 0 && tempNode.Y != 0)
+                    {
+                        Canvas.SetTop(tempNode, tempNode.Y);
+                        Canvas.SetLeft(tempNode, tempNode.X);
                         resultGraph.ResultCanvas.Children.Add(tempNode);
+                    }
                     else
                         throw new Exception("X and Y undefined!");
                 }
