@@ -407,11 +407,21 @@ namespace NetworkObservability
             double left = Canvas.GetLeft(node);
             double top = Canvas.GetTop(node);
 
-            for (int i = 0; i < node.StartLines.Count; i++)
-                node.StartLines[i].StartPoint = new Point(left + node.ActualWidth / 2, top + node.ActualHeight / 2);
+            for (int i = 0; i < node.OutLines.Count; i++)
+            {
 
-            for (int i = 0; i < node.EndLines.Count; i++)
-                node.EndLines[i].EndPoint = new Point(left + node.ActualWidth / 2, top + node.ActualHeight / 2);
+                    node.OutLines[i].X1 = left + node.ActualWidth / 2;
+                    node.OutLines[i].Y1 = top + node.ActualHeight / 2;
+                
+            }
+
+            for (int i = 0; i < node.InLines.Count; i++)
+            {
+
+                    node.InLines[i].X2 = left + node.ActualWidth / 2;
+                    node.InLines[i].Y2 = top + node.ActualHeight / 2;
+                
+            }
         }
 
         #endregion

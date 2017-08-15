@@ -12,13 +12,13 @@ namespace NetworkObservability
 	{
 		private Graph graph;
 		private Dictionary<INode, CanvasNode> nodeToCNode;
-		private Dictionary<Path, EType> lineToEdge;
+		private Dictionary<CanvasEdge, EType> lineToEdge;
 
 		public CanvasGraph()
 		{
 			graph = new Graph();
 			nodeToCNode = new Dictionary<INode, CanvasNode>();
-			lineToEdge = new Dictionary<Path, EType>();
+			lineToEdge = new Dictionary<CanvasEdge, EType>();
 		}
 
 		public T Call<T>(Func<Graph, T> func)
@@ -36,7 +36,13 @@ namespace NetworkObservability
 			graph.Add(node.nodeImpl);
 		}
 
-		public EType this[Path line]
+        public void DeleteNode(CanvasNode node)
+        {
+            nodeToCNode.Remove(node.nodeImpl);
+            graph.Remove(node.nodeImpl);
+        }
+
+        public EType this[CanvasEdge line]
 		{
 			get
 			{

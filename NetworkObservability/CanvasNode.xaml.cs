@@ -31,8 +31,10 @@ namespace NetworkObservability
         private double x;
         private double y;
 
-        public List<LineGeometry> EndLines { get; private set; }
-        public List<LineGeometry> StartLines { get; private set; }
+        // Connections out from the current node
+        public List<CanvasEdge> OutLines { get; private set; }
+        // Connection into the current node
+        public List<CanvasEdge> InLines { get; private set; }
 
         public bool IsSelected
         {
@@ -108,8 +110,8 @@ namespace NetworkObservability
 
         public CanvasNode() : base()
         {
-            StartLines = new List<LineGeometry>();
-            EndLines = new List<LineGeometry>();
+            OutLines = new List<CanvasEdge>();
+            InLines = new List<CanvasEdge>();
             nodeImpl = new Node();
             InitializeComponent();
         }

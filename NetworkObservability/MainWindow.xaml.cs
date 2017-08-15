@@ -101,19 +101,22 @@ namespace NetworkObservability
 					*/
 
                     // Test Arc draw
-                    System.Windows.Shapes.Path arc = new System.Windows.Shapes.Path();
+                    CanvasEdge arc = new CanvasEdge();
                     arc.Stroke = Brushes.DarkGray;
-                    arc.HorizontalAlignment = HorizontalAlignment.Left;
+                    arc.HorizontalAlignment = HorizontalAlignment.Center;
                     arc.VerticalAlignment = VerticalAlignment.Center;
-                    arc.StrokeThickness = 1;
+                    arc.StrokeThickness = 2;
+                    arc.X1 = startNode.X;
+                    arc.Y1 = startNode.Y;
+                    arc.X2 = endNode.X;
+                    arc.Y2 = endNode.Y;
+                    arc.IsDirected = ArcType.SelectedItem == DirectedArc;
 
                     MainCanvas.Children.Add(arc);
                     Canvas.SetZIndex(arc, -1);
 
-                    LineGeometry line = new LineGeometry();
-                    arc.Data = line;
-                    startNode.StartLines.Add(line);
-                    endNode.EndLines.Add(line);
+                    startNode.OutLines.Add(arc);
+                    endNode.InLines.Add(arc);
 
                     MainCanvas.UpdateLines(startNode);
                     MainCanvas.UpdateLines(endNode);
@@ -198,6 +201,7 @@ namespace NetworkObservability
         private void ___Button___Delete__Click(object sender, RoutedEventArgs e)
         {
             CanvasNode node = MainCanvas.SelectedNode;
+            graph.DeleteNode(node);
             MainCanvas.Children.Remove(node);
         }
 

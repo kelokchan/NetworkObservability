@@ -28,7 +28,7 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsObserver}" Value="True">
                                         <Setter Property="Stroke" Value="Red"/>
-                                        <Setter Property="StrokeThickness" Value="5"/>
+                                        <Setter Property="StrokeThickness" Value="4"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
