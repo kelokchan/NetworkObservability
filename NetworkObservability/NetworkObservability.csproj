@@ -38,7 +38,7 @@
   <ItemGroup>
     <Reference Include="NOCoreForFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\NOCoreForFramework\NOCoreForFramework\bin\Release\NOCoreForFramework.dll</HintPath>
+      <HintPath>..\..\..\royce\NOCoreForFramework\NOCoreForFramework\bin\Release\NOCoreForFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -63,6 +63,9 @@
     <Compile Include="CanvasGraph.cs" />
     <Compile Include="CanvasNode.xaml.cs">
       <DependentUpon>CanvasNode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ResultGraph.xaml.cs">
+      <DependentUpon>ResultGraph.xaml</DependentUpon>
     </Compile>
     <Page Include="CanvasNode.xaml">
       <SubType>Designer</SubType>
@@ -95,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="resources\Toolbar\StopButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResultGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

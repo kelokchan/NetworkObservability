@@ -178,6 +178,9 @@ namespace NetworkObservability
 
         private void Start_Click(object sender, RoutedEventArgs e)
 		{
+            // Create a resultGraph instance
+            ResultGraph resultGraph = new ResultGraph();
+
 			logTab.IsSelected = true;
             logger.Content = "";
 			logger.Content += "\nStart Checking observability....\n";
@@ -188,14 +191,43 @@ namespace NetworkObservability
 
 			logger.Content += "Observation Completed.\n";
 
-			foreach (var pair in result)
-			{
-				INode from = pair.Key.Item1, to = pair.Key.Item2;
-				bool isObserved = pair.Value;
-				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
-			}
+            // This section needs to be manipulated -------------------------//
+            //CanvasNode tempNode = new CanvasNode();
+            //tempNode.X = 400;
+            //tempNode.Y = 400;
+            //resultGraph.ResultCanvas.Children.Add(tempNode);
+            //---------------------------------------------------------------//
 
-			logger.Content += "Task Finished.";
+            foreach (var pair in result)
+            {
+                INode from = pair.Key.Item1, to = pair.Key.Item2;
+                bool isObserved = pair.Value;
+                logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
+
+                CanvasNode tempNode = graph[from].Clone();
+                if (tempNode == null)
+                {
+                    throw new Exception("null Canvas Node!");
+                }
+                else
+                {
+                    if (tempNode.X != 0 && tempNode.Y != 0)
+                    {
+                        Canvas.SetTop(tempNode, tempNode.Y);
+                        Canvas.SetLeft(tempNode, tempNode.X);
+                        resultGraph.ResultCanvas.Children.Add(tempNode);
+                    }
+                    else
+                        throw new Exception("X and Y undefined!");
+                }
+
+            }
+
+            logger.Content += "Task Finished.";
+            // Display the resultGraph window
+            resultGraph.ResultCanvas.IsEnabled = false;
+            resultGraph.Show();
+
 		}
 
         private void ___Button___Delete__Click(object sender, RoutedEventArgs e)
