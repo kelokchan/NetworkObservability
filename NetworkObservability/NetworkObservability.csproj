@@ -60,6 +60,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddAttributeWindow.xaml.cs">
+      <DependentUpon>AddAttributeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CanvasGraph.cs" />
     <Compile Include="CanvasNode.xaml.cs">
       <DependentUpon>CanvasNode.xaml</DependentUpon>
@@ -67,6 +70,10 @@
     <Compile Include="ResultGraph.xaml.cs">
       <DependentUpon>ResultGraph.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddAttributeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CanvasNode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

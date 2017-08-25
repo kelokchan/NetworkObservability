@@ -12,13 +12,13 @@ namespace NetworkObservability
 	{
 		private Graph graph;
 		private Dictionary<INode, CanvasNode> nodeToCNode;
-		private Dictionary<CanvasEdge, EType> lineToEdge;
+		private Dictionary<EType, CanvasEdge> edgeToCEdge;
 
 		public CanvasGraph()
 		{
 			graph = new Graph();
 			nodeToCNode = new Dictionary<INode, CanvasNode>();
-			lineToEdge = new Dictionary<CanvasEdge, EType>();
+			edgeToCEdge = new Dictionary<EType, CanvasEdge>();
 		}
 
 		public T Call<T>(Func<Graph, T> func)
@@ -42,15 +42,30 @@ namespace NetworkObservability
             graph.Remove(node.nodeImpl);
         }
 
-        public EType this[CanvasEdge line]
+        public void DeleteEdge(CanvasEdge edge)
+        {
+            edgeToCEdge.Remove((EType) edge.edgeImpl);
+
+            INode from = edge.edgeImpl.From;
+            nodeToCNode[from].OutLines.Remove(edge);
+            from.Links.Remove(edge.edgeImpl);
+
+            INode to = edge.edgeImpl.To;
+            to.Links.Remove(edge.edgeImpl);
+            nodeToCNode[to].InLines.Remove(edge);
+
+            graph.Remove(edge.edgeImpl);
+        }
+
+        public CanvasEdge this[IEdge edge]
 		{
 			get
 			{
-				return lineToEdge[line];
+				return edgeToCEdge[(EType) edge];
 			}
 			set
 			{
-				lineToEdge[line] = value;
+				edgeToCEdge[(EType) edge] = value;
 			}
 		}
 
@@ -65,5 +80,10 @@ namespace NetworkObservability
 				nodeToCNode[node] = value;
 			}
 		}
-	}
+
+        internal void ConnectNodeToWith(CanvasNode startNode, CanvasNode endNode, CanvasEdge edge)
+        {
+            graph.ConnectNodeToWith(startNode.nodeImpl, endNode.nodeImpl, edge.edgeImpl);
+        }
+    }
 }

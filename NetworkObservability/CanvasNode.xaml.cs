@@ -24,7 +24,7 @@ namespace NetworkObservability
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal Node nodeImpl;
+        internal INode nodeImpl;
 
         public bool isInSet { get; set; }
         private bool isSelected;

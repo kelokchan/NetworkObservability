@@ -7,11 +7,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using NetworkObservabilityCore;
 
 namespace NetworkObservability
 {
     public sealed class CanvasEdge : Shape
     {
+        internal IEdge edgeImpl;
+
+        public CanvasEdge() : base()
+        {
+            edgeImpl = new Edge();     
+        }
+
         #region Dependency Properties
 
         public static readonly DependencyProperty X1Property = DependencyProperty.Register("X1", typeof(double), typeof(CanvasEdge), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
@@ -21,7 +29,10 @@ namespace NetworkObservability
         public static readonly DependencyProperty HeadWidthProperty = DependencyProperty.Register("HeadWidth", typeof(double), typeof(CanvasEdge), new FrameworkPropertyMetadata(7.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty HeadHeightProperty = DependencyProperty.Register("HeadHeight", typeof(double), typeof(CanvasEdge), new FrameworkPropertyMetadata(7.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty IsDirectedProperty = DependencyProperty.Register("IsDirected", typeof(Boolean), typeof(CanvasEdge), new PropertyMetadata(true));
+       
         #endregion
+
+        private bool isSelected;
 
         #region CLR Properties
 
@@ -71,6 +82,16 @@ namespace NetworkObservability
         {
             get { return (double)base.GetValue(HeadHeightProperty); }
             set { base.SetValue(HeadHeightProperty, value); }
+        }
+
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                this.Stroke = isSelected ? Brushes.Green : Brushes.DarkGray;
+            }
         }
 
         #endregion
@@ -133,8 +154,8 @@ namespace NetworkObservability
                 context.LineTo(mid_point, true, true);
                 context.LineTo(pt4, true, true);               
             }
-        }
 
+        }
         #endregion
     }
 }

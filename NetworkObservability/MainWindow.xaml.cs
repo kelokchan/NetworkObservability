@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using NetworkObservabilityCore;
 using System.Windows.Media;
+using System.Windows.Data;
 
 namespace NetworkObservability
 {
@@ -22,7 +23,7 @@ namespace NetworkObservability
         /// </summary>
         private UIElement elementForContextMenu;
         public static MainWindow AppWindow;
-		CanvasGraph<Node, Edge> graph = new CanvasGraph<Node, Edge>();
+		CanvasGraph<INode, IEdge> graph = new CanvasGraph<INode, IEdge>();
 
         Point startPoint, endPoint;
         CanvasNode startNode, endNode;
@@ -33,13 +34,6 @@ namespace NetworkObservability
             AppWindow = this;
 
             canvasNodeButton.PreviewMouseDown += Component_MouseDown;
-
-            //visibleObserver.PreviewMouseDown += Component_MouseDown;
-            //invisibleObserver.PreviewMouseDown += Component_MouseDown;
-            //visibleNode.PreviewMouseDown += Component_MouseDown;
-            //invisibleNode.PreviewMouseDown += Component_MouseDown;
-            //endNode.PreviewMouseDown += Component_MouseDown;
-            //customNode.PreviewMouseDown += Component_MouseDown;
         }
 
         void OnContextMenuOpened(object sender, RoutedEventArgs e)
@@ -85,43 +79,33 @@ namespace NetworkObservability
                     this.menuStartArc.Visibility = Visibility.Visible;
                     this.menuEndArc.Visibility = Visibility.Collapsed;
 
-					// Try Adding Edge
-					Edge edge = new Edge(1);
-					graph.Call(graph => {
-						graph.ConnectNodeToWith(startNode.nodeImpl, selectedNode.nodeImpl, edge);
+                    CanvasEdge edge = new CanvasEdge()
+                    {
+                        Stroke = Brushes.DarkGray,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        StrokeThickness = 2,
+                        X1 = startNode.X,
+                        Y1 = startNode.Y,
+                        X2 = endNode.X,
+                        Y2 = endNode.Y,
+                        IsDirected = ArcType.SelectedItem == DirectedArc
+                    };
+
+                    graph.ConnectNodeToWith(startNode, selectedNode, edge);
+                    graph.Call(graph => {
+						graph.ConnectNodeToWith(startNode.nodeImpl, selectedNode.nodeImpl, edge.edgeImpl);
 					});
-                    /* 
-					if ((ArcType.SelectedItem as ComboBoxItem).Equals(UndirectedArc))
-					{
-						graph.Call(graph =>
-						{
-							graph.ConnectNodeToWith(selectedNode.nodeImpl, startNode.nodeImpl, new Edge(1));
-						});
-					}
-					*/
+					graph[edge.edgeImpl] = edge;
 
-                    // Test Arc draw
-                    CanvasEdge arc = new CanvasEdge();
-                    arc.Stroke = Brushes.DarkGray;
-                    arc.HorizontalAlignment = HorizontalAlignment.Center;
-                    arc.VerticalAlignment = VerticalAlignment.Center;
-                    arc.StrokeThickness = 2;
-                    arc.X1 = startNode.X;
-                    arc.Y1 = startNode.Y;
-                    arc.X2 = endNode.X;
-                    arc.Y2 = endNode.Y;
-                    arc.IsDirected = ArcType.SelectedItem == DirectedArc;
+                    MainCanvas.Children.Add(edge);
+                    Canvas.SetZIndex(edge, -1);
 
-                    MainCanvas.Children.Add(arc);
-                    Canvas.SetZIndex(arc, -1);
-
-                    startNode.OutLines.Add(arc);
-                    endNode.InLines.Add(arc);
+                    startNode.OutLines.Add(edge);
+                    endNode.InLines.Add(edge);
 
                     MainCanvas.UpdateLines(startNode);
                     MainCanvas.UpdateLines(endNode);
-
-					graph[arc] = edge;
                 }
             }
         }
@@ -149,6 +133,7 @@ namespace NetworkObservability
 
             node.X = p.X;
             node.Y = p.Y;
+            node.IsSelected = true;
 
 			graph.AddNode(node);
 			graph[node.nodeImpl] = node;
@@ -166,10 +151,7 @@ namespace NetworkObservability
                 Canvas.SetLeft(node, actualX);
                 Canvas.SetTop(node, actualY);
 
-                // Set autofocus to right panel
-                PropertiesPanel.DataContext = node;
-                PropertiesPanel.Focus();
-
+                NodePanel.DataContext = node;
                 return null;
             }), null);
             //Canvas.SetLeft(node, p.X);
@@ -230,11 +212,64 @@ namespace NetworkObservability
 
 		}
 
+        private void AddAttributeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainCanvas.SelectedEdge == null) return;
+
+            var attributeWindow = new AddAttributeWindow();
+            if (attributeWindow.ShowDialog() == true)
+            {
+                EdgePanel.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                TextBlock l = new TextBlock();
+                l.Text = attributeWindow.Attribute + ":";
+                TextBox t = new TextBox();
+                t.Text = attributeWindow.Value;
+
+                //var myBinding = new Binding();
+                //myBinding.Source = MainCanvas.SelectedEdge;
+                //myBinding.Mode = BindingMode.TwoWay;
+                //myBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                //myBinding.Path = new PropertyPath("Label");
+                //t.SetBinding(TextBox.TextProperty, myBinding);
+
+                Grid.SetRow(l, EdgePanel.Children.Count - 1);
+                Grid.SetColumn(l, 0);
+                Grid.SetRow(t, EdgePanel.Children.Count - 1);
+                Grid.SetColumn(t, 1);
+                EdgePanel.Children.Add(l);
+                EdgePanel.Children.Add(t);
+            }
+        }
+
         private void ___Button___Delete__Click(object sender, RoutedEventArgs e)
         {
-            CanvasNode node = MainCanvas.SelectedNode;
-            graph.DeleteNode(node);
-            MainCanvas.Children.Remove(node);
+            if (MainCanvas.SelectedNode != null)
+            {
+                NodePanel.DataContext = null;
+                var node = MainCanvas.SelectedNode;
+                MainCanvas.Children.Remove(node);
+
+                foreach(CanvasEdge edge in node.InLines)
+                {
+                    MainCanvas.Children.Remove(edge);
+                }
+                foreach (CanvasEdge edge in node.OutLines)
+                {
+                    MainCanvas.Children.Remove(edge);
+                }
+
+                graph.DeleteNode(node);
+                MainCanvas.SelectedNode = null;
+            }
+            else if (MainCanvas.SelectedEdge != null)
+            {
+                EdgePanel.DataContext = null;
+                var edge = MainCanvas.SelectedEdge;
+                MainCanvas.Children.Remove(edge);
+            
+                graph.DeleteEdge(edge);
+                MainCanvas.SelectedEdge = null;
+            }
         }
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)

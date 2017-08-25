@@ -22,6 +22,9 @@ namespace NetworkObservability
         // Stores a Node reference upcast from elementBeingDragged
         private CanvasNode node;
 
+        // Stores a Edge reference upcast from elementBeingDragged
+        private CanvasEdge edge;
+
         // Keeps track of where the mouse cursor was when a drag operation began.		
         private Point origCursorLocation;
 
@@ -223,26 +226,39 @@ namespace NetworkObservability
                 {
                     this.node.IsSelected = false;
                 }
-
                 this.node = value;
-                NetworkObservability.MainWindow.AppWindow.PropertiesPanel.DataContext = this.node;
-                this.node.IsSelected = true;
+            }
+        }
+
+        public CanvasEdge SelectedEdge
+        {
+            get
+            {
+                return this.edge;
+            }
+            set
+            {
+                if (this.edge != null)
+                {
+                    this.edge.IsSelected = false;
+                }
+                this.edge = value;
             }
         }
 
         #endregion
 
-        #region FindCanvasChild
+            #region FindCanvasChild
 
-        /// <summary>
-        /// Walks up the visual tree starting with the specified DependencyObject, 
-        /// looking for a UIElement which is a child of the Canvas.  If a suitable 
-        /// element is not found, null is returned.  If the 'depObj' object is a 
-        /// UIElement in the Canvas's Children collection, it will be returned.
-        /// </summary>
-        /// <param name="depObj">
-        /// A DependencyObject from which the search begins.
-        /// </param>
+            /// <summary>
+            /// Walks up the visual tree starting with the specified DependencyObject, 
+            /// looking for a UIElement which is a child of the Canvas.  If a suitable 
+            /// element is not found, null is returned.  If the 'depObj' object is a 
+            /// UIElement in the Canvas's Children collection, it will be returned.
+            /// </summary>
+            /// <param name="depObj">
+            /// A DependencyObject from which the search begins.
+            /// </param>
         public UIElement FindCanvasChild(DependencyObject depObj)
         {
             while (depObj != null)
@@ -284,7 +300,7 @@ namespace NetworkObservability
             // Walk up the visual tree from the element that was clicked, 
             // looking for an element that is a direct child of the Canvas.
             this.ElementBeingDragged = this.FindCanvasChild(e.Source as DependencyObject);
-            if (this.ElementBeingDragged == null || this.elementBeingDragged is Line)
+            if (this.ElementBeingDragged == null)
                 return;
 
             // Test get new Node
@@ -292,6 +308,12 @@ namespace NetworkObservability
             {
                 this.SelectedNode = (CanvasNode) this.elementBeingDragged;             
             }
+            else if (this.elementBeingDragged is CanvasEdge)
+            {
+                this.SelectedEdge = (CanvasEdge) this.elementBeingDragged;
+            }
+
+            this.SetMainWindowSidePanel(this.ElementBeingDragged);
 
             // Get the element's offsets from the four sides of the Canvas.
             double left = Canvas.GetLeft(this.ElementBeingDragged);
@@ -311,6 +333,33 @@ namespace NetworkObservability
             this.isDragInProgress = true;
         }
 
+        private void SetMainWindowSidePanel(UIElement elementBeingDragged)
+        {
+            if (elementBeingDragged is CanvasNode)
+            {
+                if (this.edge != null)
+                {
+                    this.edge.IsSelected = false;
+                    this.edge = null;
+                }
+                this.node.IsSelected = true;
+                NetworkObservability.MainWindow.AppWindow.NodePanel.DataContext = this.node;
+                NetworkObservability.MainWindow.AppWindow.SidePanel.SelectedIndex = 0;
+            }
+            else if (elementBeingDragged is CanvasEdge)
+            {
+                if (this.node != null)
+                {
+                    this.node.IsSelected = false;
+                    this.node = null;
+                }
+                this.edge.IsSelected = true;
+                NetworkObservability.MainWindow.AppWindow.EdgePanel.DataContext = this.edge;
+                NetworkObservability.MainWindow.AppWindow.SidePanel.SelectedIndex = 1;
+            }
+
+        }
+
         #endregion // OnPreviewMouseLeftButtonDown
 
         #region OnPreviewMouseMove
@@ -319,8 +368,8 @@ namespace NetworkObservability
         {
             base.OnPreviewMouseMove(e);
 
-            // If no element is being dragged, there is nothing to do.
-            if (this.ElementBeingDragged == null || !this.isDragInProgress)
+            // If no element is being dragged or element is edge, there is nothing to do.
+            if (this.ElementBeingDragged == null || !this.isDragInProgress || this.ElementBeingDragged is CanvasEdge)
                 return;
 
             // Get the position of the mouse cursor, relative to the Canvas.
@@ -409,18 +458,14 @@ namespace NetworkObservability
 
             for (int i = 0; i < node.OutLines.Count; i++)
             {
-
-                    node.OutLines[i].X1 = left + node.ActualWidth / 2;
-                    node.OutLines[i].Y1 = top + node.ActualHeight / 2;
-                
+                 node.OutLines[i].X1 = left + node.ActualWidth / 2;
+                 node.OutLines[i].Y1 = top + node.ActualHeight / 2;               
             }
 
             for (int i = 0; i < node.InLines.Count; i++)
             {
-
-                    node.InLines[i].X2 = left + node.ActualWidth / 2;
-                    node.InLines[i].Y2 = top + node.ActualHeight / 2;
-                
+                node.InLines[i].X2 = left + node.ActualWidth / 2;
+                node.InLines[i].Y2 = top + node.ActualHeight / 2;              
             }
         }
 

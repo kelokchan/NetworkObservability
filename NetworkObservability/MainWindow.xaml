@@ -67,34 +67,68 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="5" Background="#FFBCBCBC"/>
-            <TabControl Grid.Column="2">
-                <TabItem Header="Properties">
-                    <Grid x:Name="PropertiesPanel" Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="ID: "/>
-                        <TextBox Grid.Row="0" Grid.Column="1" Margin="0 0 0 5" Text="{Binding ID, Mode=OneWay}" IsReadOnly="True"></TextBox>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Label: "/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Observer: "/>
-                        <CheckBox Grid.Row="2" Grid.Column="1" Margin="0 0 0 5" IsChecked="{Binding IsObserver, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Visible: "/>
-                        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0 0 0 5" IsChecked="{Binding IsNodeVisible, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                        <TextBlock Grid.Row="4" Grid.Column="0" Text="X: "/>
-                        <TextBox Grid.Row="4" Grid.Column="1" Margin="0 0 0 5" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
-                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Y: "/>
-                        <TextBox Grid.Row="5" Grid.Column="1" Margin="0 0 0 5" Text="{Binding Y, StringFormat=N0,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
-                    </Grid>
+            <TabControl Name="SidePanel" Grid.Column="2">
+                <TabItem Header="Node">
+                    <StackPanel Margin="10">
+                        <Grid x:Name="NodePanel">
+                            <Grid.Resources>
+                                <Style TargetType="{x:Type TextBox}">
+                                    <Setter Property="Margin" Value="0,0,0,10" />
+                                </Style>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <Setter Property="Margin" Value="0,0,0,10" />
+                                </Style>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="ID: "/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ID, Mode=OneWay}" IsReadOnly="True"></TextBox>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Label: "/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Observer: "/>
+                            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsObserver, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Visible: "/>
+                            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsNodeVisible, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="X: "/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Y: "/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Y, StringFormat=N0,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
+                        </Grid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Edge">
+                    <StackPanel Margin="10">
+                        <Grid x:Name="EdgePanel">
+                            <Grid.Resources>
+                                <Style TargetType="{x:Type TextBox}">
+                                    <Setter Property="Margin" Value="0,0,0,10" />
+                                </Style>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <Setter Property="Margin" Value="0,0,0,10" />
+                                </Style>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Directed: "/>
+                            <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding IsDirected, Mode=OneWay}" IsEnabled="False"></CheckBox>
+                        </Grid>
+                        <Button Name="AddAttributeBtn" Padding="2" Content="Add attribute" Cursor="Hand" HorizontalAlignment="Right" Click="AddAttributeBtn_Click"/>
+                    </StackPanel>
                 </TabItem>
             </TabControl>
             <Grid Grid.Column="0">
@@ -114,7 +148,6 @@
                                 <MenuItem Header="Send To Back" Name="menuItemSendToBack" />
                             </ContextMenu>
                         </custom:DragCanvas.ContextMenu>
-
                     </custom:DragCanvas>
                 </ScrollViewer>
 
