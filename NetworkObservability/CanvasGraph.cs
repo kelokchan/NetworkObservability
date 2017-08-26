@@ -48,12 +48,10 @@ namespace NetworkObservability
 
             INode from = edge.edgeImpl.From;
             nodeToCNode[from].OutLines.Remove(edge);
-            //from.Links.Remove(edge.edgeImpl);
             from.ConnectTo.Remove(edge.edgeImpl);
 
             INode to = edge.edgeImpl.To;
             to.ConnectTo.Remove(edge.edgeImpl);
-            //to.Links.Remove(edge.edgeImpl);
             nodeToCNode[to].InLines.Remove(edge);
 
             graph.Remove(edge.edgeImpl);
@@ -82,10 +80,5 @@ namespace NetworkObservability
 				nodeToCNode[node] = value;
 			}
 		}
-
-        internal void ConnectNodeToWith(CanvasNode startNode, CanvasNode endNode, CanvasEdge edge)
-        {
-            graph.ConnectNodeToWith(startNode.nodeImpl, endNode.nodeImpl, edge.edgeImpl);
-        }
     }
 }

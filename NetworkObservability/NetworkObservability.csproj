@@ -38,7 +38,7 @@
   <ItemGroup>
     <Reference Include="NOCoreForFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\royce\NOCoreForFramework\NOCoreForFramework\bin\Release\NOCoreForFramework.dll</HintPath>
+      <HintPath>..\..\..\Visual Studio 2017\Projects\NOCoreForFramework\NOCoreForFramework\bin\Release\NOCoreForFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

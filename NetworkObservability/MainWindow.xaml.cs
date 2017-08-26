@@ -92,7 +92,6 @@ namespace NetworkObservability
                         IsDirected = ArcType.SelectedItem == DirectedArc
                     };
 
-                    graph.ConnectNodeToWith(startNode, selectedNode, edge);
                     graph.Call(graph => {
 						graph.ConnectNodeToWith(startNode.nodeImpl, selectedNode.nodeImpl, edge.edgeImpl);
 					});
