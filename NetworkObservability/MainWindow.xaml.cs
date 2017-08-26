@@ -241,6 +241,7 @@ namespace NetworkObservability
             }
         }
 
+
         private void ___Button___Delete__Click(object sender, RoutedEventArgs e)
         {
             if (MainCanvas.SelectedNode != null)
@@ -285,6 +286,19 @@ namespace NetworkObservability
             {
                 //TODO 
                 Stream contents = fileDialog.OpenFile();
+            }
+        }
+        private void ___MenuItem___Save___Click(object sender, RoutedEventArgs e)
+        {
+            // TODO
+            string xmlFileContents = "Some testing string";
+        SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "XML file (*.xml) | *.xml";
+
+            if (dialog.ShowDialog() == true)
+            {
+                string savePath = System.IO.Path.GetDirectoryName(dialog.FileName);
+                File.WriteAllText(dialog.FileName, xmlFileContents);
             }
         }
     }

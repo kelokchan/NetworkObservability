@@ -1,0 +1,40 @@
+﻿<Window x:Class="NetworkObservability.StartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetworkObservability"
+        mc:Ignorable="d"
+        Title="Select" Height="Auto" Width="200">
+    <Grid>
+        <StackPanel>
+            <TextBlock Margin="10" ><Run Text="Select an attribute to run the"/><LineBreak/><Run Text="algorithm"/></TextBlock>
+            <StackPanel Name="attributeList">
+                <!-- Some rows here -->
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Width="95px">
+                    <Button Margin="10">
+                        <Button.Background>
+                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
+                        </Button.Background>
+                        <Button.BorderBrush>
+                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionColorKey}}"/>
+                        </Button.BorderBrush> Minimum</Button>
+                </StackPanel>
+                <StackPanel Width="95px">
+                    <Button Margin="10">
+                        <Button.Background>
+                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
+                        </Button.Background> Maximum</Button>
+                </StackPanel>
+            </StackPanel>
+                <StackPanel Margin="10">
+                    <Button>
+                    <Button.Background>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
+                    </Button.Background> Run</Button>
+                </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

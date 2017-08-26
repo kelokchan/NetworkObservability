@@ -48,10 +48,12 @@ namespace NetworkObservability
 
             INode from = edge.edgeImpl.From;
             nodeToCNode[from].OutLines.Remove(edge);
-            from.Links.Remove(edge.edgeImpl);
+            //from.Links.Remove(edge.edgeImpl);
+            from.ConnectTo.Remove(edge.edgeImpl);
 
             INode to = edge.edgeImpl.To;
-            to.Links.Remove(edge.edgeImpl);
+            to.ConnectTo.Remove(edge.edgeImpl);
+            //to.Links.Remove(edge.edgeImpl);
             nodeToCNode[to].InLines.Remove(edge);
 
             graph.Remove(edge.edgeImpl);
