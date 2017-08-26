@@ -117,15 +117,10 @@
                                     <Setter Property="Margin" Value="0,0,0,10" />
                                 </Style>
                             </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Directed: "/>
-                            <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding IsDirected, Mode=OneWay}" IsEnabled="False"></CheckBox>
                         </Grid>
                         <Button Name="AddAttributeBtn" Padding="2" Content="Add attribute" Cursor="Hand" HorizontalAlignment="Right" Click="AddAttributeBtn_Click"/>
                     </StackPanel>

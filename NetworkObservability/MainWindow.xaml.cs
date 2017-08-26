@@ -24,8 +24,6 @@ namespace NetworkObservability
         private UIElement elementForContextMenu;
         public static MainWindow AppWindow;
 		CanvasGraph<INode, IEdge> graph = new CanvasGraph<INode, IEdge>();
-
-        Point startPoint, endPoint;
         CanvasNode startNode, endNode;
 
         public MainWindow()
@@ -68,45 +66,82 @@ namespace NetworkObservability
                 if (startDrawing)
                 {
 					startNode = selectedNode;
-                    startPoint = new Point(startNode.X, startNode.Y);
                     this.menuStartArc.Visibility = Visibility.Collapsed;
                     this.menuEndArc.Visibility = Visibility.Visible;
                 }
                 else
                 {
                     endNode = selectedNode;
-                    endPoint = new Point(endNode.X, endNode.Y);
                     this.menuStartArc.Visibility = Visibility.Visible;
                     this.menuEndArc.Visibility = Visibility.Collapsed;
 
-                    CanvasEdge edge = new CanvasEdge()
-                    {
-                        Stroke = Brushes.DarkGray,
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Center,
-                        StrokeThickness = 2,
-                        X1 = startNode.X,
-                        Y1 = startNode.Y,
-                        X2 = endNode.X,
-                        Y2 = endNode.Y,
-                        IsDirected = ArcType.SelectedItem == DirectedArc
-                    };
-
-                    graph.Call(graph => {
-						graph.ConnectNodeToWith(startNode.nodeImpl, selectedNode.nodeImpl, edge.edgeImpl);
-					});
-					graph[edge.edgeImpl] = edge;
-
-                    MainCanvas.Children.Add(edge);
-                    Canvas.SetZIndex(edge, -1);
-
-                    startNode.OutLines.Add(edge);
-                    endNode.InLines.Add(edge);
-
-                    MainCanvas.UpdateLines(startNode);
-                    MainCanvas.UpdateLines(endNode);
+                    DrawEdge(startNode, endNode);
                 }
             }
+        }
+
+        private void DrawEdge(CanvasNode startNode, CanvasNode endNode)
+        {
+            Point startPoint, endPoint;
+            startPoint = new Point(startNode.X, startNode.Y);
+            endPoint = new Point(endNode.X, endNode.Y);
+
+            CanvasEdge edge = new CanvasEdge()
+            {
+                Stroke = Brushes.DarkGray,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                StrokeThickness = 2,
+                X1 = startNode.X,
+                Y1 = startNode.Y,
+                X2 = endNode.X,
+                Y2 = endNode.Y,
+                IsDirected = ArcType.SelectedItem == DirectedArc
+            };
+
+            graph.Call(graph => {
+                graph.ConnectNodeToWith(startNode.nodeImpl, endNode.nodeImpl, edge.edgeImpl);
+            });
+            graph[edge.edgeImpl] = edge;
+
+            MainCanvas.Children.Add(edge);
+            Canvas.SetZIndex(edge, -1);
+
+            startNode.OutLines.Add(edge);
+            endNode.InLines.Add(edge);
+
+            MainCanvas.UpdateLines(startNode);
+            MainCanvas.UpdateLines(endNode);
+        }
+
+        private void DrawNode(Point p)
+        {
+            CanvasNode node = new CanvasNode()
+            {
+                X = p.X,
+                Y = p.Y,
+                IsSelected = true
+            };
+
+            graph.Call(graph => graph.Add(node.nodeImpl));
+            graph[node.nodeImpl] = node;
+            MainCanvas.Children.Add(node);
+            MainCanvas.SelectedNode = node;
+
+            // As the component is actually a Grid, calculation is needed to obtain the center of the Component in the background
+            MainCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (Object state)
+            {
+                double widthOffset = node.ActualWidth / 2;
+                double heightOffset = node.ActualHeight / 2;
+                double actualX = p.X - widthOffset;
+                double actualY = p.Y - heightOffset;
+
+                Canvas.SetLeft(node, actualX);
+                Canvas.SetTop(node, actualY);
+
+                NodePanel.DataContext = node;
+                return null;
+            }), null);
         }
 
         private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -127,34 +162,8 @@ namespace NetworkObservability
 
         private void MainCanvas_Drop(object sender, DragEventArgs e)
         {
-            CanvasNode node = new CanvasNode();
             Point p = e.GetPosition(MainCanvas);
-
-            node.X = p.X;
-            node.Y = p.Y;
-            node.IsSelected = true;
-
-			graph.Call(graph => graph.Add(node.nodeImpl));
-			graph[node.nodeImpl] = node;
-            (sender as Canvas).Children.Add(node);
-            MainCanvas.SelectedNode = node;
-
-            // As the component is actually a Grid, calculation is needed to obtain the center of the Component in the background
-            MainCanvas.Dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (Object state)
-            {
-                double widthOffset = node.ActualWidth / 2;
-                double heightOffset = node.ActualHeight / 2;
-                double actualX = p.X - widthOffset;
-                double actualY = p.Y - heightOffset;
-
-                Canvas.SetLeft(node, actualX);
-                Canvas.SetTop(node, actualY);
-
-                NodePanel.DataContext = node;
-                return null;
-            }), null);
-            //Canvas.SetLeft(node, p.X);
-            //Canvas.SetTop(node, p.Y);
+            DrawNode(p);
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
@@ -218,11 +227,21 @@ namespace NetworkObservability
             var attributeWindow = new AddAttributeWindow();
             if (attributeWindow.ShowDialog() == true)
             {
-                EdgePanel.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                RowDefinition rd = new RowDefinition() { Height = GridLength.Auto };
+                EdgePanel.RowDefinitions.Add(rd);
+                int rowIndex = EdgePanel.RowDefinitions.IndexOf(rd);
+
                 TextBlock l = new TextBlock();
                 l.Text = attributeWindow.Attribute + ":";
+                EdgePanel.Children.Add(l);
+                Grid.SetRow(l, rowIndex);
+                Grid.SetColumn(l, 0);
+
                 TextBox t = new TextBox();
                 t.Text = attributeWindow.Value;
+                EdgePanel.Children.Add(t);
+                Grid.SetRow(t, rowIndex);
+                Grid.SetColumn(t, 1);
 
                 //var myBinding = new Binding();
                 //myBinding.Source = MainCanvas.SelectedEdge;
@@ -231,15 +250,8 @@ namespace NetworkObservability
                 //myBinding.Path = new PropertyPath("Label");
                 //t.SetBinding(TextBox.TextProperty, myBinding);
 
-                Grid.SetRow(l, EdgePanel.Children.Count - 1);
-                Grid.SetColumn(l, 0);
-                Grid.SetRow(t, EdgePanel.Children.Count - 1);
-                Grid.SetColumn(t, 1);
-                EdgePanel.Children.Add(l);
-                EdgePanel.Children.Add(t);
             }
         }
-
 
         private void ___Button___Delete__Click(object sender, RoutedEventArgs e)
         {
@@ -249,7 +261,7 @@ namespace NetworkObservability
                 var node = MainCanvas.SelectedNode;
                 MainCanvas.Children.Remove(node);
 
-                foreach(CanvasEdge edge in node.InLines)
+                foreach (CanvasEdge edge in node.InLines)
                 {
                     MainCanvas.Children.Remove(edge);
                 }
@@ -264,9 +276,10 @@ namespace NetworkObservability
             else if (MainCanvas.SelectedEdge != null)
             {
                 EdgePanel.DataContext = null;
+                EdgePanel.Children.Clear();
                 var edge = MainCanvas.SelectedEdge;
                 MainCanvas.Children.Remove(edge);
-            
+
                 graph.DeleteEdge(edge);
                 MainCanvas.SelectedEdge = null;
             }
