@@ -31,11 +31,6 @@ namespace NetworkObservability
 			func(graph);
 		}
 
-		public void AddNode(CanvasNode node)
-		{
-			graph.Add(node.nodeImpl);
-		}
-
         public void DeleteNode(CanvasNode node)
         {
             nodeToCNode.Remove(node.nodeImpl);

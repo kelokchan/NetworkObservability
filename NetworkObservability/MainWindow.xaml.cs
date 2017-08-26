@@ -134,7 +134,7 @@ namespace NetworkObservability
             node.Y = p.Y;
             node.IsSelected = true;
 
-			graph.AddNode(node);
+			graph.Call(graph => graph.Add(node.nodeImpl));
 			graph[node.nodeImpl] = node;
             (sender as Canvas).Children.Add(node);
             MainCanvas.SelectedNode = node;
