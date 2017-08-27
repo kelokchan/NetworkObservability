@@ -64,6 +64,7 @@
       <DependentUpon>AddAttributeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="CanvasGraph.cs" />
+    <Compile Include="CanvasGraphXML.cs" />
     <Compile Include="CanvasNode.xaml.cs">
       <DependentUpon>CanvasNode.xaml</DependentUpon>
     </Compile>
