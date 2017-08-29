@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using NetworkObservabilityCore;
 
 namespace NetworkObservability
 {
@@ -21,22 +22,25 @@ namespace NetworkObservability
     /// </summary>
     public partial class ResultGraph : Window
     {
-        private string xmlFileContents = "Some testing string";
-
         public ResultGraph()//I might pass the content to the constructor
         {
             InitializeComponent();
         }
 
+        
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            // TODO
+            //string xmlFileContents = "Some testing string";
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "XML file (*.xml) | *.xml";
 
-            if(dialog.ShowDialog() == true)
+            if (dialog.ShowDialog() == true)
             {
+                CanvasGraphXML output = new CanvasGraphXML();
                 string savePath = System.IO.Path.GetDirectoryName(dialog.FileName);
-                File.WriteAllText(dialog.FileName, xmlFileContents);
+                // Save to file
+                //output.Save(savePath, graph);
             }
         }
     }

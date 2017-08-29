@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using NetworkObservabilityCore;
 using System.Windows.Media;
 using System.Windows.Data;
+using System.Collections.Generic;
 
 namespace NetworkObservability
 {
@@ -180,37 +181,33 @@ namespace NetworkObservability
 			var result = graph.Call(graph => graph.ObserveConnectivity(observers));
 
 			logger.Content += "Observation Completed.\n";
-
-            // This section needs to be manipulated -------------------------//
-            //CanvasNode tempNode = new CanvasNode();
-            //tempNode.X = 400;
-            //tempNode.Y = 400;
-            //resultGraph.ResultCanvas.Children.Add(tempNode);
-            //---------------------------------------------------------------//
-
+            
             foreach (var pair in result)
             {
                 INode from = pair.Key.Item1, to = pair.Key.Item2;
+                Route route = pair.Key.Item3;
                 bool isObserved = pair.Value;
                 logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
 
-                CanvasNode tempNode = graph[from].Clone();
-                if (tempNode == null)
+                CanvasNode tempSrcNode = graph[from].Clone();
+                CanvasNode tempDestNode = graph[to].Clone();
+                if (tempSrcNode == null)
                 {
                     throw new Exception("null Canvas Node!");
                 }
                 else
                 {
-                    if (tempNode.X != 0 && tempNode.Y != 0)
+                    if (tempSrcNode.X != 0 && tempSrcNode.Y != 0)
                     {
-                        Canvas.SetTop(tempNode, tempNode.Y);
-                        Canvas.SetLeft(tempNode, tempNode.X);
-                        resultGraph.ResultCanvas.Children.Add(tempNode);
+                        Canvas.SetTop(tempSrcNode, tempSrcNode.Y);
+                        Canvas.SetLeft(tempSrcNode, tempSrcNode.X);
+                        resultGraph.ResultCanvas.Children.Add(tempSrcNode);
+
                     }
                     else
                         throw new Exception("X and Y undefined!");
                 }
-
+                DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
             }
 
             logger.Content += "Task Finished.";
@@ -219,6 +216,39 @@ namespace NetworkObservability
             resultGraph.Show();
 
 		}
+
+        private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
+        {
+            CanvasEdge tempEdge = new CanvasEdge()
+            {
+                Stroke = Brushes.Blue,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                StrokeThickness = 3,
+                X1 = tempSrcNode.X,
+                Y1 = tempSrcNode.Y,
+                X2 = tempDestNode.X,
+                Y2 = tempDestNode.Y,
+                IsDirected = ArcType.SelectedItem == DirectedArc
+            };
+
+            graph.Call(graph =>
+            {
+                graph.ConnectNodeToWith(tempSrcNode.nodeImpl, tempDestNode.nodeImpl, tempEdge.edgeImpl);
+            });
+            graph[tempEdge.edgeImpl] = tempEdge;
+
+            resultGraph.ResultCanvas.Children.Add(tempEdge);
+            Canvas.SetZIndex(tempEdge, -1);
+
+            tempSrcNode.OutLines.Add(tempEdge);
+            tempDestNode.InLines.Add(tempEdge);
+
+            resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
+            resultGraph.ResultCanvas.UpdateLines(tempDestNode);
+        }
+
+
 
         private void AddAttributeBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -297,20 +327,24 @@ namespace NetworkObservability
             if (getFile == true)
             {
                 //TODO 
-                Stream contents = fileDialog.OpenFile();
+                CanvasGraphXML reader = new CanvasGraphXML();
+                reader.Read(fileDialog.FileName);// as Graph;
+                // Manipulate the local variables of this class
             }
         }
         private void ___MenuItem___Save___Click(object sender, RoutedEventArgs e)
         {
             // TODO
-            string xmlFileContents = "Some testing string";
-        SaveFileDialog dialog = new SaveFileDialog();
+            //string xmlFileContents = "Some testing string";
+            SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "XML file (*.xml) | *.xml";
 
             if (dialog.ShowDialog() == true)
             {
+                CanvasGraphXML output = new CanvasGraphXML();
                 string savePath = System.IO.Path.GetDirectoryName(dialog.FileName);
-                File.WriteAllText(dialog.FileName, xmlFileContents);
+                // Save to file
+                //output.Save(savePath, graph);
             }
         }
     }
