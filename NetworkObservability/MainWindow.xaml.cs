@@ -92,7 +92,7 @@ namespace NetworkObservability
                 Stroke = Brushes.DarkGray,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                StrokeThickness = 2,
+                StrokeThickness = 3,
                 X1 = startNode.X,
                 Y1 = startNode.Y,
                 X2 = endNode.X,
@@ -255,31 +255,47 @@ namespace NetworkObservability
             if (MainCanvas.SelectedEdge == null) return;
 
             var attributeWindow = new AddAttributeWindow();
+
             if (attributeWindow.ShowDialog() == true)
             {
+                String attributeName = attributeWindow.Attribute;
+                String attributeValue = attributeWindow.Value;
+
+                bool boolValue;
+                double numValue;
+
                 RowDefinition rd = new RowDefinition() { Height = GridLength.Auto };
                 EdgePanel.RowDefinitions.Add(rd);
                 int rowIndex = EdgePanel.RowDefinitions.IndexOf(rd);
 
-                TextBlock l = new TextBlock();
-                l.Text = attributeWindow.Attribute + ":";
-                EdgePanel.Children.Add(l);
-                Grid.SetRow(l, rowIndex);
-                Grid.SetColumn(l, 0);
+                TextBlock attributeTxtBlock = new TextBlock();
+                attributeTxtBlock.Text = attributeName + ":";
+                EdgePanel.Children.Add(attributeTxtBlock);
+                Grid.SetRow(attributeTxtBlock, rowIndex);
+                Grid.SetColumn(attributeTxtBlock, 0);
 
-                TextBox t = new TextBox();
-                t.Text = attributeWindow.Value;
-                EdgePanel.Children.Add(t);
-                Grid.SetRow(t, rowIndex);
-                Grid.SetColumn(t, 1);
+                TextBox valueTxtBox = new TextBox();
+                EdgePanel.Children.Add(valueTxtBox);
+                Grid.SetRow(valueTxtBox, rowIndex);
+                Grid.SetColumn(valueTxtBox, 1);
 
-                //var myBinding = new Binding();
-                //myBinding.Source = MainCanvas.SelectedEdge;
-                //myBinding.Mode = BindingMode.TwoWay;
-                //myBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                //myBinding.Path = new PropertyPath("Label");
-                //t.SetBinding(TextBox.TextProperty, myBinding);
-
+                if (attributeWindow.boolRadio.IsChecked == true)
+                {
+                    boolValue = Boolean.TryParse(attributeValue, out boolValue) ? boolValue : false;
+                    MainCanvas.SelectedEdge.edgeImpl.Attributes[attributeName] = boolValue;
+                    valueTxtBox.Text = boolValue.ToString();
+                }
+                else if (attributeWindow.numRadio.IsChecked == true)
+                {
+                    numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
+                    MainCanvas.SelectedEdge.edgeImpl.Attributes[attributeName] = numValue;
+                    valueTxtBox.Text = numValue.ToString();
+                }
+                else
+                {
+                    MainCanvas.SelectedEdge.edgeImpl.Attributes[attributeName] = attributeValue;
+                    valueTxtBox.Text = attributeValue;
+                }
             }
         }
 

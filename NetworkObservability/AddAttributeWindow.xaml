@@ -26,9 +26,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <RadioButton Grid.Row="0" Grid.Column="0" GroupName="Type" Name="numRadio" Content="Number" IsChecked="True" VerticalAlignment="Center" Margin="0 0 5 0"/>
-                <RadioButton Grid.Row="0" Grid.Column="1" GroupName="Type" Name="txtRadio" Content="Descriptive Text" VerticalAlignment="Center" Margin="0 0 5 0"/>
+                <RadioButton Grid.Row="0" Grid.Column="1" GroupName="Type" Name="boolRadio" Content="Boolean" VerticalAlignment="Center" Margin="0 0 5 0"/>
+                <RadioButton Grid.Row="0" Grid.Column="2" GroupName="Type" Name="txtRadio" Content="Descriptive Text" VerticalAlignment="Center" Margin="0 0 5 0"/>
             </Grid>
 
             <Label Grid.Row="1" Grid.Column="0" Content="Attribute:" Margin="0 0 10 5" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
