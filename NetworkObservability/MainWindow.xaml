@@ -49,7 +49,7 @@
                         <Label Content="Arc type:" VerticalContentAlignment="Center" FontWeight="Bold"/>
                         <ComboBox x:Name="ArcType" Height="25" Width="150" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" BorderBrush="#00ACACAC" >
                             <ComboBoxItem x:Name="DirectedArc" Content="Directed lines" Selector.IsSelected="True" />
-                            <ComboBoxItem x:Name="UndirectedArc" Content="Undirected lines"/>
+                            <!--<ComboBoxItem x:Name="UndirectedArc" Content="Undirected lines"/>-->
                         </ComboBox>
                         <!-- Add the image label for the arrows here! -->
                         
