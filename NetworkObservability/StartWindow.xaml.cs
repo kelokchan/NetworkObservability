@@ -23,7 +23,8 @@ namespace NetworkObservability
         // A tuple of 2 elements.
         // first is a name of attribute, which is a key to be used by algorithms,
         // the second one is a constraint object.
-        Tuple<string, Constraint<IEdge>> returnValue;
+        public Tuple<string, Constraint<IEdge>> returnValue { get; set; }
+        
 
         public StartWindow()
         {

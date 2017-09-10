@@ -172,14 +172,15 @@ namespace NetworkObservability
 		{
             // Create a resultGraph instance
             ResultGraph resultGraph = new ResultGraph();
+            StartWindow startWindow = new StartWindow();
 
 			logTab.IsSelected = true;
             logger.Content = "";
 			logger.Content += "\nStart Checking observability....\n";
 
 			var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
-
-			var result = new ConnectivityObserver().ObserveConnectivity(graph.Impl, observers);
+            
+			var result = new ConnectivityObserver().ObserveConnectivity(graph.Impl, observers, startWindow.returnValue);
 
 			logger.Content += "Observation Completed.\n";
             
