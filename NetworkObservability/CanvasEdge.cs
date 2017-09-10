@@ -13,11 +13,15 @@ namespace NetworkObservability
 {
     public sealed class CanvasEdge : Shape
     {
-        internal IEdge edgeImpl;
+        internal IEdge Impl
+		{
+			get;
+			set;
+		}
 
         public CanvasEdge() : base()
         {
-            edgeImpl = new Edge();     
+            Impl = new Edge();     
         }
 
         #region Dependency Properties

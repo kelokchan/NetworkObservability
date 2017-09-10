@@ -24,7 +24,11 @@ namespace NetworkObservability
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal INode nodeImpl;
+        internal INode Impl
+		{
+			get;
+			set;
+		}
 
         public bool isInSet { get; set; }
         private bool isSelected;
@@ -53,11 +57,11 @@ namespace NetworkObservability
         {
             get
             {
-                return nodeImpl.IsObserver;
+                return Impl.IsObserver;
             }
             set
             {
-                nodeImpl.IsObserver = value;
+                Impl.IsObserver = value;
                 OnPropertyChanged("IsObserver");
             }
         }
@@ -66,11 +70,11 @@ namespace NetworkObservability
         {
             get
             {
-                return nodeImpl.IsVisible;
+                return Impl.IsVisible;
             }
             set
             {
-                nodeImpl.IsVisible = value;
+                Impl.IsVisible = value;
                 OnPropertyChanged("IsNodeVisible");
             }
         }
@@ -79,11 +83,11 @@ namespace NetworkObservability
         {
             get
             {
-                return nodeImpl.Label;
+                return Impl.Label;
             }
             set
             {
-                nodeImpl.Label = value;
+                Impl.Label = value;
                 OnPropertyChanged("Label");
             }
         }
@@ -92,7 +96,7 @@ namespace NetworkObservability
         {
             get
             {
-                return nodeImpl.Id;
+                return Impl.Id;
             }
         }
 
@@ -112,23 +116,23 @@ namespace NetworkObservability
         {
             OutLines = new List<CanvasEdge>();
             InLines = new List<CanvasEdge>();
-            nodeImpl = new Node();
+            Impl = new Node();
             InitializeComponent();
         }
 
         public void Call(Action<INode> func)
         {
-            func(nodeImpl);
+            func(Impl);
         }
 
         public T Call<T>(Func<INode, T> func)
         {
-            return func(nodeImpl);
+            return func(Impl);
         }
 
         public override string ToString()
         {
-            return nodeImpl.ToString();
+            return Impl.ToString();
         }
 
         public CanvasNode Clone()
@@ -139,7 +143,7 @@ namespace NetworkObservability
                 Label = Label,
                 X = X,
                 Y = Y,
-                nodeImpl = nodeImpl,
+                Impl = Impl,
                 IsNodeVisible = IsNodeVisible,
                 IsObserver = IsObserver,
             };

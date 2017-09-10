@@ -8,59 +8,71 @@ using System.Windows.Shapes;
 
 namespace NetworkObservability
 {
-	class CanvasGraph<NType, EType> where NType : INode where EType : IEdge
+	class CanvasGraph
 	{
-		private Graph graph;
 		private Dictionary<INode, CanvasNode> nodeToCNode;
-		private Dictionary<EType, CanvasEdge> edgeToCEdge;
+		private Dictionary<IEdge, CanvasEdge> edgeToCEdge;
 
+		#region Constructors
 		public CanvasGraph()
+			: this(new Graph())
 		{
-			graph = new Graph();
+		}
+
+		public CanvasGraph(IGraph graph)
+		{
+			Impl = graph;
 			nodeToCNode = new Dictionary<INode, CanvasNode>();
-			edgeToCEdge = new Dictionary<EType, CanvasEdge>();
+			edgeToCEdge = new Dictionary<IEdge, CanvasEdge>();
 		}
+		#endregion
 
-		public T Call<T>(Func<Graph, T> func)
+		public T Call<T>(Func<IGraph, T> func)
 		{
-			return func(graph);
+			return func(Impl);
 		}
 
-		public void Call(Action<Graph> func)
+		public void Call(Action<IGraph> func)
 		{
-			func(graph);
+			func(Impl);
 		}
 
-        public void DeleteNode(CanvasNode node)
+        public void Remove(CanvasNode node)
         {
-            nodeToCNode.Remove(node.nodeImpl);
-            graph.Remove(node.nodeImpl);
+            nodeToCNode.Remove(node.Impl);
+            Impl.Remove(node.Impl);
         }
 
-        public void DeleteEdge(CanvasEdge edge)
+        public void Remove(CanvasEdge edge)
         {
-            edgeToCEdge.Remove((EType) edge.edgeImpl);
+            edgeToCEdge.Remove(edge.Impl);
 
-            INode from = edge.edgeImpl.From;
+            INode from = edge.Impl.From;
             nodeToCNode[from].OutLines.Remove(edge);
-            from.ConnectTo.Remove(edge.edgeImpl);
+            from.ConnectTo.Remove(edge.Impl);
 
-            INode to = edge.edgeImpl.To;
-            to.ConnectTo.Remove(edge.edgeImpl);
+            INode to = edge.Impl.To;
+            to.ConnectTo.Remove(edge.Impl);
             nodeToCNode[to].InLines.Remove(edge);
 
-            graph.Remove(edge.edgeImpl);
+            Impl.Remove(edge.Impl);
         }
+
+		internal IGraph Impl
+		{
+			get;
+			set;
+		}
 
         public CanvasEdge this[IEdge edge]
 		{
 			get
 			{
-				return edgeToCEdge[(EType) edge];
+				return edgeToCEdge[edge];
 			}
 			set
 			{
-				edgeToCEdge[(EType) edge] = value;
+				edgeToCEdge[edge] = value;
 			}
 		}
 

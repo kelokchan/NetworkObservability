@@ -11,6 +11,7 @@ using NetworkObservabilityCore;
 using System.Windows.Media;
 using System.Windows.Data;
 using System.Collections.Generic;
+using NetworkObservabilityCore.Utils;
 
 namespace NetworkObservability
 {
@@ -24,7 +25,7 @@ namespace NetworkObservability
         /// </summary>
         private UIElement elementForContextMenu;
         public static MainWindow AppWindow;
-		CanvasGraph<INode, IEdge> graph = new CanvasGraph<INode, IEdge>();
+		CanvasGraph graph = new CanvasGraph();
         CanvasNode startNode, endNode;
 
         public MainWindow()
@@ -101,9 +102,9 @@ namespace NetworkObservability
             };
 
             graph.Call(graph => {
-                graph.ConnectNodeToWith(startNode.nodeImpl, endNode.nodeImpl, edge.edgeImpl);
+                graph.ConnectNodeToWith(startNode.Impl, endNode.Impl, edge.Impl);
             });
-            graph[edge.edgeImpl] = edge;
+            graph[edge.Impl] = edge;
 
             MainCanvas.Children.Add(edge);
             Canvas.SetZIndex(edge, -1);
@@ -124,8 +125,8 @@ namespace NetworkObservability
                 IsSelected = true
             };
 
-            graph.Call(graph => graph.Add(node.nodeImpl));
-            graph[node.nodeImpl] = node;
+            graph.Call(graph => graph.Add(node.Impl));
+            graph[node.Impl] = node;
             MainCanvas.Children.Add(node);
             MainCanvas.SelectedNode = node;
 
@@ -178,7 +179,7 @@ namespace NetworkObservability
 
 			var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
 
-			var result = graph.Call(graph => graph.ObserveConnectivity(observers));
+			var result = new ConnectivityObserver().ObserveConnectivity(graph.Impl, observers);
 
 			logger.Content += "Observation Completed.\n";
             
@@ -234,9 +235,9 @@ namespace NetworkObservability
 
             graph.Call(graph =>
             {
-                graph.ConnectNodeToWith(tempSrcNode.nodeImpl, tempDestNode.nodeImpl, tempEdge.edgeImpl);
+                graph.ConnectNodeToWith(tempSrcNode.Impl, tempDestNode.Impl, tempEdge.Impl);
             });
-            graph[tempEdge.edgeImpl] = tempEdge;
+            graph[tempEdge.Impl] = tempEdge;
 
             resultGraph.ResultCanvas.Children.Add(tempEdge);
             Canvas.SetZIndex(tempEdge, -1);
@@ -282,18 +283,18 @@ namespace NetworkObservability
                 if (attributeWindow.boolRadio.IsChecked == true)
                 {
                     boolValue = Boolean.TryParse(attributeValue, out boolValue) ? boolValue : false;
-                    MainCanvas.SelectedEdge.edgeImpl.Attributes[attributeName] = boolValue;
+                    MainCanvas.SelectedEdge.Impl.Attributes[attributeName] = boolValue;
                     valueTxtBox.Text = boolValue.ToString();
                 }
                 else if (attributeWindow.numRadio.IsChecked == true)
                 {
                     numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
-                    MainCanvas.SelectedEdge.edgeImpl.Attributes[attributeName] = numValue;
+                    MainCanvas.SelectedEdge.Impl.Attributes[attributeName] = numValue;
                     valueTxtBox.Text = numValue.ToString();
                 }
                 else
                 {
-                    MainCanvas.SelectedEdge.edgeImpl.Attributes[attributeName] = attributeValue;
+                    MainCanvas.SelectedEdge.Impl.Attributes[attributeName] = attributeValue;
                     valueTxtBox.Text = attributeValue;
                 }
             }
@@ -316,7 +317,7 @@ namespace NetworkObservability
                     MainCanvas.Children.Remove(edge);
                 }
 
-                graph.DeleteNode(node);
+                graph.Remove(node);
                 MainCanvas.SelectedNode = null;
             }
             else if (MainCanvas.SelectedEdge != null)
@@ -326,7 +327,7 @@ namespace NetworkObservability
                 var edge = MainCanvas.SelectedEdge;
                 MainCanvas.Children.Remove(edge);
 
-                graph.DeleteEdge(edge);
+                graph.Remove(edge);
                 MainCanvas.SelectedEdge = null;
             }
         }
@@ -342,9 +343,9 @@ namespace NetworkObservability
 
             if (getFile == true)
             {
-                //TODO 
                 CanvasGraphXML reader = new CanvasGraphXML();
-                reader.Read(fileDialog.FileName);// as Graph;
+                graph = reader.Load(fileDialog.FileName);
+                //TODO 
                 // Manipulate the local variables of this class
             }
         }
@@ -359,8 +360,7 @@ namespace NetworkObservability
             {
                 CanvasGraphXML output = new CanvasGraphXML();
                 string savePath = System.IO.Path.GetDirectoryName(dialog.FileName);
-                // Save to file
-                //output.Save(savePath, graph);
+                output.Save(savePath, graph);
             }
         }
     }
