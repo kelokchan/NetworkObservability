@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkObservability"
         mc:Ignorable="d"
-        Title="Select" Height="400" Width="700">
+        Title="Select" Height="400" Width="600" Background="{DynamicResource ToolBarButtonHoverBorder}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -13,16 +13,21 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         
         <!-- (0, 0) -->
-        <ScrollBar Grid.Row="0" Grid.Column="0">
-        </ScrollBar>
+        <ScrollViewer Name="numericalAttributes" Grid.Row="0" Grid.Column="0" Padding="10">
+            <StackPanel>
+            <!-- checkBox to be populated-->
+                <CheckBox>item 1</CheckBox>
+            <!-- checkBox to be populated-->
+            </StackPanel>
+        </ScrollViewer>
         
         <!-- (0, 1) -->
         <Grid Grid.Row="0" Grid.Column="1">
-            <StackPanel Height="150" Orientation="Horizontal">
+            <StackPanel Name="constraintPanel" Orientation="Horizontal" Visibility="Visible">
                 <Label Margin="0,3,0,0" VerticalAlignment="Top">Select constraint:</Label>
                 <ComboBox Height="18" Width="80" Margin="0,5,0,0" VerticalAlignment="Top">
                 <ComboBoxItem>Greater than</ComboBoxItem>
@@ -30,23 +35,32 @@
                 <ComboBoxItem>Equal to</ComboBoxItem>
                 <ComboBoxItem>Range</ComboBoxItem>
             </ComboBox>
-                <TextBox Margin="10,5,0,0" Width="80" VerticalAlignment="Top"></TextBox>
+                <TextBox Name="constraintReader" Visibility="Visible" Margin="10,5,0,0" Width="80" VerticalAlignment="Top"></TextBox>
             </StackPanel>
             <!-- bottom part of (0, 1) -->
-            <StackPanel Height="150" Orientation="Horizontal">
-                <Label Margin="0,38,0,0">Between (min)</Label>
-                <TextBox Width="80" VerticalAlignment="Top" Margin="0,40,0,0"/>
-                <Label Margin="0,38,0,0">and (max)</Label>
-                <TextBox Width="80" VerticalAlignment="Top" Margin="0,40,0,0"></TextBox>
+            <StackPanel Name="middleRow" Height="150" Orientation="Horizontal" Visibility="Visible">
+                <Label Margin="0,38,0,0">between [min]</Label>
+                <TextBox Name="rangeMin" Width="80" VerticalAlignment="Top" Margin="0,40,0,0"/>
+                <Label Margin="0,38,0,0">and [max]</Label>
+                <TextBox Name="rangeMax" Width="80" VerticalAlignment="Top" Margin="0,40,0,0"></TextBox>
+            </StackPanel>
+            <StackPanel>
+                <Button Margin="250,100,40,0" Name="oKbutton" Background="{DynamicResource Button.Disabled.Background}" Visibility="Visible">OK</Button>
             </StackPanel>
         </Grid>
         
         <!-- (1, 0) -->
-        <ScrollBar Grid.Row="1" Grid.Column="0">
-        </ScrollBar>
+        <ScrollViewer Name="boolAttributes" Grid.Row="1" Grid.Column="0" Padding="10">
+            <StackPanel>
+            <!-- checkBox to be populated-->
+                <CheckBox>item 1</CheckBox>
+            <!-- checkBox to be populated-->
+            </StackPanel>
+        </ScrollViewer>
         
         <!-- (1, 1) -->
         <Grid Grid.Row="1" Grid.Column="1">
+            <Button FontSize="30" Margin="250 120 20 20" Background="{DynamicResource Button.Disabled.Background}">RUN</Button>
         </Grid>
     </Grid>
 </Window>
