@@ -5,36 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkObservability"
         mc:Ignorable="d"
-        Title="Select" Height="Auto" Width="200">
+        Title="Select" Height="400" Width="700">
     <Grid>
-        <StackPanel>
-            <TextBlock Margin="10" ><Run Text="Select an attribute to run the"/><LineBreak/><Run Text="algorithm"/></TextBlock>
-            <StackPanel Name="attributeList">
-                <!-- Some rows here -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- (0, 0) -->
+        <ScrollBar Grid.Row="0" Grid.Column="0">
+        </ScrollBar>
+        
+        <!-- (0, 1) -->
+        <Grid Grid.Row="0" Grid.Column="1">
+            <StackPanel Height="150" Orientation="Horizontal">
+                <Label Margin="0,3,0,0" VerticalAlignment="Top">Select constraint:</Label>
+                <ComboBox Height="18" Width="80" Margin="0,5,0,0" VerticalAlignment="Top">
+                <ComboBoxItem>Greater than</ComboBoxItem>
+                <ComboBoxItem>Less than</ComboBoxItem>
+                <ComboBoxItem>Equal to</ComboBoxItem>
+                <ComboBoxItem>Range</ComboBoxItem>
+            </ComboBox>
+                <TextBox Margin="10,5,0,0" Width="80" VerticalAlignment="Top"></TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Width="95px">
-                    <Button Margin="10">
-                        <Button.Background>
-                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
-                        </Button.Background>
-                        <Button.BorderBrush>
-                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionColorKey}}"/>
-                        </Button.BorderBrush> Minimum</Button>
-                </StackPanel>
-                <StackPanel Width="95px">
-                    <Button Margin="10">
-                        <Button.Background>
-                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
-                        </Button.Background> Maximum</Button>
-                </StackPanel>
+            <!-- bottom part of (0, 1) -->
+            <StackPanel Height="150" Orientation="Horizontal">
+                <Label Margin="0,38,0,0">Between (min)</Label>
+                <TextBox Width="80" VerticalAlignment="Top" Margin="0,40,0,0"/>
+                <Label Margin="0,38,0,0">and (max)</Label>
+                <TextBox Width="80" VerticalAlignment="Top" Margin="0,40,0,0"></TextBox>
             </StackPanel>
-                <StackPanel Margin="10">
-                    <Button>
-                    <Button.Background>
-                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
-                    </Button.Background> Run</Button>
-                </StackPanel>
-        </StackPanel>
+        </Grid>
+        
+        <!-- (1, 0) -->
+        <ScrollBar Grid.Row="1" Grid.Column="0">
+        </ScrollBar>
+        
+        <!-- (1, 1) -->
+        <Grid Grid.Row="1" Grid.Column="1">
+        </Grid>
     </Grid>
 </Window>

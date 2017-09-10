@@ -19,9 +19,16 @@ namespace NetworkObservability
 			set;
 		}
 
-        public CanvasEdge() : base()
+        public CanvasEdge(bool fake = false) : base()
         {
-            Impl = new Edge();     
+            if (!fake)
+            {
+                Impl = new Edge();
+            }
+            else
+            {
+                Impl = new ResultEdge();
+            }
         }
 
         #region Dependency Properties

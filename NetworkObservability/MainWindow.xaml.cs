@@ -220,7 +220,7 @@ namespace NetworkObservability
 
         private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
         {
-            CanvasEdge tempEdge = new CanvasEdge()
+            CanvasEdge tempEdge = new CanvasEdge(true)
             {
                 Stroke = Brushes.Blue,
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -359,8 +359,7 @@ namespace NetworkObservability
             if (dialog.ShowDialog() == true)
             {
                 CanvasGraphXML output = new CanvasGraphXML();
-                string savePath = System.IO.Path.GetDirectoryName(dialog.FileName);
-                output.Save(savePath, graph);
+                output.Save(dialog.FileName, graph);
             }
         }
     }
