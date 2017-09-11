@@ -22,6 +22,7 @@ namespace NetworkObservability
     {
         public string Attribute { get; set; }
         public string Value { get; set; }
+        public bool ApplyAll { get; set; }
 
         public AddAttributeWindow()
         {
@@ -38,6 +39,7 @@ namespace NetworkObservability
         {
             this.Attribute = attributeTxt.Text;
             this.Value =  valueTxt.Text;
+            this.ApplyAll = applyAllCheckBox.IsChecked.Value;
             DialogResult = true;
         }
 
