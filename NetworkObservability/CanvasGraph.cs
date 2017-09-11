@@ -43,6 +43,13 @@ namespace NetworkObservability
             Impl.Remove(node.Impl);
         }
 
+        public void Clear()
+        {
+            nodeToCNode.Clear();
+            edgeToCEdge.Clear();
+            Impl = new Graph();
+        }
+
         public void Remove(CanvasEdge edge)
         {
             edgeToCEdge.Remove(edge.Impl);

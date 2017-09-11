@@ -25,7 +25,7 @@ namespace NetworkObservability
         /// </summary>
         private UIElement elementForContextMenu;
         public static MainWindow AppWindow;
-		CanvasGraph graph = new CanvasGraph();
+        CanvasGraph graph = new CanvasGraph();
         CanvasNode startNode, endNode;
 
         public MainWindow()
@@ -38,7 +38,7 @@ namespace NetworkObservability
 
         void OnContextMenuOpened(object sender, RoutedEventArgs e)
         {
-           
+
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace NetworkObservability
 
                 if (startDrawing)
                 {
-					startNode = selectedNode;
+                    startNode = selectedNode;
                     this.menuStartArc.Visibility = Visibility.Collapsed;
                     this.menuEndArc.Visibility = Visibility.Visible;
                 }
@@ -82,29 +82,39 @@ namespace NetworkObservability
             }
         }
 
-        private void DrawEdge(CanvasNode startNode, CanvasNode endNode)
+        private void DrawEdge(CanvasNode startNode, CanvasNode endNode, CanvasEdge edge = null)
         {
             Point startPoint, endPoint;
             startPoint = new Point(startNode.X, startNode.Y);
             endPoint = new Point(endNode.X, endNode.Y);
 
-            CanvasEdge edge = new CanvasEdge()
+            if (edge == null)
             {
-                Stroke = Brushes.DarkGray,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                StrokeThickness = 3,
-                X1 = startNode.X,
-                Y1 = startNode.Y,
-                X2 = endNode.X,
-                Y2 = endNode.Y,
-                IsDirected = ArcType.SelectedItem == DirectedArc
-            };
+                edge = new CanvasEdge()
+                {
+                    Stroke = Brushes.DarkGray,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    StrokeThickness = 3,
+                    X1 = startNode.X,
+                    Y1 = startNode.Y,
+                    X2 = endNode.X,
+                    Y2 = endNode.Y,
+                    IsDirected = ArcType.SelectedItem == DirectedArc
+                };
 
-            graph.Call(graph => {
-                graph.ConnectNodeToWith(startNode.Impl, endNode.Impl, edge.Impl);
-            });
-            graph[edge.Impl] = edge;
+                graph.Call(graph =>
+                {
+                    graph.ConnectNodeToWith(startNode.Impl, endNode.Impl, edge.Impl);
+                });
+                graph[edge.Impl] = edge;
+            } else
+            {
+                edge.Stroke = Brushes.DarkGray;
+                 edge.HorizontalAlignment = HorizontalAlignment.Center;
+                edge.VerticalAlignment = VerticalAlignment.Center;
+            }
+
 
             MainCanvas.Children.Add(edge);
             Canvas.SetZIndex(edge, -1);
@@ -146,6 +156,21 @@ namespace NetworkObservability
             }), null);
         }
 
+        private void DrawNode(CanvasNode node)
+        {
+
+
+            //double widthOffset = -25;// node.ActualWidth / 2;
+            //double heightOffset = -25; // node.ActualHeight / 2;
+            //double actualX = node.X - widthOffset;
+            //double actualY = node.Y - heightOffset;
+
+            Canvas.SetLeft(node, node.X); //actualX);
+            Canvas.SetTop(node, node.Y);// actualY);
+            MainCanvas.Children.Add(node);
+
+        }
+
         private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (this.MainCanvas.ElementBeingDragged != null)
@@ -169,21 +194,21 @@ namespace NetworkObservability
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
-		{
+        {
             // Create a resultGraph instance
             ResultGraph resultGraph = new ResultGraph();
             StartWindow startWindow = new StartWindow();
 
-			logTab.IsSelected = true;
+            logTab.IsSelected = true;
             logger.Content = "";
-			logger.Content += "\nStart Checking observability....\n";
+            logger.Content += "\nStart Checking observability....\n";
 
-			var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
-            
-			var result = new ConnectivityObserver().ObserveConnectivity(graph.Impl, observers, startWindow.returnValue);
+            var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
 
-			logger.Content += "Observation Completed.\n";
-            
+            var result = new ConnectivityObserver().ObserveConnectivity(graph.Impl, observers, startWindow.returnValue);
+
+            logger.Content += "Observation Completed.\n";
+
             foreach (var pair in result)
             {
                 INode from = pair.Key.Item1, to = pair.Key.Item2;
@@ -217,7 +242,7 @@ namespace NetworkObservability
             resultGraph.ResultCanvas.IsEnabled = false;
             resultGraph.Show();
 
-		}
+        }
 
         private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
         {
@@ -335,7 +360,50 @@ namespace NetworkObservability
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
-            //Open file from anywhere
+            if (graph != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Would you like to save the current graph before openning a new one?", "Current graph is not saved!",
+                    MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SaveToFile();
+                    graph.Clear();
+                    MainCanvas.Children.Clear();
+                    OpenFromFile();
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    OpenFromFile();
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    // do nothing
+                }
+            }
+        }
+
+
+        private void ___MenuItem___Save___Click(object sender, RoutedEventArgs e)
+        {
+            SaveToFile();
+        }
+
+
+
+        private void SaveToFile()
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "XML file (*.xml) | *.xml";
+
+            if (dialog.ShowDialog() == true)
+            {
+                CanvasGraphXML output = new CanvasGraphXML();
+                output.Save(dialog.FileName, graph);
+            }
+        }
+
+        private void OpenFromFile()
+        {
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Multiselect = false;
             fileDialog.Filter = "XML Files(*.xml)|*.xml|Textfiles(*.txt)|*.txt|All Files(*.*)|*.*";
@@ -345,22 +413,33 @@ namespace NetworkObservability
             if (getFile == true)
             {
                 CanvasGraphXML reader = new CanvasGraphXML();
-                graph = reader.Load(fileDialog.FileName);
-                //TODO 
-                // Manipulate the local variables of this class
-            }
-        }
-        private void ___MenuItem___Save___Click(object sender, RoutedEventArgs e)
-        {
-            // TODO
-            //string xmlFileContents = "Some testing string";
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "XML file (*.xml) | *.xml";
+                //CanvasGraph cGraph = new CanvasGraph();
+                try
+                {
+                    graph = reader.Load((fileDialog.FileName).ToString());
+                    foreach(var node in graph.Impl.AllNodes.Values)
+                    {
+                        CanvasNode tempNode = graph[node];
 
-            if (dialog.ShowDialog() == true)
-            {
-                CanvasGraphXML output = new CanvasGraphXML();
-                output.Save(dialog.FileName, graph);
+                        DrawNode(tempNode);
+                    }
+                    foreach (var edge in graph.Impl.AllEdges.Values)
+                    {
+                        CanvasNode fromNode = graph[edge.From];
+                        CanvasNode toNode = graph[edge.To];
+
+                        DrawEdge(fromNode, toNode, graph[edge]);
+                    }
+
+                }
+                catch (ArgumentNullException err)
+                {
+                    MessageBox.Show("Failed to load the invalid XML file.\nPlease use a valid one");
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
         }
     }
