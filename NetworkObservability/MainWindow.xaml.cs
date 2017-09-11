@@ -163,14 +163,14 @@ namespace NetworkObservability
         {
 
 
-            //double widthOffset = -25;// node.ActualWidth / 2;
-            //double heightOffset = -25; // node.ActualHeight / 2;
-            //double actualX = node.X - widthOffset;
-            //double actualY = node.Y - heightOffset;
+            double widthOffset = node.DisplayWidth / 2;// ;
+            double heightOffset = node.DisplayHeight / 2; // node.ActualHeight / 2;
+            double actualX = node.X - widthOffset;
+            double actualY = node.Y - heightOffset;
 
-            Canvas.SetLeft(node, node.X); //actualX);
-            Canvas.SetTop(node, node.Y);// actualY);
             MainCanvas.Children.Add(node);
+            Canvas.SetLeft(node, actualX); //actualX);
+            Canvas.SetTop(node, actualY);// actualY);
 
         }
 
