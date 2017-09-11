@@ -35,6 +35,9 @@ namespace NetworkObservability
         private double x;
         private double y;
 
+        public double DisplayWidth { get; set; }
+        public double DisplayHeight { get; set; }
+
         // Connections out from the current node
         public List<CanvasEdge> OutLines { get; private set; }
         // Connection into the current node

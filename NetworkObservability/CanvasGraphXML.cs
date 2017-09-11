@@ -38,7 +38,12 @@ namespace NetworkObservability
 			CanvasNode cnode = cgraph[node];
 			var position = new XElement("Position", new XElement("X", cnode.X),
 													new XElement("Y", cnode.Y));
+            var width = new XElement("Width", cnode.DisplayWidth);
+            var height = new XElement("Height", cnode.DisplayHeight);
+
 			xelement.Add(position);
+            xelement.Add(width);
+            xelement.Add(height);
 
 			return xelement;
 		}
@@ -72,8 +77,11 @@ namespace NetworkObservability
 			CanvasNode cnode = new CanvasNode();
 			cnode.X = Convert.ToDouble(position.Element("X").Value);
 			cnode.Y = Convert.ToDouble(position.Element("Y").Value);
+            cnode.DisplayWidth = Convert.ToDouble(xnode.Element("Width").Value);
+            cnode.DisplayHeight = Convert.ToDouble(xnode.Element("Height").Value);
 
-			cgraph[node] = cnode;
+
+            cgraph[node] = cnode;
 
 			return node;
 		}

@@ -16,6 +16,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -38,8 +39,11 @@
 
             <Label Grid.Row="2" Grid.Column="0" Content="Value:" Margin="0 0 10 5" VerticalAlignment="Center"/>
             <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Name="valueTxt"></TextBox>
-            
-            <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+
+            <Label Grid.Row="3" Grid.Column="0"></Label>
+            <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Name="applyAllCheckBox" IsChecked="True">Apply to all edges</CheckBox>
+
+            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Add" Padding="5" IsDefault="True" Margin="5,10,5,5" Name="okBtn" Click="okBtn_Click" 
                         IsEnabled="{Binding ElementName=attributeTxt, Path=Text.Length, Mode=OneWay}" />
                 <Button Content="_Cancel" Padding="5" IsCancel="True" Margin="5,10,0,5" Name="cancelBtn" Click="cancelBtn_Click"/>

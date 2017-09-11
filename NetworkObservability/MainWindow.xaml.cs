@@ -148,6 +148,9 @@ namespace NetworkObservability
                 double actualX = p.X - widthOffset;
                 double actualY = p.Y - heightOffset;
 
+                node.DisplayWidth = node.ActualWidth;
+                node.DisplayHeight = node.ActualHeight;
+                
                 Canvas.SetLeft(node, actualX);
                 Canvas.SetTop(node, actualY);
 
