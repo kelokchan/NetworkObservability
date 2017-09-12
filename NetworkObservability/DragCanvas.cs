@@ -458,14 +458,14 @@ namespace NetworkObservability
 
             for (int i = 0; i < node.OutLines.Count; i++)
             {
-                 node.OutLines[i].X1 = left + node.ActualWidth / 2;
-                 node.OutLines[i].Y1 = top + node.ActualHeight / 2;               
+                 node.OutLines[i].X1 = left + node.DisplayWidth / 2;
+                 node.OutLines[i].Y1 = top + node.DisplayHeight / 2;               
             }
 
             for (int i = 0; i < node.InLines.Count; i++)
             {
-                node.InLines[i].X2 = left + node.ActualWidth / 2;
-                node.InLines[i].Y2 = top + node.ActualHeight / 2;              
+                node.InLines[i].X2 = left + node.DisplayWidth / 2;
+                node.InLines[i].Y2 = top + node.DisplayHeight / 2;              
             }
         }
 

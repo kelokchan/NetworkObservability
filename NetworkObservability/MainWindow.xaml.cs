@@ -176,15 +176,16 @@ namespace NetworkObservability
         /// <param name="node"></param>
         private void DrawNode(CanvasNode node)
         {
-            MainCanvas.Children.Add(node);
 
-            double widthOffset = node.DisplayWidth / 2;// ;
-            double heightOffset = node.DisplayHeight / 2; // node.ActualHeight / 2;
+            double widthOffset = node.DisplayWidth / 2; ;
+            double heightOffset = node.DisplayHeight / 2;
             double actualX = node.X - widthOffset;
             double actualY = node.Y - heightOffset;
 
-            Canvas.SetLeft(node, actualX); //actualX);
-            Canvas.SetTop(node, actualY);// actualY);
+            MainCanvas.Children.Add(node);
+
+            Canvas.SetLeft(node, node.X);
+            Canvas.SetTop(node, node.Y);
 
         }
 
@@ -470,6 +471,7 @@ namespace NetworkObservability
                 //CanvasGraph cGraph = new CanvasGraph();
                 try
                 {
+                    MainCanvas.Children.Clear();
                     graph = reader.Load((fileDialog.FileName).ToString());
                     foreach(var node in graph.Impl.AllNodes.Values)
                     {
