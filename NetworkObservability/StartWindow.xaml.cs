@@ -48,18 +48,18 @@ namespace NetworkObservability
             populateAttributes();
         }
 
-        private void constraintTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void constraintTypeCombo_DropDownClosed(object sender, EventArgs e)
         {
-            //if (constraintTypeCombo.SelectedItem == rangeCombo)
-            //{
-            //    constraintReader.Visibility = Visibility.Collapsed;
-            //    constraintRangePanel.Visibility = Visibility.Visible;
-            //}
-            //else
-            //{
-            //    constraintReader.Visibility = Visibility.Visible;
-            //    constraintRangePanel.Visibility = Visibility.Collapsed;
-            //}
+            if (constraintTypeCombo.SelectedItem == rangeCombo)
+            {
+                constraintReader.Visibility = Visibility.Collapsed;
+                constraintRangePanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                constraintReader.Visibility = Visibility.Visible;
+                constraintRangePanel.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void populateAttributes()
