@@ -82,6 +82,12 @@ namespace NetworkObservability
             }
         }
 
+        /// <summary>
+        /// Draw the edge on the graph that connects 2 nodes passed, if edge param is null, create a new edge
+        /// </summary>
+        /// <param name="startNode"></param>
+        /// <param name="endNode"></param>
+        /// <param name="edge"></param>
         private void DrawEdge(CanvasNode startNode, CanvasNode endNode, CanvasEdge edge = null)
         {
             Point startPoint, endPoint;
@@ -111,8 +117,9 @@ namespace NetworkObservability
             } else
             {
                 edge.Stroke = Brushes.DarkGray;
-                 edge.HorizontalAlignment = HorizontalAlignment.Center;
+                edge.HorizontalAlignment = HorizontalAlignment.Center;
                 edge.VerticalAlignment = VerticalAlignment.Center;
+                edge.StrokeThickness = 3;
             }
 
 
@@ -126,6 +133,10 @@ namespace NetworkObservability
             MainCanvas.UpdateLines(endNode);
         }
 
+        /// <summary>
+        /// Draw node on the graph based on the mouse pointer location
+        /// </summary>
+        /// <param name="p"></param>
         private void DrawNode(Point p)
         {
             CanvasNode node = new CanvasNode()
@@ -159,16 +170,19 @@ namespace NetworkObservability
             }), null);
         }
 
+        /// <summary>
+        /// Draw node on the graph based on the given node (for xml loading)
+        /// </summary>
+        /// <param name="node"></param>
         private void DrawNode(CanvasNode node)
         {
-
+            MainCanvas.Children.Add(node);
 
             double widthOffset = node.DisplayWidth / 2;// ;
             double heightOffset = node.DisplayHeight / 2; // node.ActualHeight / 2;
             double actualX = node.X - widthOffset;
             double actualY = node.Y - heightOffset;
 
-            MainCanvas.Children.Add(node);
             Canvas.SetLeft(node, actualX); //actualX);
             Canvas.SetTop(node, actualY);// actualY);
 
@@ -183,6 +197,11 @@ namespace NetworkObservability
         }
 
 
+        /// <summary>
+        /// Enable drag and drop of node button to the canvas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Component_MouseDown(object sender, MouseButtonEventArgs e)
         {
             DataObject data = new DataObject();
@@ -200,50 +219,52 @@ namespace NetworkObservability
         {
             // Create a resultGraph instance
             ResultGraph resultGraph = new ResultGraph();
-            StartWindow startWindow = new StartWindow();
+            StartWindow startWindow = new StartWindow(graph.Impl.AllEdges.Values);
 
-            logTab.IsSelected = true;
-            logger.Content = "";
-            logger.Content += "\nStart Checking observability....\n";
+            startWindow.Show();
 
-            var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
+            //logTab.IsSelected = true;
+            //logger.Content = "";
+            //logger.Content += "\nStart Checking observability....\n";
 
-            var result = new ConnectivityObserver().ObserveConnectivity(graph.Impl, observers, startWindow.returnValue);
+            //var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
 
-            logger.Content += "Observation Completed.\n";
+            //var result = new ConnectivityObserver().ObserveConnectivity(graph.Impl, observers, startWindow.returnValue);
 
-            foreach (var pair in result)
-            {
-                INode from = pair.Key.Item1, to = pair.Key.Item2;
-                Route route = pair.Key.Item3;
-                bool isObserved = pair.Value;
-                logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
+            //logger.Content += "Observation Completed.\n";
 
-                CanvasNode tempSrcNode = graph[from].Clone();
-                CanvasNode tempDestNode = graph[to].Clone();
-                if (tempSrcNode == null)
-                {
-                    throw new Exception("null Canvas Node!");
-                }
-                else
-                {
-                    if (tempSrcNode.X != 0 && tempSrcNode.Y != 0)
-                    {
-                        Canvas.SetTop(tempSrcNode, tempSrcNode.Y);
-                        Canvas.SetLeft(tempSrcNode, tempSrcNode.X);
-                        resultGraph.ResultCanvas.Children.Add(tempSrcNode);
+            //foreach (var pair in result)
+            //{
+            //    INode from = pair.Key.Item1, to = pair.Key.Item2;
+            //    Route route = pair.Key.Item3;
+            //    bool isObserved = pair.Value;
+            //    logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
 
-                    }
-                    else
-                        throw new Exception("X and Y undefined!");
-                }
-                DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
-            }
+            //    CanvasNode tempSrcNode = graph[from].Clone();
+            //    CanvasNode tempDestNode = graph[to].Clone();
+            //    if (tempSrcNode == null)
+            //    {
+            //        throw new Exception("null Canvas Node!");
+            //    }
+            //    else
+            //    {
+            //        if (tempSrcNode.X != 0 && tempSrcNode.Y != 0)
+            //        {
+            //            Canvas.SetTop(tempSrcNode, tempSrcNode.Y);
+            //            Canvas.SetLeft(tempSrcNode, tempSrcNode.X);
+            //            resultGraph.ResultCanvas.Children.Add(tempSrcNode);
 
-            logger.Content += "Task Finished.";
-            // Display the resultGraph window
-            resultGraph.ResultCanvas.IsEnabled = false;
-            resultGraph.Show();
+            //        }
+            //        else
+            //            throw new Exception("X and Y undefined!");
+            //    }
+            //    DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
+            //}
+
+            //logger.Content += "Task Finished.";
+            //// Display the resultGraph window
+            //resultGraph.ResultCanvas.IsEnabled = false;
+            //resultGraph.Show();
 
         }
 
@@ -290,6 +311,7 @@ namespace NetworkObservability
             {
                 String attributeName = attributeWindow.Attribute;
                 String attributeValue = attributeWindow.Value;
+                bool applyToAll = attributeWindow.ApplyAll;
 
                 bool boolValue;
                 double numValue;
@@ -309,22 +331,47 @@ namespace NetworkObservability
                 Grid.SetRow(valueTxtBox, rowIndex);
                 Grid.SetColumn(valueTxtBox, 1);
 
-                if (attributeWindow.boolRadio.IsChecked == true)
+                if (applyToAll)
                 {
-                    boolValue = Boolean.TryParse(attributeValue, out boolValue) ? boolValue : false;
-                    MainCanvas.SelectedEdge.Impl.Attributes[attributeName] = boolValue;
-                    valueTxtBox.Text = boolValue.ToString();
-                }
-                else if (attributeWindow.numRadio.IsChecked == true)
+                    foreach (var edge in graph.Impl.AllEdges.Values)
+                    {
+                        if (attributeWindow.boolRadio.IsChecked == true)
+                        {
+                            boolValue = Boolean.TryParse(attributeValue, out boolValue) ? boolValue : false;
+                            edge[attributeName] = boolValue;
+                            valueTxtBox.Text = boolValue.ToString();
+                        }
+                        else if (attributeWindow.numRadio.IsChecked == true)
+                        {
+                            numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
+                            edge[attributeName] = numValue;
+                            valueTxtBox.Text = numValue.ToString();
+                        }
+                        else
+                        {
+                            edge[attributeName] = attributeValue;
+                            valueTxtBox.Text = attributeValue;
+                        }
+                    }
+                } else
                 {
-                    numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
-                    MainCanvas.SelectedEdge.Impl.Attributes[attributeName] = numValue;
-                    valueTxtBox.Text = numValue.ToString();
-                }
-                else
-                {
-                    MainCanvas.SelectedEdge.Impl.Attributes[attributeName] = attributeValue;
-                    valueTxtBox.Text = attributeValue;
+                    if (attributeWindow.boolRadio.IsChecked == true)
+                    {
+                        boolValue = Boolean.TryParse(attributeValue, out boolValue) ? boolValue : false;
+                        MainCanvas.SelectedEdge.Impl[attributeName] = boolValue;
+                        valueTxtBox.Text = boolValue.ToString();
+                    }
+                    else if (attributeWindow.numRadio.IsChecked == true)
+                    {
+                        numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
+                        MainCanvas.SelectedEdge.Impl[attributeName] = numValue;
+                        valueTxtBox.Text = numValue.ToString();
+                    }
+                    else
+                    {
+                        MainCanvas.SelectedEdge.Impl[attributeName] = attributeValue;
+                        valueTxtBox.Text = attributeValue;
+                    }
                 }
             }
         }
@@ -363,7 +410,7 @@ namespace NetworkObservability
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
-            if (graph != null)
+            if (MainCanvas.Children.Count != 0)
             {
                 MessageBoxResult result = MessageBox.Show("Would you like to save the current graph before openning a new one?", "Current graph is not saved!",
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
@@ -382,6 +429,10 @@ namespace NetworkObservability
                 {
                     // do nothing
                 }
+            }
+            else
+            {
+                OpenFromFile();
             }
         }
 
