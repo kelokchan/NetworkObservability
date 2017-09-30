@@ -27,6 +27,7 @@ namespace NetworkObservability
         public static MainWindow AppWindow;
         CanvasGraph graph = new CanvasGraph();
         CanvasNode startNode, endNode;
+        public Dictionary<String, IComparable> Companies { get; set; }
 
         public MainWindow()
         {
@@ -318,18 +319,18 @@ namespace NetworkObservability
                 double numValue;
 
                 RowDefinition rd = new RowDefinition() { Height = GridLength.Auto };
-                EdgePanel.RowDefinitions.Add(rd);
-                int rowIndex = EdgePanel.RowDefinitions.IndexOf(rd);
+                //EdgePanel.RowDefinitions.Add(rd);
+                //int rowIndex = EdgePanel.RowDefinitions.IndexOf(rd);
 
                 TextBlock attributeTxtBlock = new TextBlock();
                 attributeTxtBlock.Text = attributeName + ":";
-                EdgePanel.Children.Add(attributeTxtBlock);
-                Grid.SetRow(attributeTxtBlock, rowIndex);
+                //EdgePanel.Children.Add(attributeTxtBlock);
+                //Grid.SetRow(attributeTxtBlock, rowIndex);
                 Grid.SetColumn(attributeTxtBlock, 0);
 
                 TextBox valueTxtBox = new TextBox();
-                EdgePanel.Children.Add(valueTxtBox);
-                Grid.SetRow(valueTxtBox, rowIndex);
+                //EdgePanel.Children.Add(valueTxtBox);
+                //Grid.SetRow(valueTxtBox, rowIndex);
                 Grid.SetColumn(valueTxtBox, 1);
 
                 if (applyToAll)
@@ -374,6 +375,17 @@ namespace NetworkObservability
                         valueTxtBox.Text = attributeValue;
                     }
                 }
+
+                Companies = new Dictionary<string, IComparable>
+                {
+                    { "1", 1 },
+                    { "2", 1 },
+                    { "3", 1 },
+                    { "4", 1 },
+                };
+               // EdgeAttributeList.ItemsSource = Companies;
+
+                EdgeAttributeList.ItemsSource = MainCanvas.SelectedEdge.Impl.Attributes;
             }
         }
 
@@ -399,8 +411,8 @@ namespace NetworkObservability
             }
             else if (MainCanvas.SelectedEdge != null)
             {
-                EdgePanel.DataContext = null;
-                EdgePanel.Children.Clear();
+               // EdgePanel.DataContext = null;
+               // EdgePanel.Children.Clear();
                 var edge = MainCanvas.SelectedEdge;
                 MainCanvas.Children.Remove(edge);
 
@@ -477,7 +489,7 @@ namespace NetworkObservability
                     {
                         CanvasNode tempNode = graph[node];
 
-                        DrawNode(tempNode);
+                        DrawNode(graph[node]);
                     }
                     foreach (var edge in graph.Impl.AllEdges.Values)
                     {

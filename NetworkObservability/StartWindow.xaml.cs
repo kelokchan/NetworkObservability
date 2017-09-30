@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using NetworkObservabilityCore;
+using NetworkObservabilityCore.Criteria;
 
 namespace NetworkObservability
 {
@@ -27,7 +28,7 @@ namespace NetworkObservability
         // A tuple of 2 elements.
         // first is a name of attribute, which is a key to be used by algorithms,
         // the second one is a constraint object.
-        // public Tuple<string, Constraint<IEdge>> returnValue { get; set; }
+        public Tuple<string, Constraint<IEdge>> returnValue { get; set; }
 
 
         public StartWindow()

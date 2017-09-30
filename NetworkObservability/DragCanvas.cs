@@ -354,7 +354,7 @@ namespace NetworkObservability
                     this.node = null;
                 }
                 this.edge.IsSelected = true;
-                NetworkObservability.MainWindow.AppWindow.EdgePanel.DataContext = this.edge;
+                NetworkObservability.MainWindow.AppWindow.EdgeAttributeList.ItemsSource = this.edge.Impl.Attributes;
                 NetworkObservability.MainWindow.AppWindow.SidePanel.SelectedIndex = 1;
             }
 

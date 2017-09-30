@@ -108,7 +108,29 @@
                 </TabItem>
                 <TabItem Header="Edge">
                     <StackPanel Margin="10">
-                        <Grid x:Name="EdgePanel">
+                        <ItemsControl Name="EdgeAttributeList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,5">
+                                        <Grid.Resources>
+                                            <Style TargetType="{x:Type TextBox}">
+                                                <Setter Property="Margin" Value="0,0,0,10" />
+                                            </Style>
+                                            <Style TargetType="{x:Type CheckBox}">
+                                                <Setter Property="Margin" Value="0,0,0,10" />
+                                            </Style>
+                                        </Grid.Resources>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Path=key}"></TextBlock>
+                                        <TextBox Grid.Column="1" Text="{Binding Path=value, Mode=OneWay}"></TextBox>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <!--<Grid x:Name="EdgePanel">
                             <Grid.Resources>
                                 <Style TargetType="{x:Type TextBox}">
                                     <Setter Property="Margin" Value="0,0,0,10" />
@@ -121,7 +143,7 @@
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                        </Grid>
+                        </Grid>-->
                         <Button Name="AddAttributeBtn" Padding="2" Content="Add attribute" Cursor="Hand" HorizontalAlignment="Right" Click="AddAttributeBtn_Click"/>
                     </StackPanel>
                 </TabItem>
