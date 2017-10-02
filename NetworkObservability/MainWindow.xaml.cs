@@ -27,7 +27,6 @@ namespace NetworkObservability
         public static MainWindow AppWindow;
         CanvasGraph graph = new CanvasGraph();
         CanvasNode startNode, endNode;
-        public Dictionary<String, IComparable> Companies { get; set; }
 
         public MainWindow()
         {
@@ -301,8 +300,6 @@ namespace NetworkObservability
             resultGraph.ResultCanvas.UpdateLines(tempDestNode);
         }
 
-
-
         private void AddAttributeBtn_Click(object sender, RoutedEventArgs e)
         {
             if (MainCanvas.SelectedEdge == null) return;
@@ -315,77 +312,51 @@ namespace NetworkObservability
                 String attributeValue = attributeWindow.Value;
                 bool applyToAll = attributeWindow.ApplyAll;
 
-                bool boolValue;
                 double numValue;
-
-                RowDefinition rd = new RowDefinition() { Height = GridLength.Auto };
-                //EdgePanel.RowDefinitions.Add(rd);
-                //int rowIndex = EdgePanel.RowDefinitions.IndexOf(rd);
-
-                TextBlock attributeTxtBlock = new TextBlock();
-                attributeTxtBlock.Text = attributeName + ":";
-                //EdgePanel.Children.Add(attributeTxtBlock);
-                //Grid.SetRow(attributeTxtBlock, rowIndex);
-                Grid.SetColumn(attributeTxtBlock, 0);
-
-                TextBox valueTxtBox = new TextBox();
-                //EdgePanel.Children.Add(valueTxtBox);
-                //Grid.SetRow(valueTxtBox, rowIndex);
-                Grid.SetColumn(valueTxtBox, 1);
 
                 if (applyToAll)
                 {
                     foreach (var edge in graph.Impl.AllEdges.Values)
                     {
-                        if (attributeWindow.boolRadio.IsChecked == true)
-                        {
-                            boolValue = Boolean.TryParse(attributeValue, out boolValue) ? boolValue : false;
-                            edge[attributeName] = boolValue;
-                            valueTxtBox.Text = boolValue.ToString();
-                        }
-                        else if (attributeWindow.numRadio.IsChecked == true)
+                        if (attributeWindow.numRadio.IsChecked == true || attributeWindow.boolRadio.IsChecked == true)
                         {
                             numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
                             edge[attributeName] = numValue;
-                            valueTxtBox.Text = numValue.ToString();
                         }
                         else
                         {
-                            edge[attributeName] = attributeValue;
-                            valueTxtBox.Text = attributeValue;
+                            edge.DescriptiveAttributes[attributeName] = attributeValue;
                         }
                     }
-                } else
+                }
+                else
                 {
-                    if (attributeWindow.boolRadio.IsChecked == true)
-                    {
-                        boolValue = Boolean.TryParse(attributeValue, out boolValue) ? boolValue : false;
-                        MainCanvas.SelectedEdge.Impl[attributeName] = boolValue;
-                        valueTxtBox.Text = boolValue.ToString();
-                    }
-                    else if (attributeWindow.numRadio.IsChecked == true)
+                    if (attributeWindow.numRadio.IsChecked == true || attributeWindow.boolRadio.IsChecked == true)
                     {
                         numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
                         MainCanvas.SelectedEdge.Impl[attributeName] = numValue;
-                        valueTxtBox.Text = numValue.ToString();
                     }
                     else
                     {
-                        MainCanvas.SelectedEdge.Impl[attributeName] = attributeValue;
-                        valueTxtBox.Text = attributeValue;
+                        MainCanvas.SelectedEdge.Impl.DescriptiveAttributes[attributeName] = attributeValue;
                     }
                 }
 
-                Companies = new Dictionary<string, IComparable>
-                {
-                    { "1", 1 },
-                    { "2", 1 },
-                    { "3", 1 },
-                    { "4", 1 },
-                };
-               // EdgeAttributeList.ItemsSource = Companies;
+                Dictionary<string, double> tempNumAttr = new Dictionary<string, double>();
+                Dictionary<string, string> tempDescAttr = new Dictionary<string, string>();
 
-                EdgeAttributeList.ItemsSource = MainCanvas.SelectedEdge.Impl.Attributes;
+                foreach (var a in MainCanvas.SelectedEdge.Impl.NumericAttributes)
+                {
+                    tempNumAttr[a.Key] = a.Value;
+                }
+
+                foreach (var a in MainCanvas.SelectedEdge.Impl.DescriptiveAttributes)
+                {
+                    tempDescAttr[a.Key] = a.Value;
+                }
+
+                NumericAttrList.ItemsSource = tempNumAttr;
+                DescAttrList.ItemsSource = tempDescAttr;
             }
         }
 
@@ -411,8 +382,6 @@ namespace NetworkObservability
             }
             else if (MainCanvas.SelectedEdge != null)
             {
-               // EdgePanel.DataContext = null;
-               // EdgePanel.Children.Clear();
                 var edge = MainCanvas.SelectedEdge;
                 MainCanvas.Children.Remove(edge);
 

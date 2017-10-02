@@ -11,6 +11,8 @@ namespace NetworkObservability
             set { Attributes[key] = value; }
         }
 
+        double IConstrainable.this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public string Id { get; set; }
 
         public string Label { get; set; }
@@ -19,6 +21,8 @@ namespace NetworkObservability
         public bool IsBlocked { get; set; }
         public double Weight { get; set; }
         public IDictionary<string, IComparable> Attributes { get; set; }
+        public IDictionary<string, double> NumericAttributes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IDictionary<string, string> DescriptiveAttributes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public bool Equals(IEdge other)
         {
@@ -26,6 +30,16 @@ namespace NetworkObservability
         }
 
         public bool HasAttribute(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasDescriptiveAttribute(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasNumericAttribute(string name)
         {
             throw new NotImplementedException();
         }

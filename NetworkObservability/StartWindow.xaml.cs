@@ -67,16 +67,9 @@ namespace NetworkObservability
         {
             foreach (var edge in edges)
             {
-                foreach(var attribute in edge.Attributes)
+                foreach(var attribute in edge.NumericAttributes)
                 {
-                    if (attribute.Value.GetType().FullName == typeof(double).FullName)
-                    {
-                        numericAttributes.Add(attribute.Key);
-                    }   
-                    else if (attribute.Value.GetType().FullName == typeof(bool).FullName)
-                    {
-                        booleanAttributes.Add(attribute.Key);
-                    }
+                    numericAttributes.Add(attribute.Key);
                 }
             }
 

@@ -354,7 +354,23 @@ namespace NetworkObservability
                     this.node = null;
                 }
                 this.edge.IsSelected = true;
-                NetworkObservability.MainWindow.AppWindow.EdgeAttributeList.ItemsSource = this.edge.Impl.Attributes;
+
+
+                Dictionary<string, double> tempNumAttr = new Dictionary<string, double>();
+                Dictionary<string, string> tempDescAttr = new Dictionary<string, string>();
+
+                foreach (var a in this.edge.Impl.NumericAttributes)
+                {
+                    tempNumAttr[a.Key] = a.Value;
+                }
+
+                foreach (var a in this.edge.Impl.DescriptiveAttributes)
+                {
+                    tempDescAttr[a.Key] = a.Value;
+                }
+
+                NetworkObservability.MainWindow.AppWindow.NumericAttrList.ItemsSource = tempNumAttr;
+                NetworkObservability.MainWindow.AppWindow.DescAttrList.ItemsSource = tempDescAttr;
                 NetworkObservability.MainWindow.AppWindow.SidePanel.SelectedIndex = 1;
             }
 

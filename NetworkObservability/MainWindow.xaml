@@ -108,24 +108,32 @@
                 </TabItem>
                 <TabItem Header="Edge">
                     <StackPanel Margin="10">
-                        <ItemsControl Name="EdgeAttributeList">
+                        <ItemsControl Name="NumericAttrList">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="0,0,0,5">
-                                        <Grid.Resources>
-                                            <Style TargetType="{x:Type TextBox}">
-                                                <Setter Property="Margin" Value="0,0,0,10" />
-                                            </Style>
-                                            <Style TargetType="{x:Type CheckBox}">
-                                                <Setter Property="Margin" Value="0,0,0,10" />
-                                            </Style>
-                                        </Grid.Resources>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Path=Key}"></TextBlock>
+                                        <TextBox Grid.Column="1" Text="{Binding Path=Value, Mode=OneWay}" IsReadOnly="True"></TextBox>
+                                        <Button Margin="5,0,0,0" Grid.Column="2" Name="AttributeEditButton">Edit</Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ItemsControl Name="DescAttrList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,10">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="{Binding Path=key}"></TextBlock>
-                                        <TextBox Grid.Column="1" Text="{Binding Path=value, Mode=OneWay}"></TextBox>
+                                        <TextBlock Grid.Column="0" Text="{Binding Path=Key}"></TextBlock>
+                                        <TextBox Grid.Column="1" Text="{Binding Path=Value, Mode=OneWay}"></TextBox>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

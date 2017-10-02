@@ -38,7 +38,8 @@
             <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Name="attributeTxt"/>
 
             <Label Grid.Row="2" Grid.Column="0" Content="Value:" Margin="0 0 10 5" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Name="valueTxt"></TextBox>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Name="valueTxt" TextChanged="valueTxt_TextChanged"></TextBox>
+            <CheckBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Name="valueBool" Visibility="Hidden">True/False</CheckBox>
 
             <Label Grid.Row="3" Grid.Column="0"></Label>
             <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Name="applyAllCheckBox" IsChecked="True">Apply to all edges</CheckBox>
