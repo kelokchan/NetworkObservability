@@ -321,11 +321,13 @@ namespace NetworkObservability
                         if (attributeWindow.numRadio.IsChecked == true || attributeWindow.boolRadio.IsChecked == true)
                         {
                             numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
-                            edge[attributeName] = numValue;
+                            if (!edge.HasNumericAttribute(attributeName))
+                                edge[attributeName] = numValue;
                         }
                         else
                         {
-                            edge.DescriptiveAttributes[attributeName] = attributeValue;
+                            if (!edge.HasDescriptiveAttribute(attributeName))
+                                edge.DescriptiveAttributes[attributeName] = attributeValue;
                         }
                     }
                 }
@@ -334,11 +336,13 @@ namespace NetworkObservability
                     if (attributeWindow.numRadio.IsChecked == true || attributeWindow.boolRadio.IsChecked == true)
                     {
                         numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
-                        MainCanvas.SelectedEdge.Impl[attributeName] = numValue;
+                        if (!MainCanvas.SelectedEdge.Impl.HasNumericAttribute(attributeName))
+                            MainCanvas.SelectedEdge.Impl[attributeName] = numValue;
                     }
                     else
                     {
-                        MainCanvas.SelectedEdge.Impl.DescriptiveAttributes[attributeName] = attributeValue;
+                        if (!MainCanvas.SelectedEdge.Impl.HasDescriptiveAttribute(attributeName))
+                            MainCanvas.SelectedEdge.Impl.DescriptiveAttributes[attributeName] = attributeValue;
                     }
                 }
 

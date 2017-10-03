@@ -31,6 +31,11 @@ namespace NetworkObservability
             }
         }
 
+        internal Dictionary<string, double> GetNumAttributes()
+        {
+            return (Dictionary<string,double>) this.Impl.NumericAttributes;
+        }
+
         #region Dependency Properties
 
         public static readonly DependencyProperty X1Property = DependencyProperty.Register("X1", typeof(double), typeof(CanvasEdge), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
