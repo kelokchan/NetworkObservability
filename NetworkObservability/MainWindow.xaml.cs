@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Data;
 using System.Collections.Generic;
 using NetworkObservabilityCore.Utils;
+using System.Diagnostics;
 
 namespace NetworkObservability
 {
@@ -33,7 +34,7 @@ namespace NetworkObservability
             InitializeComponent();
             AppWindow = this;
 
-            canvasNodeButton.PreviewMouseDown += Component_MouseDown;
+            canvasNodeButton.PreviewMouseDown += Component_MouseDown;          
         }
 
         void OnContextMenuOpened(object sender, RoutedEventArgs e)
@@ -300,6 +301,25 @@ namespace NetworkObservability
             resultGraph.ResultCanvas.UpdateLines(tempDestNode);
         }
 
+        private void PopulateAttributesPanel(CanvasEdge edge)
+        {
+            Dictionary<string, double> tempNumAttr = new Dictionary<string, double>();
+            Dictionary<string, string> tempDescAttr = new Dictionary<string, string>();
+
+            foreach (var a in edge.Impl.NumericAttributes)
+            {
+                tempNumAttr[a.Key] = a.Value;
+            }
+
+            foreach (var a in edge.Impl.DescriptiveAttributes)
+            {
+                tempDescAttr[a.Key] = a.Value;
+            }
+
+            NumericAttrList.ItemsSource = tempNumAttr;
+            DescAttrList.ItemsSource = tempDescAttr;
+        }
+
         private void AddAttributeBtn_Click(object sender, RoutedEventArgs e)
         {
             if (MainCanvas.SelectedEdge == null) return;
@@ -346,21 +366,7 @@ namespace NetworkObservability
                     }
                 }
 
-                Dictionary<string, double> tempNumAttr = new Dictionary<string, double>();
-                Dictionary<string, string> tempDescAttr = new Dictionary<string, string>();
-
-                foreach (var a in MainCanvas.SelectedEdge.Impl.NumericAttributes)
-                {
-                    tempNumAttr[a.Key] = a.Value;
-                }
-
-                foreach (var a in MainCanvas.SelectedEdge.Impl.DescriptiveAttributes)
-                {
-                    tempDescAttr[a.Key] = a.Value;
-                }
-
-                NumericAttrList.ItemsSource = tempNumAttr;
-                DescAttrList.ItemsSource = tempDescAttr;
+                PopulateAttributesPanel(MainCanvas.SelectedEdge);
             }
         }
 
@@ -440,6 +446,30 @@ namespace NetworkObservability
                 CanvasGraphXML output = new CanvasGraphXML();
                 output.Save(dialog.FileName, graph);
             }
+        }
+
+        private void NumAttributeDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            string key = ((Button)sender).Tag as string;
+
+            MessageBoxResult result = MessageBox.Show("Delete this attribute from all other edges?", null, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                foreach(var edge in graph.Impl.AllEdges.Values)
+                {
+                    edge.NumericAttributes.Remove(key);
+                }
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                MainCanvas.SelectedEdge.Impl.NumericAttributes.Remove(key);
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                // do nothing
+            }
+
+            PopulateAttributesPanel(MainCanvas.SelectedEdge);
         }
 
         private void OpenFromFile()
