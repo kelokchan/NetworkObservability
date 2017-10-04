@@ -68,6 +68,9 @@
     <Compile Include="CanvasNode.xaml.cs">
       <DependentUpon>CanvasNode.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NodeButton.xaml.cs">
+      <DependentUpon>NodeButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ResultEdge.cs" />
     <Compile Include="ResultGraph.xaml.cs">
       <DependentUpon>ResultGraph.xaml</DependentUpon>
@@ -80,6 +83,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CanvasNode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NodeButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

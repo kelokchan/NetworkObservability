@@ -40,7 +40,7 @@
                 <ToolBar Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Height="50" ToolBarTray.IsLocked="True" >
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="35 0 0 0">
                         <Label Content="Node:" VerticalContentAlignment="Center" FontWeight="Bold"></Label>
-                        <custom:CanvasNode x:Name="canvasNodeButton" Margin="20 0 20 0" VerticalContentAlignment="Center"></custom:CanvasNode>
+                        <custom:NodeButton x:Name="canvasNodeButton" Margin="20 0 20 0" VerticalContentAlignment="Center"></custom:NodeButton>
                         <Label Content="Arc type:" VerticalContentAlignment="Center" FontWeight="Bold"/>
                         <ComboBox x:Name="ArcType" Height="25" Width="150" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" BorderBrush="#00ACACAC" >
                             <ComboBoxItem x:Name="DirectedArc" Content="Directed lines" Selector.IsSelected="True" />

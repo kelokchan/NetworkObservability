@@ -483,6 +483,7 @@ namespace NetworkObservability
                 else if (result == MessageBoxResult.No)
                 {
                     MainCanvas.Children.Clear();
+
                 }
                 else if (result == MessageBoxResult.Cancel)
                 {

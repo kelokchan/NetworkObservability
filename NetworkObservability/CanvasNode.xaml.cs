@@ -115,11 +115,11 @@ namespace NetworkObservability
             set { y = value; OnPropertyChanged("Y"); }
         }
 
-        public CanvasNode() : base()
+        public CanvasNode(INode node = null) : base()
         {
             OutLines = new List<CanvasEdge>();
             InLines = new List<CanvasEdge>();
-            Impl = new Node();
+            Impl = node == null ? new Node() : node;
             InitializeComponent();
         }
 
