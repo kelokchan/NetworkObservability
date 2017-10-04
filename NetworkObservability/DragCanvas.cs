@@ -502,7 +502,17 @@ namespace NetworkObservability
 
         #endregion // Host Event Handlers
 
-        #region Private Helpers
+        #region Helpers
+
+        #region IsEmpty
+        /// <summary>
+        /// Return true if current canvas is empty 
+        /// </summary>
+        public bool IsEmpty()
+        {
+            return this.Children.Count == 0;
+        }
+        #endregion
 
         #region CalculateDragElementRect
 

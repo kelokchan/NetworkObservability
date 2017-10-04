@@ -37,18 +37,12 @@ namespace NetworkObservability
             canvasNodeButton.PreviewMouseDown += Component_MouseDown;          
         }
 
-        void OnContextMenuOpened(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         /// <summary>
         /// Handles the Click event of both menu items in the context menu.
         /// </summary>
         void OnMenuItemClick(object sender, RoutedEventArgs e)
         {
-            if (this.elementForContextMenu == null)
-                return;
+            if (this.elementForContextMenu == null || this.elementForContextMenu is CanvasEdge) return;
 
             if (e.Source == this.menuItemBringToFront ||
                 e.Source == this.menuItemSendToBack)
@@ -62,7 +56,7 @@ namespace NetworkObservability
             }
 
             if (e.Source == this.menuStartArc || e.Source == this.menuEndArc)
-            {
+            {              
                 CanvasNode selectedNode = this.elementForContextMenu as CanvasNode;
                 bool startDrawing = e.Source == this.menuStartArc;
 
@@ -74,6 +68,12 @@ namespace NetworkObservability
                 }
                 else
                 {
+                    if (selectedNode == startNode)
+                    {
+                        MessageBox.Show("Can't connect to the same node", "Error");
+                        return;
+                    }
+
                     endNode = selectedNode;
                     this.menuStartArc.Visibility = Visibility.Visible;
                     this.menuEndArc.Visibility = Visibility.Collapsed;
@@ -187,7 +187,6 @@ namespace NetworkObservability
 
             Canvas.SetLeft(node, node.X);
             Canvas.SetTop(node, node.Y);
-
         }
 
         private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -402,7 +401,7 @@ namespace NetworkObservability
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
-            if (MainCanvas.Children.Count != 0)
+            if (!MainCanvas.IsEmpty())
             {
                 MessageBoxResult result = MessageBox.Show("Would you like to save the current graph before openning a new one?", "Current graph is not saved!",
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
@@ -472,6 +471,30 @@ namespace NetworkObservability
             PopulateAttributesPanel(MainCanvas.SelectedEdge);
         }
 
+        private void MenuReset_Click(object sender, RoutedEventArgs e)
+        {
+            if (!MainCanvas.IsEmpty())
+            {
+                MessageBoxResult result = MessageBox.Show("Would you like to save the current graph before openning a new one?", "Current graph is not saved!", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SaveToFile();
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    MainCanvas.Children.Clear();
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    // do nothing
+                }
+            }
+            else
+            {
+                MainCanvas.Children.Clear();
+            }
+        }
+
         private void OpenFromFile()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -490,8 +513,6 @@ namespace NetworkObservability
                     graph = reader.Load((fileDialog.FileName).ToString());
                     foreach(var node in graph.Impl.AllNodes.Values)
                     {
-                        CanvasNode tempNode = graph[node];
-
                         DrawNode(graph[node]);
                     }
                     foreach (var edge in graph.Impl.AllEdges.Values)
