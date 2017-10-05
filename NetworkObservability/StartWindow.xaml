@@ -9,7 +9,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -18,48 +17,46 @@
         
         <!-- (0, 0) -->
         <ScrollViewer Grid.Column="0">
-            <ListBox ItemsSource="{Binding Attributes}" SelectedItem="{Binding SelectedAttribute}">
+            <ListBox Name="CommonAttrList" ItemsSource="{Binding BindingCriterion}" SelectedItem="{Binding SelectedCriteria}" SelectionChanged="CommonAttrList_SelectionChanged" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <ListBoxItem IsSelected="{Binding IsChecked}">
-                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item}" />
+                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Attribute}" />
                         </ListBoxItem>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </ScrollViewer>
-        
-        <!-- (0, 1) -->
-        <Grid Grid.Row="0" Grid.Column="1">
-            <StackPanel Name="constraintPanel" Orientation="Horizontal" Visibility="Visible">
-                <Label Margin="0,3,0,0" VerticalAlignment="Top">Select constraint:</Label>
-                <ComboBox Margin="0,5,0,0" VerticalAlignment="Top" Name="constraintTypeCombo" SelectedIndex="0" DropDownClosed="constraintTypeCombo_DropDownClosed">
-                    <ComboBoxItem>Greater than</ComboBoxItem>
-                    <ComboBoxItem>Less than</ComboBoxItem>
-                    <ComboBoxItem>Equal to</ComboBoxItem>
-                    <ComboBoxItem Name="rangeCombo">Range</ComboBoxItem>
-                </ComboBox>
-                <TextBox Name="constraintReader" Margin="10,5,0,0" Width="80" VerticalAlignment="Top" Height="22"></TextBox>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Name="EditPanel" DataContext="{Binding}" Grid.Row="0">
+                <StackPanel Name="constraintPanel" Orientation="Horizontal" Visibility="Visible">
+                    <Label Margin="0,3,0,0" VerticalAlignment="Top">Select constraint:</Label>
+                    <ComboBox Margin="0,5,0,0" VerticalAlignment="Center" Name="constraintTypeCombo" SelectedIndex="{Binding SelectedIndex}" DropDownClosed="constraintTypeCombo_DropDownClosed">
+                        <ComboBoxItem>Greater than</ComboBoxItem>
+                        <ComboBoxItem>Less than</ComboBoxItem>
+                        <ComboBoxItem>Equal to</ComboBoxItem>
+                        <ComboBoxItem Name="rangeCombo">Range</ComboBoxItem>
+                    </ComboBox>
+                    <TextBox Name="constraintReader" Margin="10,5,0,0" Width="80" VerticalAlignment="Center" Text="{Binding Value1}"></TextBox>
+                </StackPanel>
+                <StackPanel Name="constraintRangePanel" Height="150" Orientation="Horizontal" Visibility="Collapsed">
+                    <Label Margin="0,10,0,0">between [min]</Label>
+                    <TextBox Name="rangeMin" Width="80" VerticalAlignment="Top" Margin="0,15,0,0" Text="{Binding Value1}"/>
+                    <Label Margin="0,10,0,0">and [max]</Label>
+                    <TextBox Name="rangeMax" Width="80" VerticalAlignment="Top" Margin="0,15,0,0" Text="{Binding Value2}"></TextBox>
+                </StackPanel>
             </StackPanel>
-            <!-- bottom part of (0, 1) -->
-            <StackPanel Name="constraintRangePanel" Height="150" Orientation="Horizontal" Visibility="Hidden">
-                <Label Margin="0,38,0,0">between [min]</Label>
-                <TextBox Name="rangeMin" Width="80" VerticalAlignment="Top" Margin="0,40,0,0"/>
-                <Label Margin="0,38,0,0">and [max]</Label>
-                <TextBox Name="rangeMax" Width="80" VerticalAlignment="Top" Margin="0,40,0,0"></TextBox>
-            </StackPanel>
-            <StackPanel>
-                <Button Margin="250,100,40,0" Name="oKbutton" Background="{DynamicResource Button.Disabled.Background}" Visibility="Visible">OK</Button>
+            <StackPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <TextBlock VerticalAlignment="Center">Choose weight attribute: </TextBlock>
+                <ComboBox Margin="5,0,0,0" Name="weightCombo" SelectedIndex="0" VerticalAlignment="Center"></ComboBox>
+                <Button Margin="15,0,0,0" Padding="5" Name="RunBtn" Click="RunBtn_Click">Run</Button>
+                <Button Margin="5,0,0,0" Padding="5" Name="CancelBtn" Click="CancelBtn_Click">Cancel</Button>
             </StackPanel>
         </Grid>
-            
-        <!-- (1, 1) -->
-        <Grid Grid.Row="1" Grid.Column="1">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Weight:"></TextBlock>
-                <ComboBox Margin="10,0,0,0"></ComboBox>
-            </StackPanel>
-        </Grid>
-        
     </Grid>
 </Window>

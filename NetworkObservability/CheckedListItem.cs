@@ -13,6 +13,7 @@ namespace NetworkObservability
 
         private bool isChecked;
         private T item;
+        private string attribute;
 
         public CheckedListItem()
         { }
@@ -21,6 +22,11 @@ namespace NetworkObservability
         {
             this.item = item;
             this.isChecked = isChecked;
+        }
+
+        public CheckedListItem(string attribute)
+        {
+            this.attribute = attribute;
         }
 
         public T Item

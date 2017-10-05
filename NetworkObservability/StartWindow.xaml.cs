@@ -22,41 +22,55 @@ namespace NetworkObservability
     /// </summary>
     public partial class StartWindow : Window
     {
-        private IEnumerable<IEdge> edges;
-        HashSet<String> numericAttributes;
-        //HashSet<String> booleanAttributes;
+        HashSet<String> CommonAttributes;
 
         // A tuple of 2 elements.
         // first is a name of attribute, which is a key to be used by algorithms,
         // the second one is a constraint object.
         public Tuple<string, Constraint<IEdge>> returnValue { get; set; }
 
-        public ObservableCollection<CheckedListItem<String>> Attributes { get; set; }
+        public ObservableCollection<CheckedListItem<BindingCriteria>> BindingCriterion { get; set; }
 
+        private BindingCriteria _selectedCriterion;
+        public BindingCriteria SelectionCriterion
+        {
+            get { return _selectedCriterion; }
+            set
+            {
+                _selectedCriterion = value;               
+            }
+        }
 
         public StartWindow()
         {
             InitializeComponent();
         }   
 
-        public StartWindow(IEnumerable<IEdge> edges)
+        public StartWindow(HashSet<String> CommonAttributes)
         {
             InitializeComponent();
 
-            this.edges = edges;
-            numericAttributes = populateAttributes();
-            Attributes = new ObservableCollection<CheckedListItem<string>>();
-            foreach(var a in numericAttributes)
+            this.CommonAttributes = CommonAttributes;
+            BindingCriterion = new ObservableCollection<CheckedListItem<BindingCriteria>>();
+            foreach(var attribute in this.CommonAttributes)
             {
-                Attributes.Add(new CheckedListItem<string>(a));
+                BindingCriteria bc = new BindingCriteria(attribute);
+                BindingCriterion.Add(new CheckedListItem<BindingCriteria>(bc));
             }
+
+            this.weightCombo.ItemsSource = CommonAttributes;
 
             DataContext = this;
         }
 
         private void constraintTypeCombo_DropDownClosed(object sender, EventArgs e)
         {
-            if (constraintTypeCombo.SelectedItem == rangeCombo)
+            ToggleInputVisiblity(constraintTypeCombo.SelectedIndex);
+        }
+
+        private void ToggleInputVisiblity(int index)
+        {
+            if (index == 3)
             {
                 constraintReader.Visibility = Visibility.Collapsed;
                 constraintRangePanel.Visibility = Visibility.Visible;
@@ -68,18 +82,48 @@ namespace NetworkObservability
             }
         }
 
-        private HashSet<String> populateAttributes()
+        private void CommonAttrList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var set = new HashSet<String>();
-            foreach (var edge in edges)
+            SelectionCriterion = ((CheckedListItem<BindingCriteria>) CommonAttrList.SelectedItem).Item;
+            this.EditPanel.DataContext = SelectionCriterion;
+            ToggleInputVisiblity(SelectionCriterion.SelectedIndex);
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void RunBtn_Click(object sender, RoutedEventArgs e)
+        {
+            HashSet<ICriterion> criteria = new HashSet<ICriterion>();
+            foreach(CheckedListItem<BindingCriteria> checkbox in CommonAttrList.Items)
             {
-                foreach(var attribute in edge.NumericAttributes)
+                if (checkbox.IsChecked)
                 {
-                    set.Add(attribute.Key);
+                    BindingCriteria criterion = checkbox.Item;
+
+                    switch (criterion.SelectedIndex)
+                    {
+                        case 0:
+                            criteria.Add(new GreaterThanCriterion(criterion.Attribute, criterion.Value1));
+                            break;
+                        case 1:
+                            criteria.Add(new LessThanCriterion(criterion.Attribute, criterion.Value1));
+                            break;
+                        case 2:
+                            criteria.Add(new EqualCriterion(criterion.Attribute, criterion.Value1));
+                            break;
+                        case 3:
+                            criteria.Add(new RangeCriterion(criterion.Attribute, criterion.Value1, criterion.Value2));
+                            break;
+                    }
                 }
             }
 
-            return set;
+            Constraint<IEdge> constraint = new Constraint<IEdge>(criteria);
+            returnValue = Tuple.Create(weightCombo.SelectedItem.ToString(), constraint);
+            DialogResult = true;
         }
     }
 }

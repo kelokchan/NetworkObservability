@@ -223,7 +223,7 @@ namespace NetworkObservability
         {
             // Create a resultGraph instance
             ResultGraph resultGraph = new ResultGraph();
-            StartWindow startWindow = new StartWindow(graph.Impl.AllEdges.Values);
+            StartWindow startWindow = new StartWindow(graph.CommonAttributes);
 
             startWindow.Show();
 
@@ -348,6 +348,8 @@ namespace NetworkObservability
                             numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
                             if (!edge.HasNumericAttribute(attributeName))
                                 edge[attributeName] = numValue;
+
+                            graph.CommonAttributes.Add(attributeName);
                         }
                         else
                         {
@@ -473,6 +475,8 @@ namespace NetworkObservability
             {
                 // do nothing
             }
+
+            graph.CommonAttributes.Remove(key);
 
             PopulateAttributesPanel(MainCanvas.SelectedEdge);
         }
@@ -610,18 +614,18 @@ namespace NetworkObservability
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (!MainCanvas.IsEmpty())
-            {
-                MessageBoxResult result = MessageBox.Show("Are you sure you want to exit?", "Current graph will be lost if you haven't saved it yet.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Yes)
-                {
-                    base.OnClosing(e);
-                }
-                else
-                {
-                    e.Cancel = true;
-                }// end else/if
-            }
+            //if (!MainCanvas.IsEmpty())
+            //{
+            //    MessageBoxResult result = MessageBox.Show("Are you sure you want to exit?", "Current graph will be lost if you haven't saved it yet.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            //    if (result == MessageBoxResult.Yes)
+            //    {
+            //        base.OnClosing(e);
+            //    }
+            //    else
+            //    {
+            //        e.Cancel = true;
+            //    }// end else/if
+            //}
         }
     }
 
