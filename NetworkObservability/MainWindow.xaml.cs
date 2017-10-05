@@ -29,6 +29,9 @@ namespace NetworkObservability
         CanvasGraph graph = new CanvasGraph();
         CanvasNode startNode, endNode;
 
+        Dictionary<string, double> edgeNumAttrList = new Dictionary<string, double>();
+        Dictionary<string, string> edgeDescAttrList = new Dictionary<string, string>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -300,23 +303,26 @@ namespace NetworkObservability
             resultGraph.ResultCanvas.UpdateLines(tempDestNode);
         }
 
-        private void PopulateAttributesPanel(CanvasEdge edge)
+        public void PopulateAttributesPanel(CanvasEdge edge)
         {
-            Dictionary<string, double> tempNumAttr = new Dictionary<string, double>();
-            Dictionary<string, string> tempDescAttr = new Dictionary<string, string>();
+            edgeNumAttrList.Clear();
+            edgeDescAttrList.Clear();
 
             foreach (var a in edge.Impl.NumericAttributes)
             {
-                tempNumAttr[a.Key] = a.Value;
+                edgeNumAttrList[a.Key] = a.Value;
             }
 
             foreach (var a in edge.Impl.DescriptiveAttributes)
             {
-                tempDescAttr[a.Key] = a.Value;
+                edgeDescAttrList[a.Key] = a.Value;
             }
 
-            NumericAttrList.ItemsSource = tempNumAttr;
-            DescAttrList.ItemsSource = tempDescAttr;
+            NumericAttrList.ItemsSource = null;
+            NumericAttrList.ItemsSource = edgeNumAttrList;
+
+            DescAttrList.ItemsSource = null;
+            DescAttrList.ItemsSource = edgeDescAttrList;
         }
 
         private void AddAttributeBtn_Click(object sender, RoutedEventArgs e)
@@ -493,6 +499,71 @@ namespace NetworkObservability
             else
             {
                 MainCanvas.Children.Clear();
+            }
+        }
+
+        private void DescAttributeDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            string key = ((Button)sender).Tag as string;
+
+            MessageBoxResult result = MessageBox.Show("Delete this attribute from all other edges?", null, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                foreach (var edge in graph.Impl.AllEdges.Values)
+                {
+                    edge.DescriptiveAttributes.Remove(key);
+                }
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                MainCanvas.SelectedEdge.Impl.DescriptiveAttributes.Remove(key);
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                // do nothing
+            }
+
+            PopulateAttributesPanel(MainCanvas.SelectedEdge);
+        }
+
+        private void NumAttributeEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var pair = (KeyValuePair<string, double>) ((Button)sender).Tag;
+            string key = pair.Key;
+            double prevValue = pair.Value;
+
+            var EditAttributeWindow = new EditAttributeWindow()
+            {
+                Attribute = key,
+                Value = prevValue.ToString(),
+                IsNumeric = true
+            };
+
+            if (EditAttributeWindow.ShowDialog() == true)
+            {
+                double newValue = Double.TryParse(EditAttributeWindow.Value, out newValue) ? newValue : prevValue;
+                this.MainCanvas.SelectedEdge.Impl.NumericAttributes[key] = newValue;
+                PopulateAttributesPanel(this.MainCanvas.SelectedEdge);
+            }
+        }
+
+        private void DescAttributeEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var pair = (KeyValuePair<string, string>)((Button)sender).Tag;
+            string key = pair.Key;
+            string prevValue = pair.Value;
+
+            var EditAttributeWindow = new EditAttributeWindow()
+            {
+                Attribute = key,
+                Value = prevValue.ToString(),
+                IsNumeric = false
+            };
+
+            if (EditAttributeWindow.ShowDialog() == true)
+            {
+                this.MainCanvas.SelectedEdge.Impl.DescriptiveAttributes[key] = EditAttributeWindow.Value;
+                PopulateAttributesPanel(this.MainCanvas.SelectedEdge);
             }
         }
 

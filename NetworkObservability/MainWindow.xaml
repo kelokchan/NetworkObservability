@@ -115,8 +115,8 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" Text="{Binding Path=Key}"></TextBlock>
                                         <TextBox Grid.Column="1" Text="{Binding Path=Value, Mode=OneWay}" IsReadOnly="True"></TextBox>
-                                        <Button Margin="5,0,0,0" Grid.Column="2" Tag="{Binding}" Name="NumAttributeEditButton">Edit</Button>
-                                        <Button Margin="5,0,0,0" Grid.Column="3" Tag="{Binding Path=Key}" Name="NumAttributeDeleteButton" Click="NumAttributeDeleteButton_Click">Delete</Button>
+                                        <Button Margin="5,0,0,0" Grid.Column="2" Tag="{Binding}" Name="NumAttributeEditButton" Click="NumAttributeEditButton_Click">Edit</Button>
+                                        <Button Margin="5,0,0,0" Grid.Column="3" Tag="{Binding Key}" Name="NumAttributeDeleteButton" Click="NumAttributeDeleteButton_Click">Delete</Button>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -133,8 +133,8 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" Text="{Binding Path=Key}"></TextBlock>
                                         <TextBox Grid.Column="1" Text="{Binding Path=Value, Mode=OneWay}"></TextBox>
-                                        <Button Margin="5,0,0,0" Grid.Column="2" Tag="{Binding}" Name="DescAttributeEditButton">Edit</Button>
-                                        <Button Margin="5,0,0,0" Grid.Column="3" Tag="{Binding}" Name="DescAttributeDeleteButton">Delete</Button>
+                                        <Button Margin="5,0,0,0" Grid.Column="2" Tag="{Binding}" Name="DescAttributeEditButton" Click="DescAttributeEditButton_Click">Edit</Button>
+                                        <Button Margin="5,0,0,0" Grid.Column="3" Tag="{Binding Key}" Name="DescAttributeDeleteButton" Click="DescAttributeDeleteButton_Click">Delete</Button>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
