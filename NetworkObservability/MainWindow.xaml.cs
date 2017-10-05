@@ -225,7 +225,10 @@ namespace NetworkObservability
             ResultGraph resultGraph = new ResultGraph();
             StartWindow startWindow = new StartWindow(graph.CommonAttributes);
 
-            startWindow.Show();
+            if (startWindow.ShowDialog() == true)
+            {
+
+            }
 
             //logTab.IsSelected = true;
             //logger.Content = "";
@@ -614,18 +617,21 @@ namespace NetworkObservability
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            //if (!MainCanvas.IsEmpty())
-            //{
-            //    MessageBoxResult result = MessageBox.Show("Are you sure you want to exit?", "Current graph will be lost if you haven't saved it yet.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-            //    if (result == MessageBoxResult.Yes)
-            //    {
-            //        base.OnClosing(e);
-            //    }
-            //    else
-            //    {
-            //        e.Cancel = true;
-            //    }// end else/if
-            //}
+            if (!MainCanvas.IsEmpty())
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to exit?", "Current graph will be lost if you haven't saved it yet.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.OnClosing(e);
+                }
+                else
+                {
+                    e.Cancel = true;
+                }// end else/if
+            }
+
+            Application.Current.Shutdown();
+
         }
     }
 
