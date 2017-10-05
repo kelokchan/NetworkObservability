@@ -9,6 +9,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -16,7 +17,7 @@
         </Grid.ColumnDefinitions>
         
         <!-- (0, 0) -->
-        <ScrollViewer Grid.Column="0" Padding="10">
+        <ScrollViewer Grid.Column="0">
             <ListBox ItemsSource="{Binding Attributes}" SelectedItem="{Binding SelectedAttribute}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -54,7 +55,11 @@
             
         <!-- (1, 1) -->
         <Grid Grid.Row="1" Grid.Column="1">
-            <Button FontSize="30" Margin="250 120 20 20">RUN</Button>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Weight:"></TextBlock>
+                <ComboBox Margin="10,0,0,0"></ComboBox>
+            </StackPanel>
         </Grid>
+        
     </Grid>
 </Window>
