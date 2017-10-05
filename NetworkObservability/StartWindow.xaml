@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkObservability"
         mc:Ignorable="d"
-        Title="Select" Height="400" Width="600" Loaded="Window_Loaded">
+        Title="Select" Height="400" Width="600">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -17,11 +16,16 @@
         </Grid.ColumnDefinitions>
         
         <!-- (0, 0) -->
-        <ScrollViewer Grid.Row="0" Grid.Column="0" Padding="10">
-            <StackPanel Name="numericalAttributesPanel">
-            <!-- checkBox to be populated-->
-            <!-- checkBox to be populated-->
-            </StackPanel>
+        <ScrollViewer Grid.Column="0" Padding="10">
+            <ListBox ItemsSource="{Binding Attributes}" SelectedItem="{Binding SelectedAttribute}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ListBoxItem IsSelected="{Binding IsChecked}">
+                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item}" />
+                        </ListBoxItem>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </ScrollViewer>
         
         <!-- (0, 1) -->
@@ -47,15 +51,7 @@
                 <Button Margin="250,100,40,0" Name="oKbutton" Background="{DynamicResource Button.Disabled.Background}" Visibility="Visible">OK</Button>
             </StackPanel>
         </Grid>
-        
-        <!-- (1, 0) -->
-        <ScrollViewer Grid.Row="1" Grid.Column="0" Padding="10">
-            <StackPanel Name="boolAttributesPanel">
-            <!-- checkBox to be populated-->
-            <!-- checkBox to be populated-->
-            </StackPanel>
-        </ScrollViewer>
-        
+            
         <!-- (1, 1) -->
         <Grid Grid.Row="1" Grid.Column="1">
             <Button FontSize="30" Margin="250 120 20 20">RUN</Button>

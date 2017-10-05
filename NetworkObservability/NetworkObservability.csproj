@@ -68,6 +68,8 @@
     <Compile Include="CanvasNode.xaml.cs">
       <DependentUpon>CanvasNode.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CheckedListItem.cs" />
+    <Compile Include="Constraintz.cs" />
     <Compile Include="EditAttributeWindow.xaml.cs">
       <DependentUpon>EditAttributeWindow.xaml</DependentUpon>
     </Compile>

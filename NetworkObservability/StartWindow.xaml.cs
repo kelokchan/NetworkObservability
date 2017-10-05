@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using NetworkObservabilityCore;
 using NetworkObservabilityCore.Criteria;
+using System.Collections.ObjectModel;
 
 namespace NetworkObservability
 {
@@ -23,30 +24,34 @@ namespace NetworkObservability
     {
         private IEnumerable<IEdge> edges;
         HashSet<String> numericAttributes;
-        HashSet<String> booleanAttributes;
+        //HashSet<String> booleanAttributes;
 
         // A tuple of 2 elements.
         // first is a name of attribute, which is a key to be used by algorithms,
         // the second one is a constraint object.
         public Tuple<string, Constraint<IEdge>> returnValue { get; set; }
 
+        public ObservableCollection<CheckedListItem<String>> Attributes { get; set; }
+
 
         public StartWindow()
         {
             InitializeComponent();
-        }
+        }   
 
         public StartWindow(IEnumerable<IEdge> edges)
         {
-            this.edges = edges;
-            numericAttributes = new HashSet<string>();
-            booleanAttributes = new HashSet<string>();
             InitializeComponent();
-        }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            populateAttributes();
+            this.edges = edges;
+            numericAttributes = populateAttributes();
+            Attributes = new ObservableCollection<CheckedListItem<string>>();
+            foreach(var a in numericAttributes)
+            {
+                Attributes.Add(new CheckedListItem<string>(a));
+            }
+
+            DataContext = this;
         }
 
         private void constraintTypeCombo_DropDownClosed(object sender, EventArgs e)
@@ -63,42 +68,18 @@ namespace NetworkObservability
             }
         }
 
-        private void populateAttributes()
+        private HashSet<String> populateAttributes()
         {
+            var set = new HashSet<String>();
             foreach (var edge in edges)
             {
                 foreach(var attribute in edge.NumericAttributes)
                 {
-                    numericAttributes.Add(attribute.Key);
+                    set.Add(attribute.Key);
                 }
             }
 
-            populateAttributePanels();
-        }
-
-        private void populateAttributePanels()
-        {
-            CheckBox cb;
-            foreach (var numAttribute in numericAttributes)
-            {
-                cb = new CheckBox()
-                {
-                    Margin = new System.Windows.Thickness(0, 0, 0, 5)
-                };
-                
-                cb.Content = numAttribute;
-                numericalAttributesPanel.Children.Add(cb);
-      
-            }
-
-            foreach (var boolAttribute in booleanAttributes)
-            {
-                cb = new CheckBox();
-
-                cb.Content = boolAttribute;
-                boolAttributesPanel.Children.Add(cb);
-
-            }
+            return set;
         }
     }
 }
