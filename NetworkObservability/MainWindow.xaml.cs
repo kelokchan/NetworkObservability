@@ -29,6 +29,9 @@ namespace NetworkObservability
         CanvasGraph graph = new CanvasGraph();
         CanvasNode startNode, endNode;
 
+        Dictionary<string, double> edgeNumAttrList = new Dictionary<string, double>();
+        Dictionary<string, string> edgeDescAttrList = new Dictionary<string, string>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,18 +40,12 @@ namespace NetworkObservability
             canvasNodeButton.PreviewMouseDown += Component_MouseDown;          
         }
 
-        void OnContextMenuOpened(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         /// <summary>
         /// Handles the Click event of both menu items in the context menu.
         /// </summary>
         void OnMenuItemClick(object sender, RoutedEventArgs e)
         {
-            if (this.elementForContextMenu == null)
-                return;
+            if (this.elementForContextMenu == null || this.elementForContextMenu is CanvasEdge) return;
 
             if (e.Source == this.menuItemBringToFront ||
                 e.Source == this.menuItemSendToBack)
@@ -62,7 +59,7 @@ namespace NetworkObservability
             }
 
             if (e.Source == this.menuStartArc || e.Source == this.menuEndArc)
-            {
+            {              
                 CanvasNode selectedNode = this.elementForContextMenu as CanvasNode;
                 bool startDrawing = e.Source == this.menuStartArc;
 
@@ -74,6 +71,12 @@ namespace NetworkObservability
                 }
                 else
                 {
+                    if (selectedNode == startNode)
+                    {
+                        MessageBox.Show("Can't connect to the same node", "Error");
+                        return;
+                    }
+
                     endNode = selectedNode;
                     this.menuStartArc.Visibility = Visibility.Visible;
                     this.menuEndArc.Visibility = Visibility.Collapsed;
@@ -187,7 +190,6 @@ namespace NetworkObservability
 
             Canvas.SetLeft(node, node.X);
             Canvas.SetTop(node, node.Y);
-
         }
 
         private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -221,9 +223,12 @@ namespace NetworkObservability
         {
             // Create a resultGraph instance
             ResultGraph resultGraph = new ResultGraph();
-            StartWindow startWindow = new StartWindow(graph.Impl.AllEdges.Values);
+            StartWindow startWindow = new StartWindow(graph.CommonAttributes);
 
-            startWindow.Show();
+            if (startWindow.ShowDialog() == true)
+            {
+
+            }
 
             //logTab.IsSelected = true;
             //logger.Content = "";
@@ -301,23 +306,26 @@ namespace NetworkObservability
             resultGraph.ResultCanvas.UpdateLines(tempDestNode);
         }
 
-        private void PopulateAttributesPanel(CanvasEdge edge)
+        public void PopulateAttributesPanel(CanvasEdge edge)
         {
-            Dictionary<string, double> tempNumAttr = new Dictionary<string, double>();
-            Dictionary<string, string> tempDescAttr = new Dictionary<string, string>();
+            edgeNumAttrList.Clear();
+            edgeDescAttrList.Clear();
 
             foreach (var a in edge.Impl.NumericAttributes)
             {
-                tempNumAttr[a.Key] = a.Value;
+                edgeNumAttrList[a.Key] = a.Value;
             }
 
             foreach (var a in edge.Impl.DescriptiveAttributes)
             {
-                tempDescAttr[a.Key] = a.Value;
+                edgeDescAttrList[a.Key] = a.Value;
             }
 
-            NumericAttrList.ItemsSource = tempNumAttr;
-            DescAttrList.ItemsSource = tempDescAttr;
+            NumericAttrList.ItemsSource = null;
+            NumericAttrList.ItemsSource = edgeNumAttrList;
+
+            DescAttrList.ItemsSource = null;
+            DescAttrList.ItemsSource = edgeDescAttrList;
         }
 
         private void AddAttributeBtn_Click(object sender, RoutedEventArgs e)
@@ -343,6 +351,8 @@ namespace NetworkObservability
                             numValue = Double.TryParse(attributeValue, out numValue) ? numValue : 0.0;
                             if (!edge.HasNumericAttribute(attributeName))
                                 edge[attributeName] = numValue;
+
+                            graph.CommonAttributes.Add(attributeName);
                         }
                         else
                         {
@@ -402,7 +412,7 @@ namespace NetworkObservability
 
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
-            if (MainCanvas.Children.Count != 0)
+            if (!MainCanvas.IsEmpty())
             {
                 MessageBoxResult result = MessageBox.Show("Would you like to save the current graph before openning a new one?", "Current graph is not saved!",
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
@@ -469,7 +479,99 @@ namespace NetworkObservability
                 // do nothing
             }
 
+            graph.CommonAttributes.Remove(key);
+
             PopulateAttributesPanel(MainCanvas.SelectedEdge);
+        }
+
+        private void MenuReset_Click(object sender, RoutedEventArgs e)
+        {
+            if (!MainCanvas.IsEmpty())
+            {
+                MessageBoxResult result = MessageBox.Show("Would you like to save the current graph before openning a new one?", "Current graph is not saved!", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SaveToFile();
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    MainCanvas.Children.Clear();
+
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    // do nothing
+                }
+            }
+            else
+            {
+                MainCanvas.Children.Clear();
+            }
+        }
+
+        private void DescAttributeDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            string key = ((Button)sender).Tag as string;
+
+            MessageBoxResult result = MessageBox.Show("Delete this attribute from all other edges?", null, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                foreach (var edge in graph.Impl.AllEdges.Values)
+                {
+                    edge.DescriptiveAttributes.Remove(key);
+                }
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                MainCanvas.SelectedEdge.Impl.DescriptiveAttributes.Remove(key);
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                // do nothing
+            }
+
+            PopulateAttributesPanel(MainCanvas.SelectedEdge);
+        }
+
+        private void NumAttributeEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var pair = (KeyValuePair<string, double>) ((Button)sender).Tag;
+            string key = pair.Key;
+            double prevValue = pair.Value;
+
+            var EditAttributeWindow = new EditAttributeWindow()
+            {
+                Attribute = key,
+                Value = prevValue.ToString(),
+                IsNumeric = true
+            };
+
+            if (EditAttributeWindow.ShowDialog() == true)
+            {
+                double newValue = Double.TryParse(EditAttributeWindow.Value, out newValue) ? newValue : prevValue;
+                this.MainCanvas.SelectedEdge.Impl.NumericAttributes[key] = newValue;
+                PopulateAttributesPanel(this.MainCanvas.SelectedEdge);
+            }
+        }
+
+        private void DescAttributeEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var pair = (KeyValuePair<string, string>)((Button)sender).Tag;
+            string key = pair.Key;
+            string prevValue = pair.Value;
+
+            var EditAttributeWindow = new EditAttributeWindow()
+            {
+                Attribute = key,
+                Value = prevValue.ToString(),
+                IsNumeric = false
+            };
+
+            if (EditAttributeWindow.ShowDialog() == true)
+            {
+                this.MainCanvas.SelectedEdge.Impl.DescriptiveAttributes[key] = EditAttributeWindow.Value;
+                PopulateAttributesPanel(this.MainCanvas.SelectedEdge);
+            }
         }
 
         private void OpenFromFile()
@@ -490,8 +592,6 @@ namespace NetworkObservability
                     graph = reader.Load((fileDialog.FileName).ToString());
                     foreach(var node in graph.Impl.AllNodes.Values)
                     {
-                        CanvasNode tempNode = graph[node];
-
                         DrawNode(graph[node]);
                     }
                     foreach (var edge in graph.Impl.AllEdges.Values)
@@ -512,6 +612,26 @@ namespace NetworkObservability
                     MessageBox.Show(err.Message);
                 }
             }
+        }
+
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            if (!MainCanvas.IsEmpty())
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to exit?", "Current graph will be lost if you haven't saved it yet.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.OnClosing(e);
+                }
+                else
+                {
+                    e.Cancel = true;
+                }// end else/if
+            }
+
+            Application.Current.Shutdown();
+
         }
     }
 

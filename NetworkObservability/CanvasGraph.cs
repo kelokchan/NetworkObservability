@@ -13,8 +13,10 @@ namespace NetworkObservability
 		private Dictionary<INode, CanvasNode> nodeToCNode;
 		private Dictionary<IEdge, CanvasEdge> edgeToCEdge;
 
-		#region Constructors
-		public CanvasGraph()
+        public HashSet<string> CommonAttributes { get; set; }
+
+        #region Constructors
+        public CanvasGraph()
 			: this(new Graph())
 		{
 		}
@@ -24,7 +26,8 @@ namespace NetworkObservability
 			Impl = graph;
 			nodeToCNode = new Dictionary<INode, CanvasNode>();
 			edgeToCEdge = new Dictionary<IEdge, CanvasEdge>();
-		}
+            CommonAttributes = new HashSet<string>();
+        }
 		#endregion
 
 		public T Call<T>(Func<IGraph, T> func)

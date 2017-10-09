@@ -74,12 +74,11 @@ namespace NetworkObservability
 		{
 			INode node =  base.LoadNode(xnode);
 			var position = xnode.Element("Position");
-			CanvasNode cnode = new CanvasNode();
+			CanvasNode cnode = new CanvasNode(node);
 			cnode.X = Convert.ToDouble(position.Element("X").Value);
 			cnode.Y = Convert.ToDouble(position.Element("Y").Value);
             cnode.DisplayWidth = Convert.ToDouble(xnode.Element("Width").Value);
             cnode.DisplayHeight = Convert.ToDouble(xnode.Element("Height").Value);
-
 
             cgraph[node] = cnode;
 
@@ -95,6 +94,7 @@ namespace NetworkObservability
 			cedge.Y1 = Convert.ToDouble(position.Element("Y1").Value);
 			cedge.X2 = Convert.ToDouble(position.Element("X2").Value);
 			cedge.Y2 = Convert.ToDouble(position.Element("Y2").Value);
+            cedge.Impl = tuple.Item3;
 			cgraph[tuple.Item3] = cedge;
 
 			return tuple;

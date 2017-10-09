@@ -16,13 +16,8 @@
             <Menu Padding="5 0 5 0">
                 <MenuItem Header="_File">
                     <MenuItem Header="_Open" Click="MenuOpen_Click"/>
-                    <MenuItem Header="_Close"/>
+                    <MenuItem Header="_Reset" Click="MenuReset_Click"/>
                     <MenuItem Header="_Save" Click="___MenuItem___Save___Click"/>
-                </MenuItem>
-
-                <MenuItem Header="_Add">
-                    <MenuItem Header="_Node"/>
-                    <MenuItem Header="_Arc"/>
                 </MenuItem>
             </Menu>
 
@@ -45,7 +40,7 @@
                 <ToolBar Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Height="50" ToolBarTray.IsLocked="True" >
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="35 0 0 0">
                         <Label Content="Node:" VerticalContentAlignment="Center" FontWeight="Bold"></Label>
-                        <custom:CanvasNode x:Name="canvasNodeButton" Margin="20 0 20 0" VerticalContentAlignment="Center"></custom:CanvasNode>
+                        <custom:NodeButton x:Name="canvasNodeButton" Margin="20 0 20 0" VerticalContentAlignment="Center"></custom:NodeButton>
                         <Label Content="Arc type:" VerticalContentAlignment="Center" FontWeight="Bold"/>
                         <ComboBox x:Name="ArcType" Height="25" Width="150" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" BorderBrush="#00ACACAC" >
                             <ComboBoxItem x:Name="DirectedArc" Content="Directed lines" Selector.IsSelected="True" />
@@ -94,11 +89,11 @@
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="ID: "/>
                             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ID, Mode=OneWay}" IsReadOnly="True"></TextBox>
                             <TextBlock Grid.Row="1" Grid.Column="0" Text="Label: "/>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                             <TextBlock Grid.Row="2" Grid.Column="0" Text="Observer: "/>
-                            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsObserver, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsObserver, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
                             <TextBlock Grid.Row="3" Grid.Column="0" Text="Visible: "/>
-                            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsNodeVisible, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsNodeVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
                             <TextBlock Grid.Row="4" Grid.Column="0" Text="X: "/>
                             <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
                             <TextBlock Grid.Row="5" Grid.Column="0" Text="Y: "/>
@@ -120,8 +115,8 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" Text="{Binding Path=Key}"></TextBlock>
                                         <TextBox Grid.Column="1" Text="{Binding Path=Value, Mode=OneWay}" IsReadOnly="True"></TextBox>
-                                        <Button Margin="5,0,0,0" Grid.Column="2" Tag="{Binding}" Name="NumAttributeEditButton">Edit</Button>
-                                        <Button Margin="5,0,0,0" Grid.Column="3" Tag="{Binding Path=Key}" Name="NumAttributeDeleteButton" Click="NumAttributeDeleteButton_Click">Delete</Button>
+                                        <Button Margin="5,0,0,0" Grid.Column="2" Tag="{Binding}" Name="NumAttributeEditButton" Click="NumAttributeEditButton_Click">Edit</Button>
+                                        <Button Margin="5,0,0,0" Grid.Column="3" Tag="{Binding Key}" Name="NumAttributeDeleteButton" Click="NumAttributeDeleteButton_Click">Delete</Button>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -138,8 +133,8 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" Text="{Binding Path=Key}"></TextBlock>
                                         <TextBox Grid.Column="1" Text="{Binding Path=Value, Mode=OneWay}"></TextBox>
-                                        <Button Margin="5,0,0,0" Grid.Column="2" Tag="{Binding}" Name="DescAttributeEditButton">Edit</Button>
-                                        <Button Margin="5,0,0,0" Grid.Column="3" Tag="{Binding}" Name="DescAttributeDeleteButton">Delete</Button>
+                                        <Button Margin="5,0,0,0" Grid.Column="2" Tag="{Binding}" Name="DescAttributeEditButton" Click="DescAttributeEditButton_Click">Edit</Button>
+                                        <Button Margin="5,0,0,0" Grid.Column="3" Tag="{Binding Key}" Name="DescAttributeDeleteButton" Click="DescAttributeDeleteButton_Click">Delete</Button>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -172,7 +167,7 @@
                 <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                     <custom:DragCanvas x:Name="MainCanvas" Background="AliceBlue" Width="2560" Height="1440" AllowDrop="True" AllowDragging="True" Drop="MainCanvas_Drop" PreviewMouseRightButtonDown="MainCanvas_PreviewMouseRightButtonDown">
                         <custom:DragCanvas.ContextMenu>
-                            <ContextMenu Opened="OnContextMenuOpened"  MenuItem.Click="OnMenuItemClick">
+                            <ContextMenu MenuItem.Click="OnMenuItemClick">
                                 <MenuItem Header="Connect From Here" Name="menuStartArc" />
                                 <MenuItem Header="Connect To Here" Name="menuEndArc" Visibility="Collapsed"/>
                                 <MenuItem Header="Bring To Front" Name="menuItemBringToFront" />

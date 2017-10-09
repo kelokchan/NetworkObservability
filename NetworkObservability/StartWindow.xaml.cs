@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using NetworkObservabilityCore;
 using NetworkObservabilityCore.Criteria;
+using System.Collections.ObjectModel;
 
 namespace NetworkObservability
 {
@@ -21,37 +22,55 @@ namespace NetworkObservability
     /// </summary>
     public partial class StartWindow : Window
     {
-        private IEnumerable<IEdge> edges;
-        HashSet<String> numericAttributes;
-        HashSet<String> booleanAttributes;
+        HashSet<String> CommonAttributes;
 
         // A tuple of 2 elements.
         // first is a name of attribute, which is a key to be used by algorithms,
         // the second one is a constraint object.
         public Tuple<string, Constraint<IEdge>> returnValue { get; set; }
 
+        public ObservableCollection<CheckedListItem<BindingCriteria>> BindingCriterion { get; set; }
+
+        private BindingCriteria _selectedCriterion;
+        public BindingCriteria SelectionCriterion
+        {
+            get { return _selectedCriterion; }
+            set
+            {
+                _selectedCriterion = value;               
+            }
+        }
 
         public StartWindow()
         {
             InitializeComponent();
-        }
+        }   
 
-        public StartWindow(IEnumerable<IEdge> edges)
+        public StartWindow(HashSet<String> CommonAttributes)
         {
-            this.edges = edges;
-            numericAttributes = new HashSet<string>();
-            booleanAttributes = new HashSet<string>();
             InitializeComponent();
-        }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            populateAttributes();
+            this.CommonAttributes = CommonAttributes;
+            BindingCriterion = new ObservableCollection<CheckedListItem<BindingCriteria>>();
+            foreach(var attribute in this.CommonAttributes)
+            {
+                BindingCriteria bc = new BindingCriteria(attribute);
+                BindingCriterion.Add(new CheckedListItem<BindingCriteria>(bc));
+            }
+
+            this.weightCombo.ItemsSource = CommonAttributes;
+
+            DataContext = this;
         }
 
         private void constraintTypeCombo_DropDownClosed(object sender, EventArgs e)
         {
-            if (constraintTypeCombo.SelectedItem == rangeCombo)
+            ToggleInputVisiblity(constraintTypeCombo.SelectedIndex);
+        }
+
+        private void ToggleInputVisiblity(int index)
+        {
+            if (index == 3)
             {
                 constraintReader.Visibility = Visibility.Collapsed;
                 constraintRangePanel.Visibility = Visibility.Visible;
@@ -63,42 +82,48 @@ namespace NetworkObservability
             }
         }
 
-        private void populateAttributes()
+        private void CommonAttrList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (var edge in edges)
+            SelectionCriterion = ((CheckedListItem<BindingCriteria>) CommonAttrList.SelectedItem).Item;
+            this.EditPanel.DataContext = SelectionCriterion;
+            ToggleInputVisiblity(SelectionCriterion.SelectedIndex);
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void RunBtn_Click(object sender, RoutedEventArgs e)
+        {
+            HashSet<ICriterion> criteria = new HashSet<ICriterion>();
+            foreach(CheckedListItem<BindingCriteria> checkbox in CommonAttrList.Items)
             {
-                foreach(var attribute in edge.NumericAttributes)
+                if (checkbox.IsChecked)
                 {
-                    numericAttributes.Add(attribute.Key);
+                    BindingCriteria criterion = checkbox.Item;
+
+                    switch (criterion.SelectedIndex)
+                    {
+                        case 0:
+                            criteria.Add(new GreaterThanCriterion(criterion.Attribute, criterion.Value1));
+                            break;
+                        case 1:
+                            criteria.Add(new LessThanCriterion(criterion.Attribute, criterion.Value1));
+                            break;
+                        case 2:
+                            criteria.Add(new EqualCriterion(criterion.Attribute, criterion.Value1));
+                            break;
+                        case 3:
+                            criteria.Add(new RangeCriterion(criterion.Attribute, criterion.Value1, criterion.Value2));
+                            break;
+                    }
                 }
             }
 
-            populateAttributePanels();
-        }
-
-        private void populateAttributePanels()
-        {
-            CheckBox cb;
-            foreach (var numAttribute in numericAttributes)
-            {
-                cb = new CheckBox()
-                {
-                    Margin = new System.Windows.Thickness(0, 0, 0, 5)
-                };
-                
-                cb.Content = numAttribute;
-                numericalAttributesPanel.Children.Add(cb);
-      
-            }
-
-            foreach (var boolAttribute in booleanAttributes)
-            {
-                cb = new CheckBox();
-
-                cb.Content = boolAttribute;
-                boolAttributesPanel.Children.Add(cb);
-
-            }
+            Constraint<IEdge> constraint = new Constraint<IEdge>(criteria);
+            returnValue = Tuple.Create(weightCombo.SelectedItem.ToString(), constraint);
+            DialogResult = true;
         }
     }
 }
