@@ -85,17 +85,19 @@ namespace NetworkObservability
 			return node;
 		}
 
-		protected override Tuple<string, string, IEdge> LoadEdge(XElement xedge)
+		protected override FromToThrough<string, string, IEdge> LoadEdge(XElement xedge)
 		{
 			var tuple = base.LoadEdge(xedge);
 			var position = xedge.Element("Position");
-			CanvasEdge cedge = new CanvasEdge();
-			cedge.X1 = Convert.ToDouble(position.Element("X1").Value);
-			cedge.Y1 = Convert.ToDouble(position.Element("Y1").Value);
-			cedge.X2 = Convert.ToDouble(position.Element("X2").Value);
-			cedge.Y2 = Convert.ToDouble(position.Element("Y2").Value);
-            cedge.Impl = tuple.Item3;
-			cgraph[tuple.Item3] = cedge;
+			CanvasEdge cedge = new CanvasEdge()
+			{
+				X1 = Convert.ToDouble(position.Element("X1").Value),
+				Y1 = Convert.ToDouble(position.Element("Y1").Value),
+				X2 = Convert.ToDouble(position.Element("X2").Value),
+				Y2 = Convert.ToDouble(position.Element("Y2").Value),
+				Impl = tuple.Through
+			};
+			cgraph[tuple.Through] = cedge;
 
 			return tuple;
 		}

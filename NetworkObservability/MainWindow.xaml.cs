@@ -603,7 +603,7 @@ namespace NetworkObservability
                     }
 
                 }
-                catch (ArgumentNullException err)
+                catch (ArgumentNullException)
                 {
                     MessageBox.Show("Failed to load the invalid XML file.\nPlease use a valid one");
                 }
