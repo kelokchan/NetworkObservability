@@ -6,12 +6,27 @@ namespace NetworkObservability
 {
     internal class ResultEdge : IEdge
     {
-        public IComparable this[string key] {
-            get { return Attributes[key]; }
-            set { Attributes[key] = value; }
-        }
+		private static int r_id = 0;
 
-        double IConstrainable.this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		internal ResultEdge(IEdge original)
+		{
+			Id = original.Id;
+			Label = original.Label;
+			From = original.From;
+			To = original.To;
+			IsBlocked = original.IsBlocked;
+			NumericAttributes = new Dictionary<String, Double>(original.NumericAttributes);
+			DescriptiveAttributes = new Dictionary<String, String>(original.DescriptiveAttributes);
+		}
+
+		internal ResultEdge()
+		{
+			Id = Label = string.Format("RE{0}", r_id++);
+			NumericAttributes = new Dictionary<String, Double>();
+			DescriptiveAttributes = new Dictionary<String, String>();
+		}
+
+        public double this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public string Id { get; set; }
 
@@ -19,29 +34,32 @@ namespace NetworkObservability
         public INode From { get; set; }
         public INode To { get; set; }
         public bool IsBlocked { get; set; }
-        public double Weight { get; set; }
-        public IDictionary<string, IComparable> Attributes { get; set; }
-        public IDictionary<string, double> NumericAttributes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IDictionary<string, string> DescriptiveAttributes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IDictionary<string, double> NumericAttributes { get; set; }
+        public IDictionary<string, string> DescriptiveAttributes { get; set; }
 
         public bool Equals(IEdge other)
         {
-            throw new NotImplementedException();
+			return Id == other.Id;
         }
 
-        public bool HasAttribute(string name)
-        {
-            throw new NotImplementedException();
-        }
+		public override bool Equals(object other)
+		{
+			return other is IEdge && Equals(other as IEdge);
+		}
 
-        public bool HasDescriptiveAttribute(string name)
+		public override int GetHashCode()
+		{
+			return Id.GetHashCode();
+		}
+
+		public bool HasDescriptiveAttribute(string name)
         {
-            throw new NotImplementedException();
+			return DescriptiveAttributes.ContainsKey(name);
         }
 
         public bool HasNumericAttribute(string name)
         {
-            throw new NotImplementedException();
+			return NumericAttributes.ContainsKey(name);
         }
     }
 }

@@ -272,7 +272,7 @@ namespace NetworkObservability
 
         private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
         {
-            CanvasEdge tempEdge = new CanvasEdge(true)
+			CanvasEdge tempEdge = new CanvasEdge(null)
             {
                 Stroke = Brushes.Blue,
                 HorizontalAlignment = HorizontalAlignment.Center,

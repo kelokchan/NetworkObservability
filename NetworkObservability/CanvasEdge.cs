@@ -19,17 +19,16 @@ namespace NetworkObservability
 			set;
 		}
 
-        public CanvasEdge(bool fake = false) : base()
+
+        public CanvasEdge() : base()
         {
-            if (!fake)
-            {
-                Impl = new Edge();
-            }
-            else
-            {
-                Impl = new ResultEdge();
-            }
+			Impl = new Edge();
         }
+
+		public CanvasEdge(CanvasEdge origin) : base()
+		{
+			Impl = origin == null ? new ResultEdge() : new ResultEdge(origin.Impl);
+		}
 
         internal Dictionary<string, double> GetNumAttributes()
         {
