@@ -81,6 +81,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="100"/>
@@ -92,12 +93,37 @@
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                             <TextBlock Grid.Row="2" Grid.Column="0" Text="Observer: "/>
                             <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsObserver, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Visible: "/>
-                            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsNodeVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="X: "/>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
-                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Y: "/>
-                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Y, StringFormat=N0,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Inclusive: ">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsObserver}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsObserverInclusive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <CheckBox.Style>
+                                    <Style TargetType="{x:Type CheckBox}">
+                                        <Setter Property="Margin" Value="0,0,0,10"/>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsObserver}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Visible: "/>
+                            <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding IsNodeVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="X: "/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding X, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Y: "/>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Y, StringFormat=N0,UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"></TextBox>
                         </Grid>
                     </StackPanel>
                 </TabItem>
