@@ -24,12 +24,6 @@ namespace NetworkObservability
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-		public CanvasNode() : base()
-		{
-			Impl = new Node();
-            InitializeComponent();
-        }
-
         public CanvasNode(CanvasNode canvasNode)
 			: base()
 		{
