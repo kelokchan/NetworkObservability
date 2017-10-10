@@ -84,6 +84,19 @@ namespace NetworkObservability
             }
         }
 
+        public bool IsObserverInclusive
+        {
+            get
+            {
+                return Impl.IsObserverInclusive;
+            }
+            set
+            {
+                Impl.IsObserverInclusive = value;
+                OnPropertyChanged("IsObserverInclusive");
+            }
+        }
+
         public bool IsNodeVisible
         {
             get
