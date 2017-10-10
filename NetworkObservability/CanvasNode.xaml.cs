@@ -27,6 +27,8 @@ namespace NetworkObservability
         public CanvasNode(CanvasNode canvasNode)
 			: base()
 		{
+            OutLines = new List<CanvasEdge>();
+            InLines = new List<CanvasEdge>();
 			Impl = new ResultNode(canvasNode.Impl);
             InitializeComponent();
         }
