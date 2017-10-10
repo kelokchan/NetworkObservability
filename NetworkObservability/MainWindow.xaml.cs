@@ -630,6 +630,7 @@ namespace NetworkObservability
                 if (result == MessageBoxResult.Yes)
                 {
                     base.OnClosing(e);
+                    Application.Current.Shutdown();
                 }
                 else
                 {
@@ -637,7 +638,7 @@ namespace NetworkObservability
                 }// end else/if
             }
 
-            Application.Current.Shutdown();
+           
 
         }
     }

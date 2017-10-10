@@ -27,13 +27,23 @@ namespace NetworkObservability
 		public CanvasNode() : base()
 		{
 			Impl = new Node();
-		}
+            InitializeComponent();
+        }
 
-		public CanvasNode(CanvasNode canvasNode)
+        public CanvasNode(CanvasNode canvasNode)
 			: base()
 		{
 			Impl = new ResultNode(canvasNode.Impl);
-		}
+            InitializeComponent();
+        }
+
+        public CanvasNode(INode node = null) : base()
+        {
+            OutLines = new List<CanvasEdge>();
+            InLines = new List<CanvasEdge>();
+            Impl = node == null ? new Node() : node;
+            InitializeComponent();
+        }
 
         internal INode Impl
 		{
@@ -124,14 +134,6 @@ namespace NetworkObservability
         {
             get { return y; }
             set { y = value; OnPropertyChanged("Y"); }
-        }
-
-        public CanvasNode(INode node = null) : base()
-        {
-            OutLines = new List<CanvasEdge>();
-            InLines = new List<CanvasEdge>();
-            Impl = node == null ? new Node() : node;
-            InitializeComponent();
         }
 
         public void Call(Action<INode> func)
