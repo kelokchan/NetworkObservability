@@ -556,7 +556,19 @@ namespace NetworkObservability
             if (EditAttributeWindow.ShowDialog() == true)
             {
                 double newValue = Double.TryParse(EditAttributeWindow.Value, out newValue) ? newValue : prevValue;
-                this.MainCanvas.SelectedEdge.Impl.NumericAttributes[key] = newValue;
+
+                if (EditAttributeWindow.ApplyAll)
+                {
+                    foreach (var edge in graph.Impl.AllEdges.Values)
+                    {
+                        edge.NumericAttributes[key] = newValue;
+                    }
+                }
+                else
+                {
+                    this.MainCanvas.SelectedEdge.Impl.NumericAttributes[key] = newValue;
+                }
+
                 PopulateAttributesPanel(this.MainCanvas.SelectedEdge);
             }
         }
@@ -576,7 +588,17 @@ namespace NetworkObservability
 
             if (EditAttributeWindow.ShowDialog() == true)
             {
-                this.MainCanvas.SelectedEdge.Impl.DescriptiveAttributes[key] = EditAttributeWindow.Value;
+                if (EditAttributeWindow.ApplyAll)
+                {
+                    foreach (var edge in graph.Impl.AllEdges.Values)
+                    {
+                        edge.DescriptiveAttributes[key] = EditAttributeWindow.Value;
+                    }
+                }
+                else
+                {
+                    this.MainCanvas.SelectedEdge.Impl.DescriptiveAttributes[key] = EditAttributeWindow.Value;
+                }
                 PopulateAttributesPanel(this.MainCanvas.SelectedEdge);
             }
         }
