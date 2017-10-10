@@ -227,7 +227,7 @@ namespace NetworkObservability
 
             if (startWindow.ShowDialog() != true)
             {
-				MessageBox.Show("Task imcompleted.\nAborted.", "Algorithm not running.");
+				return;
             }
 
 			logTab.IsSelected = true;
@@ -297,11 +297,11 @@ namespace NetworkObservability
                 IsDirected = ArcType.SelectedItem == DirectedArc
             };
 
-            graph.Call(graph =>
+            resultGraph.CGraph.Call(graph =>
             {
                 graph.ConnectNodeToWith(tempSrcNode.Impl, tempDestNode.Impl, tempEdge.Impl);
             });
-            graph[tempEdge.Impl] = tempEdge;
+            resultGraph.CGraph[tempEdge.Impl] = tempEdge;
 
             resultGraph.ResultCanvas.Children.Add(tempEdge);
             Canvas.SetZIndex(tempEdge, -1);

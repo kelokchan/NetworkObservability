@@ -31,6 +31,10 @@ namespace NetworkObservability
             InLines = new List<CanvasEdge>();
 			Impl = new ResultNode(canvasNode.Impl);
             InitializeComponent();
+			X = canvasNode.X;
+			Y = canvasNode.Y;
+			DisplayHeight = canvasNode.DisplayHeight;
+			DisplayWidth = canvasNode.DisplayWidth;
         }
 
         public CanvasNode(INode node = null) : base()
@@ -114,10 +118,7 @@ namespace NetworkObservability
 
         public String ID
         {
-            get
-            {
-                return Impl.Id;
-            }
+			get => Impl.Id;
         }
 
         public double X
