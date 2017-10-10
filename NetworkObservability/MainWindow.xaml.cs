@@ -225,59 +225,66 @@ namespace NetworkObservability
             ResultGraph resultGraph = new ResultGraph();
             StartWindow startWindow = new StartWindow(graph.CommonAttributes);
 
-            if (startWindow.ShowDialog() == true)
+            if (startWindow.ShowDialog() != true)
             {
-
+				MessageBox.Show("Task imcompleted.\nAborted.", "Algorithm not running.");
             }
 
-            //logTab.IsSelected = true;
-            //logger.Content = "";
-            //logger.Content += "\nStart Checking observability....\n";
+			logTab.IsSelected = true;
+			logger.Content = "";
+			logger.Content += "\nStart Checking observability....\n";
 
-            //var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
+			var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
 
-            //var result = new ConnectivityObserver().ObserveConnectivity(graph.Impl, observers, startWindow.returnValue);
+			var result = new ConnectivityObserver().Observe(graph.Impl, observers, startWindow.returnValue);
 
-            //logger.Content += "Observation Completed.\n";
+			logger.Content += "Observation Completed.\n";
 
-            //foreach (var pair in result)
-            //{
-            //    INode from = pair.Key.Item1, to = pair.Key.Item2;
-            //    Route route = pair.Key.Item3;
-            //    bool isObserved = pair.Value;
-            //    logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
+			foreach (var pair in result)
+			{
+				INode from = pair.Key.From, to = pair.Key.To;
+				Route route = pair.Key.Through;
+				bool isObserved = pair.Value;
+				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
 
-            //    CanvasNode tempSrcNode = graph[from].Clone();
-            //    CanvasNode tempDestNode = graph[to].Clone();
-            //    if (tempSrcNode == null)
-            //    {
-            //        throw new Exception("null Canvas Node!");
-            //    }
-            //    else
-            //    {
-            //        if (tempSrcNode.X != 0 && tempSrcNode.Y != 0)
-            //        {
-            //            Canvas.SetTop(tempSrcNode, tempSrcNode.Y);
-            //            Canvas.SetLeft(tempSrcNode, tempSrcNode.X);
-            //            resultGraph.ResultCanvas.Children.Add(tempSrcNode);
+				CanvasNode tempSrcNode = new CanvasNode(graph[from]);
+				CanvasNode tempDestNode = new CanvasNode(graph[to]);
+				if (tempSrcNode.X != 0 && tempSrcNode.Y != 0)
+				{
+					Canvas.SetTop(tempSrcNode, tempSrcNode.Y);
+					Canvas.SetLeft(tempSrcNode, tempSrcNode.X);
+					resultGraph.ResultCanvas.Children.Add(tempSrcNode);
 
-            //        }
-            //        else
-            //            throw new Exception("X and Y undefined!");
-            //    }
-            //    DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
-            //}
+				}
+				else
+				{
+					throw new Exception("X and Y undefined!");
+				}
+				DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
+			}
 
-            //logger.Content += "Task Finished.";
-            //// Display the resultGraph window
-            //resultGraph.ResultCanvas.IsEnabled = false;
-            //resultGraph.Show();
+			logger.Content += "Task Finished.";
+			// Display the resultGraph window
+			resultGraph.ResultCanvas.IsEnabled = false;
+			resultGraph.Show();
 
-        }
+		}
+
+		private void AddIfNotContain(CanvasGraph cgraph, CanvasNode cnode)
+		{
+			INode resultNode = cnode.Impl;
+			if (resultNode.GetType() != typeof(ResultNode))
+				throw new Exception("AddIfNotContain Error!");
+			
+			if (cgraph.Call(graph => !graph.Contains(resultNode)))
+				cgraph.Call(graph => graph.Add(resultNode));
+		}
 
         private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
         {
-			CanvasEdge tempEdge = new CanvasEdge(null)
+			AddIfNotContain(resultGraph.CGraph, tempSrcNode);
+			AddIfNotContain(resultGraph.CGraph, tempDestNode);
+			CanvasEdge tempEdge = new CanvasEdge(isResult: true)
             {
                 Stroke = Brushes.Blue,
                 HorizontalAlignment = HorizontalAlignment.Center,

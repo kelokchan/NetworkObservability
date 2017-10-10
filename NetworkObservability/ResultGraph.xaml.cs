@@ -25,7 +25,10 @@ namespace NetworkObservability
         public ResultGraph()//I might pass the content to the constructor
         {
             InitializeComponent();
+			CGraph = new CanvasGraph();
         }
+
+		public CanvasGraph CGraph { get; set; }
 
         
         private void MenuItem_Click(object sender, RoutedEventArgs e)

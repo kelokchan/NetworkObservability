@@ -8,7 +8,7 @@ using System.Windows.Shapes;
 
 namespace NetworkObservability
 {
-	class CanvasGraph
+	public class CanvasGraph
 	{
 		private Dictionary<INode, CanvasNode> nodeToCNode;
 		private Dictionary<IEdge, CanvasEdge> edgeToCEdge;

@@ -25,14 +25,17 @@ namespace NetworkObservability
 			Impl = new Edge();
         }
 
-		public CanvasEdge(CanvasEdge origin) : base()
+		public CanvasEdge(bool isResult) : base()
 		{
-			Impl = origin == null ? new ResultEdge() : new ResultEdge(origin.Impl);
+			if (isResult)
+				Impl = new ResultEdge();
+			else
+				Impl = new Edge();
 		}
 
         internal Dictionary<string, double> GetNumAttributes()
         {
-            return (Dictionary<string,double>) this.Impl.NumericAttributes;
+            return (Dictionary<string,double>) Impl.NumericAttributes;
         }
 
         #region Dependency Properties

@@ -24,6 +24,17 @@ namespace NetworkObservability
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+		public CanvasNode() : base()
+		{
+			Impl = new Node();
+		}
+
+		public CanvasNode(CanvasNode canvasNode)
+			: base()
+		{
+			Impl = new ResultNode(canvasNode.Impl);
+		}
+
         internal INode Impl
 		{
 			get;
