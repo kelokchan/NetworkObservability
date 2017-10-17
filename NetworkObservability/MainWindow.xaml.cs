@@ -251,7 +251,7 @@ namespace NetworkObservability
                     INode from = pair.Key.From, to = pair.Key.To;
                     Route route = pair.Key.Through;
                     bool isObserved = pair.Value;
-                    logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
+                    logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "observed" : "not observed");
 
                     CanvasNode tempSrcNode = new CanvasNode(graph[from]);
                     CanvasNode tempDestNode = new CanvasNode(graph[to]);
@@ -259,7 +259,7 @@ namespace NetworkObservability
                     DrawNode(tempSrcNode, resultGraph.ResultCanvas);
                     DrawNode(tempDestNode, resultGraph.ResultCanvas);
 
-                    DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
+                    DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode, isObserved);
                 }
 
                 logger.Content += "Task Finished.";
@@ -280,13 +280,13 @@ namespace NetworkObservability
 				cgraph.Call(graph => graph.Add(resultNode));
 		}
 
-        private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
+        private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode, bool isObserved)
         {
 			AddIfNotContain(resultGraph.CGraph, tempSrcNode);
 			AddIfNotContain(resultGraph.CGraph, tempDestNode);
 			CanvasEdge tempEdge = new CanvasEdge(isResult: true)
             {
-                Stroke = Brushes.Blue,
+                Stroke = Brushes.DarkOrange,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 StrokeThickness = 3,
@@ -294,7 +294,7 @@ namespace NetworkObservability
                 Y1 = tempSrcNode.Y,
                 X2 = tempDestNode.X,
                 Y2 = tempDestNode.Y,
-                IsDirected = ArcType.SelectedItem == DirectedArc
+                IsDirected = ArcType.SelectedItem == DirectedArc,
             };
 
             //graph.Call(graph =>
@@ -303,15 +303,18 @@ namespace NetworkObservability
             //});
             //graph[tempEdge.Impl] = tempEdge;
 
-            resultGraph.ResultCanvas.Children.Add(tempEdge);
-            Canvas.SetZIndex(tempEdge, -1);
+            if (isObserved)
+            {
+                resultGraph.ResultCanvas.Children.Add(tempEdge);
+                Canvas.SetZIndex(tempEdge, -1);
 
-            tempSrcNode.OutLines.Add(tempEdge);
-            tempDestNode.InLines.Add(tempEdge);
+                tempSrcNode.OutLines.Add(tempEdge);
+                tempDestNode.InLines.Add(tempEdge);
 
-            resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
-            resultGraph.ResultCanvas.UpdateLines(tempDestNode);
+                resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
+                resultGraph.ResultCanvas.UpdateLines(tempDestNode);
         }
+    }
 
         public void PopulateAttributesPanel(CanvasEdge edge)
         {
