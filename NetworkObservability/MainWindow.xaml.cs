@@ -113,6 +113,13 @@ namespace NetworkObservability
                     IsDirected = ArcType.SelectedItem == DirectedArc
                 };
 
+                // Add attributes to the edge
+                foreach (KeyValuePair<string, double> attr in graph.CommonAttributes)
+                {
+                    if (!edge.Impl.HasNumericAttribute(attr.Key))
+                        edge.Impl.NumericAttributes.Add(attr.Key, attr.Value);
+                }
+
                 graph.Call(graph =>
                 {
                     graph.ConnectNodeToWith(startNode.Impl, endNode.Impl, edge.Impl);
