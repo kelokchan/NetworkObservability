@@ -260,6 +260,7 @@ namespace NetworkObservability
                     Route route = pair.Key.Through;
                     bool isObserved = pair.Value;
                     logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "observed" : "not observed");
+                    logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, pair.Key.Through);
 
                     CanvasNode tempSrcNode = new CanvasNode(graph[from]);
                     CanvasNode tempDestNode = new CanvasNode(graph[to]);

@@ -75,6 +75,7 @@
     <Compile Include="NodeButton.xaml.cs">
       <DependentUpon>NodeButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ResultCanvas.cs" />
     <Compile Include="ResultEdge.cs" />
     <Compile Include="ResultGraph.xaml.cs">
       <DependentUpon>ResultGraph.xaml</DependentUpon>
