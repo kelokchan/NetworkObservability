@@ -26,13 +26,40 @@ namespace NetworkObservability
 			cgraph = graph;
 			XElement root = new XElement("NetworkObservability");
 			DumpTo(graph.Call(graphImpl => graphImpl), ref root);
-			File.Add(root);
+            root.Add(CreateCommonAttributes(cgraph.CommonAttributes));
+            File.Add(root);
 
 			// New way to save
 			File.Save(path);
 		}
 
-		protected override XElement CreateXElement(INode node)
+        private XElement CreateCommonAttributes<K, V>(IDictionary<K, V> commonAttributes)
+        {
+            XElement xcommonAttributes = new XElement("CommonAttributes");
+
+            foreach (var pair in commonAttributes)
+            {
+                xcommonAttributes.Add(new XElement("Attribute",
+                                      new XAttribute("Key", pair.Key),
+                                      new XAttribute("Value", pair.Value)));
+            }
+
+            return xcommonAttributes;
+        }
+
+        private IDictionary<string, double> LoadCommonAttributes(XElement xcommonAttributes)
+        {
+            Dictionary<string, double> commonAttributes = new Dictionary<string, double>();
+
+            foreach (var attribute in xcommonAttributes.Elements())
+            {
+                commonAttributes[attribute.Attribute("Key").Value] = Convert.ToDouble(attribute.Attribute("Value").Value);
+            }
+
+            return commonAttributes;
+        }
+
+        protected override XElement CreateXElement(INode node)
 		{
 			XElement xelement = base.CreateXElement(node);
 			CanvasNode cnode = cgraph[node];
@@ -66,11 +93,12 @@ namespace NetworkObservability
 			File = XDocument.Load(path);
 			cgraph = new CanvasGraph();
 			cgraph.Impl = Dump(File.Root);
+            cgraph.CommonAttributes = LoadCommonAttributes(File.Root.Element("CommonAttributes"));
 
 			return cgraph;
 		}
 
-		protected override INode LoadNode(XElement xnode)
+        protected override INode LoadNode(XElement xnode)
 		{
 			INode node =  base.LoadNode(xnode);
 			var position = xnode.Element("Position");

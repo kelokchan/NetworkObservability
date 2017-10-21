@@ -29,7 +29,11 @@ namespace NetworkObservability
 		{
             OutLines = new List<CanvasEdge>();
             InLines = new List<CanvasEdge>();
-			Impl = new ResultNode(canvasNode.Impl);
+            X = canvasNode.X;
+            Y = canvasNode.Y;
+            DisplayHeight = canvasNode.DisplayHeight;
+            DisplayWidth = canvasNode.DisplayWidth;
+			Impl = canvasNode.Impl;
             InitializeComponent();
 			X = canvasNode.X;
 			Y = canvasNode.Y;

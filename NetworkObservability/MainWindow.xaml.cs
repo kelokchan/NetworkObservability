@@ -113,6 +113,13 @@ namespace NetworkObservability
                     IsDirected = ArcType.SelectedItem == DirectedArc
                 };
 
+                // Add attributes to the edge
+                foreach (KeyValuePair<string, double> attr in graph.CommonAttributes)
+                {
+                    if (!edge.Impl.HasNumericAttribute(attr.Key))
+                        edge.Impl.NumericAttributes.Add(attr.Key, attr.Value);
+                }
+
                 graph.Call(graph =>
                 {
                     graph.ConnectNodeToWith(startNode.Impl, endNode.Impl, edge.Impl);
@@ -178,7 +185,7 @@ namespace NetworkObservability
         /// Draw node on the graph based on the given node (for xml loading)
         /// </summary>
         /// <param name="node"></param>
-        private void DrawNode(CanvasNode node)
+        private void DrawNode(CanvasNode node, Canvas canvas = null)
         {
 
             double widthOffset = node.DisplayWidth / 2; ;
@@ -186,7 +193,13 @@ namespace NetworkObservability
             double actualX = node.X - widthOffset;
             double actualY = node.Y - heightOffset;
 
-            MainCanvas.Children.Add(node);
+            if (canvas != null)
+            {
+                canvas.Children.Add(node);
+            } else
+            {
+                MainCanvas.Children.Add(node);
+            }
 
             Canvas.SetLeft(node, node.X);
             Canvas.SetTop(node, node.Y);
@@ -222,71 +235,67 @@ namespace NetworkObservability
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             // Create a resultGraph instance
-            ResultGraph resultGraph = new ResultGraph();
             StartWindow startWindow = new StartWindow(graph.CommonAttributes);
 
             if (startWindow.ShowDialog() != true)
             {
-				return;
+				MessageBox.Show("Task imcompleted.\nAborted.", "Algorithm not running.");
             }
+            else
+            {
+                logTab.IsSelected = true;
+                logger.Content = "";
+                logger.Content += "\nStart Checking observability....\n";
 
-			logTab.IsSelected = true;
-			logger.Content = "";
-			logger.Content += "\nStart Checking observability....\n";
+                var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
 
-			var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
+                var result = new ConnectivityObserver().Observe(graph.Impl, observers, startWindow.returnValue);
 
-			var result = new ConnectivityObserver().Observe(graph.Impl, observers, startWindow.returnValue);
+                logger.Content += "Observation Completed.\n";
+                ResultGraph resultGraph = new ResultGraph();
 
-			logger.Content += "Observation Completed.\n";
+                foreach (var pair in result)
+                {
+                    INode from = pair.Key.From, to = pair.Key.To;
+                    Route route = pair.Key.Through;
+                    bool isObserved = pair.Value;
+                    logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "observed" : "not observed");
+                    logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, pair.Key.Through);
 
-			foreach (var pair in result)
-			{
-				INode from = pair.Key.From, to = pair.Key.To;
-				Route route = pair.Key.Through;
-				bool isObserved = pair.Value;
-				logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "Observed" : "Unobserved");
+                    CanvasNode tempSrcNode = new CanvasNode(graph[from]);
+                    CanvasNode tempDestNode = new CanvasNode(graph[to]);
 
-				CanvasNode tempSrcNode = new CanvasNode(graph[from]);
-				CanvasNode tempDestNode = new CanvasNode(graph[to]);
-				if (tempSrcNode.X != 0 && tempSrcNode.Y != 0)
-				{
-					Canvas.SetTop(tempSrcNode, tempSrcNode.Y);
-					Canvas.SetLeft(tempSrcNode, tempSrcNode.X);
-					resultGraph.ResultCanvas.Children.Add(tempSrcNode);
+                    DrawNode(tempSrcNode, resultGraph.ResultCanvas);
+                    DrawNode(tempDestNode, resultGraph.ResultCanvas);
 
-				}
-				else
-				{
-					throw new Exception("X and Y undefined!");
-				}
-				DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
-			}
+                    DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode, isObserved);
+                }
 
-			logger.Content += "Task Finished.";
-			// Display the resultGraph window
-			resultGraph.ResultCanvas.IsEnabled = false;
-			resultGraph.Show();
+                logger.Content += "Task Finished.";
+                // Display the resultGraph window
+                resultGraph.ResultCanvas.IsEnabled = false;
+                resultGraph.Show();
+            }
 
 		}
 
 		private void AddIfNotContain(CanvasGraph cgraph, CanvasNode cnode)
 		{
 			INode resultNode = cnode.Impl;
-			if (resultNode.GetType() != typeof(ResultNode))
-				throw new Exception("AddIfNotContain Error!");
+			//if (resultNode.GetType() != typeof(ResultNode))
+			//	throw new Exception("AddIfNotContain Error!");
 			
 			if (cgraph.Call(graph => !graph.Contains(resultNode)))
 				cgraph.Call(graph => graph.Add(resultNode));
 		}
 
-        private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
+        private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode, bool isObserved)
         {
 			AddIfNotContain(resultGraph.CGraph, tempSrcNode);
 			AddIfNotContain(resultGraph.CGraph, tempDestNode);
 			CanvasEdge tempEdge = new CanvasEdge(isResult: true)
             {
-                Stroke = Brushes.Blue,
+                Stroke = Brushes.DarkOrange,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 StrokeThickness = 3,
@@ -294,24 +303,27 @@ namespace NetworkObservability
                 Y1 = tempSrcNode.Y,
                 X2 = tempDestNode.X,
                 Y2 = tempDestNode.Y,
-                IsDirected = ArcType.SelectedItem == DirectedArc
+                IsDirected = ArcType.SelectedItem == DirectedArc,
             };
 
-            resultGraph.CGraph.Call(graph =>
+            //graph.Call(graph =>
+            //{
+            //    graph.ConnectNodeToWith(tempSrcNode.Impl, tempDestNode.Impl, tempEdge.Impl);
+            //});
+            //graph[tempEdge.Impl] = tempEdge;
+
+            if (isObserved)
             {
-                graph.ConnectNodeToWith(tempSrcNode.Impl, tempDestNode.Impl, tempEdge.Impl);
-            });
-            resultGraph.CGraph[tempEdge.Impl] = tempEdge;
+                resultGraph.ResultCanvas.Children.Add(tempEdge);
+                Canvas.SetZIndex(tempEdge, -1);
 
-            resultGraph.ResultCanvas.Children.Add(tempEdge);
-            Canvas.SetZIndex(tempEdge, -1);
+                tempSrcNode.OutLines.Add(tempEdge);
+                tempDestNode.InLines.Add(tempEdge);
 
-            tempSrcNode.OutLines.Add(tempEdge);
-            tempDestNode.InLines.Add(tempEdge);
-
-            resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
-            resultGraph.ResultCanvas.UpdateLines(tempDestNode);
+                resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
+                resultGraph.ResultCanvas.UpdateLines(tempDestNode);
         }
+    }
 
         public void PopulateAttributesPanel(CanvasEdge edge)
         {
@@ -359,7 +371,7 @@ namespace NetworkObservability
                             if (!edge.HasNumericAttribute(attributeName))
                                 edge[attributeName] = numValue;
 
-                            graph.CommonAttributes.Add(attributeName);
+                            graph.CommonAttributes[attributeName] = numValue;
                         }
                         else
                         {

@@ -36,9 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NOCoreForFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\NOCoreForFramework\NOCoreForFramework\bin\Debug\NOCoreForFramework.dll</HintPath>
+    <Reference Include="NOCoreForFramework">
+      <HintPath>..\..\NOCoreForFramework\NOCoreForFramework\bin\Release\NOCoreForFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -76,6 +75,7 @@
     <Compile Include="NodeButton.xaml.cs">
       <DependentUpon>NodeButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ResultCanvas.cs" />
     <Compile Include="ResultEdge.cs" />
     <Compile Include="ResultGraph.xaml.cs">
       <DependentUpon>ResultGraph.xaml</DependentUpon>

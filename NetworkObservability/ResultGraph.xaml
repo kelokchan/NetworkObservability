@@ -18,15 +18,14 @@
 
         <StackPanel Grid.Row="0">
             <Menu Padding="5 0 5 0">
-                <MenuItem Header="_Save" Click="MenuItem_Click">
+                <!-- <MenuItem Header="_Save" Click="MenuItem_Click"> -->
                     <!--<MenuItem Header="As image"/>
                     <MenuItem Header="As XML"/>-->
-                </MenuItem>
-            </Menu>
+            <!--    </MenuItem> -->
+             </Menu>
         </StackPanel>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-            <custom:DragCanvas x:Name="ResultCanvas" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="False" >
-            </custom:DragCanvas>
+            <custom:ResultCanvas x:Name="ResultCanvas" Background="AliceBlue" Width="3500" Height="1200" AllowDrop="False" AllowDragging="True"/>
         </ScrollViewer>
 
     </Grid>

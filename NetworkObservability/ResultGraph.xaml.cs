@@ -43,7 +43,7 @@ namespace NetworkObservability
                 CanvasGraphXML output = new CanvasGraphXML();
                 string savePath = System.IO.Path.GetDirectoryName(dialog.FileName);
                 // Save to file
-                //output.Save(savePath, graph);
+                output.Save(savePath, CGraph);
             }
         }
     }

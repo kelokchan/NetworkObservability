@@ -13,7 +13,8 @@ namespace NetworkObservability
 		private Dictionary<INode, CanvasNode> nodeToCNode;
 		private Dictionary<IEdge, CanvasEdge> edgeToCEdge;
 
-        public HashSet<string> CommonAttributes { get; set; }
+        //public HashSet<string> CommonAttributes { get; set; }
+        public IDictionary<string, double> CommonAttributes { get; set; }
 
         #region Constructors
         public CanvasGraph()
@@ -26,7 +27,7 @@ namespace NetworkObservability
 			Impl = graph;
 			nodeToCNode = new Dictionary<INode, CanvasNode>();
 			edgeToCEdge = new Dictionary<IEdge, CanvasEdge>();
-            CommonAttributes = new HashSet<string>();
+            CommonAttributes = new Dictionary<string, double>();
         }
 		#endregion
 

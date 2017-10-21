@@ -31,8 +31,8 @@
                 <ToolBar Grid.Column="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ToolBarTray.IsLocked="True" Height="50">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15 0 0 0">
                         <Button Content="Start" Width="70" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleForStart}" Click="Start_Click"/>
-                        <Button x:Name="___Button___Pause_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStylePause}" IsEnabled="False"/>
-                        <Button x:Name="___Button___Stop_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleStop}" IsEnabled="False"/>
+                        <!--<Button x:Name="___Button___Pause_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStylePause}" IsEnabled="False"/>
+                        <Button x:Name="___Button___Stop_" Margin="5 0 0 0" Content="Start" Width="25" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyleStop}" IsEnabled="False"/> -->
                     </StackPanel>
                 </ToolBar>
                 <!-- Left toolbar -->

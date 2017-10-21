@@ -26,7 +26,7 @@ namespace NetworkObservability
 			DescriptiveAttributes = new Dictionary<String, String>();
 		}
 
-        public double this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double this[string key] { get => NumericAttributes[key]; set => NumericAttributes[key] = value; }
 
         public string Id { get; set; }
 
