@@ -233,7 +233,8 @@ namespace NetworkObservability
             if (startWindow.ShowDialog() != true)
             {
 				MessageBox.Show("Task imcompleted.\nAborted.", "Algorithm not running.");
-            } else
+            }
+            else
             {
                 logTab.IsSelected = true;
                 logger.Content = "";
