@@ -240,7 +240,8 @@ namespace NetworkObservability
             if (startWindow.ShowDialog() != true)
             {
 				MessageBox.Show("Task imcompleted.\nAborted.", "Algorithm not running.");
-            } else
+            }
+            else
             {
                 logTab.IsSelected = true;
                 logger.Content = "";
@@ -369,7 +370,7 @@ namespace NetworkObservability
                             if (!edge.HasNumericAttribute(attributeName))
                                 edge[attributeName] = numValue;
 
-                            graph.CommonAttributes.Add(attributeName, numValue);
+                            graph.CommonAttributes[attributeName] = numValue;
                         }
                         else
                         {
