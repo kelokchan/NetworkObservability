@@ -362,7 +362,7 @@ namespace NetworkObservability
                             if (!edge.HasNumericAttribute(attributeName))
                                 edge[attributeName] = numValue;
 
-                            graph.CommonAttributes.Add(attributeName);
+                            graph.CommonAttributes.Add(attributeName, numValue);
                         }
                         else
                         {
