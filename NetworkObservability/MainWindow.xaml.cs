@@ -243,38 +243,38 @@ namespace NetworkObservability
             }
             else
             {
-                logTab.IsSelected = true;
-                logger.Content = "";
-                logger.Content += "\nStart Checking observability....\n";
+                //logTab.IsSelected = true;
+                //logger.Content = "";
+                //logger.Content += "\nStart Checking observability....\n";
 
-                var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
+                //var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
 
-                var result = new ConnectivityObserver().Observe(graph.Impl, observers, startWindow.returnValue);
+                //var result = new ConnectivityObserver().Observe(graph.Impl, observers, startWindow.returnValue);
 
-                logger.Content += "Observation Completed.\n";
-                ResultGraph resultGraph = new ResultGraph();
+                //logger.Content += "Observation Completed.\n";
+                //ResultGraph resultGraph = new ResultGraph();
 
-                foreach (var pair in result)
-                {
-                    INode from = pair.Key.From, to = pair.Key.To;
-                    Route route = pair.Key.Through;
-                    bool isObserved = pair.Value;
-                    logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "observed" : "not observed");
-                    logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, pair.Key.Through);
+                //foreach (var pair in result)
+                //{
+                //    INode from = pair.Key.From, to = pair.Key.To;
+                //    Route route = pair.Key.Through;
+                //    bool isObserved = pair.Value;
+                //    logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "observed" : "not observed");
+                //    logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, pair.Key.Through);
 
-                    CanvasNode tempSrcNode = new CanvasNode(graph[from]);
-                    CanvasNode tempDestNode = new CanvasNode(graph[to]);
+                //    CanvasNode tempSrcNode = new CanvasNode(graph[from]);
+                //    CanvasNode tempDestNode = new CanvasNode(graph[to]);
 
-                    DrawNode(tempSrcNode, resultGraph.ResultCanvas);
-                    DrawNode(tempDestNode, resultGraph.ResultCanvas);
+                //    DrawNode(tempSrcNode, resultGraph.ResultCanvas);
+                //    DrawNode(tempDestNode, resultGraph.ResultCanvas);
 
-                    DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode, isObserved);
-                }
+                //    DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode, isObserved);
+                //}
 
-                logger.Content += "Task Finished.";
-                // Display the resultGraph window
-                resultGraph.ResultCanvas.IsEnabled = false;
-                resultGraph.Show();
+                //logger.Content += "Task Finished.";
+                //// Display the resultGraph window
+                //resultGraph.ResultCanvas.IsEnabled = false;
+                //resultGraph.Show();
             }
 
 		}

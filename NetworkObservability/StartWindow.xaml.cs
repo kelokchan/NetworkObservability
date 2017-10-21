@@ -59,6 +59,10 @@ namespace NetworkObservability
                 BindingCriterion.Add(new CheckedListItem<BindingCriteria>(bc));
             }
 
+
+            // Disable run button if no common attribute
+            RunBtn.IsEnabled = CommonAttributes.Count != 0;
+
             this.weightCombo.ItemsSource = CommonAttributes.Keys;
 
             DataContext = this;
