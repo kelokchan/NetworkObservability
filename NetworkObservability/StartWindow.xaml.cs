@@ -23,7 +23,7 @@ namespace NetworkObservability
     public partial class StartWindow : Window
     {
         //HashSet<String> CommonAttributes;
-        Dictionary<string, double> CommonAttributes;
+        IDictionary<string, double> CommonAttributes;
 
         // A tuple of 2 elements.
         // first is a name of attribute, which is a key to be used by algorithms,
@@ -47,7 +47,7 @@ namespace NetworkObservability
             InitializeComponent();
         }   
 
-        public StartWindow(Dictionary<string, double> CommonAttributes)
+        public StartWindow(IDictionary<string, double> CommonAttributes)
         {
             InitializeComponent();
 
@@ -59,7 +59,7 @@ namespace NetworkObservability
                 BindingCriterion.Add(new CheckedListItem<BindingCriteria>(bc));
             }
 
-            this.weightCombo.ItemsSource = CommonAttributes;
+            this.weightCombo.ItemsSource = CommonAttributes.Keys;
 
             DataContext = this;
         }
