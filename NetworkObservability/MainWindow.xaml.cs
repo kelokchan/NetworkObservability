@@ -257,18 +257,26 @@ namespace NetworkObservability
                 foreach (var pair in result)
                 {
                     INode from = pair.Key.From, to = pair.Key.To;
-                    Route route = pair.Key.Through;
-                    bool isObserved = pair.Value;
-                    logger.Content += String.Format("Node {0} to Node {1} : {2}\n", from.Id, to.Id, isObserved ? "observed" : "not observed");
-                    logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, pair.Key.Through);
+					IEnumerable<Route> observedRoutes = pair.Value.Item1;
+					IEnumerable<Route> unobservedRoutes = pair.Value.Item2;
+					foreach (Route through in observedRoutes)
+					{
+						logger.Content += String.Format("Node {0} to Node {1} : observed\n", from.Id, to.Id);
+						logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, through);
 
-                    CanvasNode tempSrcNode = new CanvasNode(graph[from]);
-                    CanvasNode tempDestNode = new CanvasNode(graph[to]);
+						CanvasNode tempSrcNode = new CanvasNode(graph[from]);
+						CanvasNode tempDestNode = new CanvasNode(graph[to]);
 
-                    DrawNode(tempSrcNode, resultGraph.ResultCanvas);
-                    DrawNode(tempDestNode, resultGraph.ResultCanvas);
+						DrawNode(tempSrcNode, resultGraph.ResultCanvas);
+						DrawNode(tempDestNode, resultGraph.ResultCanvas);
 
-                    DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode, isObserved);
+						DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
+					}
+					foreach (Route through in unobservedRoutes)
+					{
+						logger.Content += String.Format("Node {0} to Node {1} : not observed\n", from.Id, to.Id);
+						logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, through);
+					}
                 }
 
                 logger.Content += "Task Finished.";
@@ -289,41 +297,38 @@ namespace NetworkObservability
 				cgraph.Call(graph => graph.Add(resultNode));
 		}
 
-        private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode, bool isObserved)
-        {
+		private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
+		{
 			AddIfNotContain(resultGraph.CGraph, tempSrcNode);
 			AddIfNotContain(resultGraph.CGraph, tempDestNode);
 			CanvasEdge tempEdge = new CanvasEdge(isResult: true)
-            {
-                Stroke = Brushes.DarkOrange,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                StrokeThickness = 3,
-                X1 = tempSrcNode.X,
-                Y1 = tempSrcNode.Y,
-                X2 = tempDestNode.X,
-                Y2 = tempDestNode.Y,
-                IsDirected = ArcType.SelectedItem == DirectedArc,
-            };
+			{
+				Stroke = Brushes.DarkOrange,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Center,
+				StrokeThickness = 3,
+				X1 = tempSrcNode.X,
+				Y1 = tempSrcNode.Y,
+				X2 = tempDestNode.X,
+				Y2 = tempDestNode.Y,
+				IsDirected = ArcType.SelectedItem == DirectedArc,
+			};
 
-            //graph.Call(graph =>
-            //{
-            //    graph.ConnectNodeToWith(tempSrcNode.Impl, tempDestNode.Impl, tempEdge.Impl);
-            //});
-            //graph[tempEdge.Impl] = tempEdge;
+			//graph.Call(graph =>
+			//{
+			//    graph.ConnectNodeToWith(tempSrcNode.Impl, tempDestNode.Impl, tempEdge.Impl);
+			//});
+			//graph[tempEdge.Impl] = tempEdge;
 
-            if (isObserved)
-            {
-                resultGraph.ResultCanvas.Children.Add(tempEdge);
-                Canvas.SetZIndex(tempEdge, -1);
+			resultGraph.ResultCanvas.Children.Add(tempEdge);
+			Canvas.SetZIndex(tempEdge, -1);
 
-                tempSrcNode.OutLines.Add(tempEdge);
-                tempDestNode.InLines.Add(tempEdge);
+			tempSrcNode.OutLines.Add(tempEdge);
+			tempDestNode.InLines.Add(tempEdge);
 
-                resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
-                resultGraph.ResultCanvas.UpdateLines(tempDestNode);
-        }
-    }
+			resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
+			resultGraph.ResultCanvas.UpdateLines(tempDestNode);
+		}
 
         public void PopulateAttributesPanel(CanvasEdge edge)
         {
