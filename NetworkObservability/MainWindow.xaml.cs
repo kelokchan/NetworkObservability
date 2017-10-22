@@ -269,12 +269,14 @@ namespace NetworkObservability
 
 						DrawNode(tempSrcNode, resultGraph.ResultCanvas);
 						DrawNode(tempDestNode, resultGraph.ResultCanvas);
-
-						DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
+                        if (from.IsVisible && to.IsVisible)
+                        {
+                            DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
+                        }
 					}
 					foreach (Route through in unobservedRoutes)
 					{
-						logger.Content += String.Format("Node {0} to Node {1} : not observed\n", from.Id, to.Id);
+						logger.Content += String.Format("\nNode {0} to Node {1} : not observed\n", from.Id, to.Id);
 						logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, through);
 					}
                 }
@@ -520,7 +522,7 @@ namespace NetworkObservability
                 else if (result == MessageBoxResult.No)
                 {
                     MainCanvas.Children.Clear();
-
+                    graph = new CanvasGraph();
                 }
                 else if (result == MessageBoxResult.Cancel)
                 {
@@ -530,6 +532,7 @@ namespace NetworkObservability
             else
             {
                 MainCanvas.Children.Clear();
+                graph = new CanvasGraph();
             }
         }
 
