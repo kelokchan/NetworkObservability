@@ -290,34 +290,39 @@ namespace NetworkObservability
                             Route shortestUnobRoute = unobservedRoutes.OrderBy(p => p.PathCost).First();
                             shortestDistance = shortestUnobRoute.PathCost;
                         }
+
                         if ((from.IsVisible && to.IsVisible) && shortestObRoute.PathCost < shortestDistance)
                         {
-                            logger.Content += String.Format("\nNode {0} to Node {1} : observed\n", from.Id, to.Id);
-                            logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, shortestObRoute);
+                            //resultGraph.logger.Content += String.Format("\nNode {0} to Node {1} : observed\n", from.Id, to.Id);
+                            //logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, shortestObRoute);
+							resultGraph.observedLog.Content += String.Format("{0} (This is the shortest path)\n", shortestObRoute);
+							AddOutputEdge(resultGraph, tempSrcNode, tempDestNode, unobservedRoutes.Count() == 0);
+                        } else
+						{
+							resultGraph.observedLog.Content += String.Format("{0}\n", shortestObRoute);
+						}
+					}
 
-							AddOutputEdge(resultGraph, tempSrcNode, tempDestNode);
-                        }
-                    }
-
-     //               foreach (Route through in observedRoutes)
+					//               foreach (Route through in observedRoutes)
 					//{
 					//	logger.Content += String.Format("Node {0} to Node {1} : observed\n", from.Id, to.Id);
 					//	logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, through);
 
-						//CanvasNode tempSrcNode = new CanvasNode(graph[from]);
-						//CanvasNode tempDestNode = new CanvasNode(graph[to]);
+					//CanvasNode tempSrcNode = new CanvasNode(graph[from]);
+					//CanvasNode tempDestNode = new CanvasNode(graph[to]);
 
-						//DrawNode(tempSrcNode, resultGraph.ResultCanvas);
-						//DrawNode(tempDestNode, resultGraph.ResultCanvas);
-      //                  if (from.IsVisible && to.IsVisible)
-      //                  {
-      //                      DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
-      //                  }
+					//DrawNode(tempSrcNode, resultGraph.ResultCanvas);
+					//DrawNode(tempDestNode, resultGraph.ResultCanvas);
+					//                  if (from.IsVisible && to.IsVisible)
+					//                  {
+					//                      DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
+					//                  }
 					//}
+
 					foreach (Route through in unobservedRoutes)
 					{
-						logger.Content += String.Format("\nNode {0} to Node {1} : not observed\n", from.Id, to.Id);
-						logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, through);
+				//		logger.Content += String.Format("\nNode {0} to Node {1} : not observed\n", from.Id, to.Id);
+						resultGraph.unobservedLog.Content += String.Format("{0}\n", through);
 					}
                 }
 
@@ -336,7 +341,6 @@ namespace NetworkObservability
 
                 logger.Content += "Task Finished.";
                 // Display the resultGraph window
-                resultGraph.ResultCanvas.IsEnabled = false;
                 resultGraph.Show();
             }
 
@@ -367,11 +371,11 @@ namespace NetworkObservability
 			resultGraph.ResultCanvas.UpdateLines(tempDestNode);
 		}
 
-		private void AddOutputEdge(ResultGraph resultGraph, CanvasNode srcNode, CanvasNode destNode)
+		private void AddOutputEdge(ResultGraph resultGraph, CanvasNode srcNode, CanvasNode destNode, bool fullyObserved)
 		{
 			CanvasEdge edge = new CanvasEdge(isResult: true)
 			{
-				Stroke = Brushes.DarkOrange,
+				Stroke = fullyObserved ? Brushes.Green : Brushes.DarkOrange,
 				HorizontalAlignment = HorizontalAlignment.Center,
 				VerticalAlignment = VerticalAlignment.Center,
 				StrokeThickness = 3,

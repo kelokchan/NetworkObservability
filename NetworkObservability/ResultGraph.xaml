@@ -19,10 +19,17 @@
             <custom:DragCanvas x:Name="ResultCanvas" Background="AliceBlue" Width="2560" Height="1200" AllowDrop="False" AllowDragging="True"/>
         </ScrollViewer>
         <TabControl Grid.Row="1" TabStripPlacement="Bottom" BorderThickness="1,0,1,1" >
-            <TabItem Header="Log" Name="logTab">
+            <TabItem Header="Observed Routes" Name="observedTag">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <Grid Height="Auto">
-                        <Label Name="logger"/>
+                        <Label Name="observedLog"/>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Unobserved Routes" Name="unobservedTab">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Height="Auto">
+                        <Label Name="unobservedLog"/>
                     </Grid>
                 </ScrollViewer>
             </TabItem>
