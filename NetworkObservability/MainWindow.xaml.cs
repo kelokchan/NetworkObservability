@@ -267,13 +267,13 @@ namespace NetworkObservability
 
                         DrawNode(tempSrcNode, resultGraph.ResultCanvas);
                         DrawNode(tempDestNode, resultGraph.ResultCanvas);
-                        double shortestDistance = 0;
-                        if(unobservedRoutes.Count<Route>() > 0)
-                        {
-                            Route shortestUnobRoute = unobservedRoutes.OrderBy(p => p.PathCost).First();
-                            shortestDistance = shortestUnobRoute.PathCost;
-                        }
-                        if ((from.IsVisible && to.IsVisible) && shortestObRoute.PathCost < shortestDistance)
+                        //double shortestDistance = 0;
+                        //if(unobservedRoutes.Count<Route>() > 0)
+                        //{
+                        //    Route shortestUnobRoute = unobservedRoutes.OrderBy(p => p.PathCost).First();
+                        //    shortestDistance = shortestUnobRoute.PathCost;
+                        //}
+                        if ((from.IsVisible && to.IsVisible))// && shortestObRoute.PathCost < shortestDistance)
                         {
                             logger.Content += String.Format("\nNode {0} to Node {1} : observed\n", from.Id, to.Id);
                             logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, shortestObRoute);
