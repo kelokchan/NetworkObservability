@@ -259,18 +259,24 @@ namespace NetworkObservability
                     INode from = pair.Key.From, to = pair.Key.To;
 					IEnumerable<Route> observedRoutes = pair.Value.Item1;
 					IEnumerable<Route> unobservedRoutes = pair.Value.Item2;
-                    if (observedRoutes.Count<Route>() > 0)
+                    if (observedRoutes.Count<Route>() > 0 )
                     {
-                        Route shortestRoute = observedRoutes.OrderBy(p => p.PathCost).First();
+                        Route shortestObRoute = observedRoutes.OrderBy(p => p.PathCost).First();
                         CanvasNode tempSrcNode = new CanvasNode(graph[from]);
                         CanvasNode tempDestNode = new CanvasNode(graph[to]);
 
                         DrawNode(tempSrcNode, resultGraph.ResultCanvas);
                         DrawNode(tempDestNode, resultGraph.ResultCanvas);
-                        if (from.IsVisible && to.IsVisible)
+                        double shortestDistance = 0;
+                        if(unobservedRoutes.Count<Route>() > 0)
+                        {
+                            Route shortestUnobRoute = unobservedRoutes.OrderBy(p => p.PathCost).First();
+                            shortestDistance = shortestUnobRoute.PathCost;
+                        }
+                        if ((from.IsVisible && to.IsVisible) && shortestObRoute.PathCost < shortestDistance)
                         {
                             logger.Content += String.Format("\nNode {0} to Node {1} : observed\n", from.Id, to.Id);
-                            logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, shortestRoute);
+                            logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, shortestObRoute);
 
                             DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
                         }
