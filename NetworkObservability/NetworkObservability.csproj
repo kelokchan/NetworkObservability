@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NOCoreForFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NOCoreForFramework-master\NOCoreForFramework\bin\Debug\NOCoreForFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -165,12 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\circle.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Visual Studio 2017\Projects\docfx_project\src\NOCoreForFramework\NOCoreForFramework\NOCoreForFramework.csproj">
-      <Project>{459B2C5C-0770-4D58-96F3-B42B9416879F}</Project>
-      <Name>NOCoreForFramework</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
