@@ -259,16 +259,33 @@ namespace NetworkObservability
                     INode from = pair.Key.From, to = pair.Key.To;
 					IEnumerable<Route> observedRoutes = pair.Value.Item1;
 					IEnumerable<Route> unobservedRoutes = pair.Value.Item2;
-                    if (observedRoutes.Count<Route>() > 0 )
+                    if (observedRoutes.Count() > 0 )
                     {
                         Route shortestObRoute = observedRoutes.OrderBy(p => p.PathCost).First();
                         CanvasNode tempSrcNode = new CanvasNode(graph[from]);
                         CanvasNode tempDestNode = new CanvasNode(graph[to]);
+						if (resultGraph.CGraph.Call(graph => !graph.Contains(from)))
+						{
+							resultGraph.CGraph.Call(graph => graph.Add(from));
+							resultGraph.CGraph[from] = tempSrcNode;
+						}
+						else
+						{
+							tempSrcNode = resultGraph.CGraph[from];
+						}
 
-                        DrawNode(tempSrcNode, resultGraph.ResultCanvas);
-                        DrawNode(tempDestNode, resultGraph.ResultCanvas);
-                        double shortestDistance = 0;
-                        if(unobservedRoutes.Count<Route>() > 0)
+						if (resultGraph.CGraph.Call(graph => !graph.Contains(to)))
+						{
+							resultGraph.CGraph.Call(graph => graph.Add(to));
+							resultGraph.CGraph[to] = tempDestNode;
+						}
+						else
+						{
+							tempDestNode = resultGraph.CGraph[to];
+						}
+
+                        double shortestDistance = Double.MaxValue;
+                        if(unobservedRoutes.Count() > 0)
                         {
                             Route shortestUnobRoute = unobservedRoutes.OrderBy(p => p.PathCost).First();
                             shortestDistance = shortestUnobRoute.PathCost;
@@ -278,7 +295,7 @@ namespace NetworkObservability
                             logger.Content += String.Format("\nNode {0} to Node {1} : observed\n", from.Id, to.Id);
                             logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, shortestObRoute);
 
-                            DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
+							AddOutputEdge(resultGraph, tempSrcNode, tempDestNode);
                         }
                     }
 
@@ -304,6 +321,19 @@ namespace NetworkObservability
 					}
                 }
 
+				foreach (var node in resultGraph.CGraph.Call(graph => graph.AllNodes.Values))
+				{
+					var cnode = resultGraph.CGraph[node];
+					DrawNode(cnode, resultGraph.ResultCanvas);
+				}
+				foreach (var edge in resultGraph.CGraph.Call(graph => graph.AllEdges.Values))
+				{
+					var cedge = resultGraph.CGraph[edge];
+
+					DrawOutputEdge(resultGraph, cedge);
+				}
+
+
                 logger.Content += "Task Finished.";
                 // Display the resultGraph window
                 resultGraph.ResultCanvas.IsEnabled = false;
@@ -323,6 +353,42 @@ namespace NetworkObservability
 				cgraph.Call(graph => graph.Add(resultNode));
 		}
 
+		private void DrawOutputEdge(ResultGraph resultGraph, CanvasEdge canvasEdge)
+		{
+			resultGraph.ResultCanvas.Children.Add(canvasEdge);
+			Canvas.SetZIndex(canvasEdge, -1);
+
+			CanvasNode tempSrcNode = resultGraph.CGraph[canvasEdge.Impl.From];
+			CanvasNode tempDestNode = resultGraph.CGraph[canvasEdge.Impl.To];
+			tempSrcNode.OutLines.Add(canvasEdge);
+			tempDestNode.InLines.Add(canvasEdge);
+
+			resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
+			resultGraph.ResultCanvas.UpdateLines(tempDestNode);
+		}
+
+		private void AddOutputEdge(ResultGraph resultGraph, CanvasNode srcNode, CanvasNode destNode)
+		{
+			CanvasEdge edge = new CanvasEdge(isResult: true)
+			{
+				Stroke = Brushes.DarkOrange,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Center,
+				StrokeThickness = 3,
+				X1 = srcNode.X,
+				Y1 = srcNode.Y,
+				X2 = destNode.X,
+				Y2 = destNode.Y,
+				IsDirected = ArcType.SelectedItem == DirectedArc,
+			};
+
+			resultGraph.CGraph.Call(g =>
+			{
+				g.ConnectNodeToWith(srcNode.Impl, destNode.Impl, edge.Impl);
+			});
+			resultGraph.CGraph[edge.Impl] = edge;
+		}
+		/*
 		private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
 		{
 			AddIfNotContain(resultGraph.CGraph, tempSrcNode);
@@ -355,6 +421,7 @@ namespace NetworkObservability
 			resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
 			resultGraph.ResultCanvas.UpdateLines(tempDestNode);
 		}
+		*/
 
         public void PopulateAttributesPanel(CanvasEdge edge)
         {
