@@ -275,8 +275,8 @@ namespace NetworkObservability
                         //}
                         if ((from.IsVisible && to.IsVisible))// && shortestObRoute.PathCost < shortestDistance)
                         {
-                            logger.Content += String.Format("\nNode {0} to Node {1} : observed\n", from.Id, to.Id);
-                            logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, shortestObRoute);
+                            resultGraph.logger.Content += String.Format("\nNode {0} to Node {1} : observed\n", from.Id, to.Id);
+                            resultGraph.logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, shortestObRoute);
 
                             DrawOutputEdge(resultGraph, tempSrcNode, tempDestNode);
                         }
@@ -299,14 +299,13 @@ namespace NetworkObservability
 					//}
 					foreach (Route through in unobservedRoutes)
 					{
-						logger.Content += String.Format("\nNode {0} to Node {1} : not observed\n", from.Id, to.Id);
-						logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, through);
+						resultGraph.logger.Content += String.Format("\nNode {0} to Node {1} : not observed\n", from.Id, to.Id);
+                        resultGraph.logger.Content += String.Format("The path from Node {0} to Node {1} is : {2}\n", from.Id, to.Id, through);
 					}
                 }
 
-                logger.Content += "Task Finished.";
+                resultGraph.logger.Content += "Task Finished.";
                 // Display the resultGraph window
-                resultGraph.ResultCanvas.IsEnabled = false;
                 resultGraph.Show();
             }
 
