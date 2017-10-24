@@ -18,12 +18,12 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000038</Label>
+        <Label>SRC</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
           <X>147.70000000000002</X>
-          <Y>189.02499999999998</Y>
+          <Y>187.42499999999996</Y>
         </Position>
         <Width>55</Width>
         <Height>39.63</Height>
@@ -33,7 +33,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000039</Label>
+        <Label>Dest 1</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -48,7 +48,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>false</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000040</Label>
+        <Label>Hidden observer</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -63,7 +63,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000041</Label>
+        <Label>Dest 4</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -78,7 +78,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000042</Label>
+        <Label>Dest 3</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -93,12 +93,12 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000043</Label>
+        <Label>middle node</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
           <X>657.30000000000007</X>
-          <Y>91.424999999999983</Y>
+          <Y>89.824999999999989</Y>
         </Position>
         <Width>55</Width>
         <Height>39.63</Height>
@@ -108,7 +108,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000044</Label>
+        <Label>Dest 2</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -131,7 +131,7 @@
         <DescriptiveAttributes />
         <Position>
           <X1>175.20000000000002</X1>
-          <Y1>208.83999999999998</Y1>
+          <Y1>207.23999999999995</Y1>
           <X2>331.2</X2>
           <Y2>222.44000000000003</Y2>
         </Position>
@@ -148,8 +148,8 @@
         <Position>
           <X1>331.2</X1>
           <Y1>222.44000000000003</Y1>
-          <X2>510.40000000000003</X2>
-          <Y2>71.240000000000009</Y2>
+          <X2>537.90000000000009</X2>
+          <Y2>91.055</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000063" Type="NetworkObservabilityCore.Edge">
@@ -164,8 +164,8 @@
         <Position>
           <X1>331.2</X1>
           <Y1>222.44000000000003</Y1>
-          <X2>492</X2>
-          <Y2>388.84000000000003</Y2>
+          <X2>519.5</X2>
+          <Y2>408.65500000000003</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000064" Type="NetworkObservabilityCore.Edge">
@@ -197,7 +197,7 @@
           <X1>331.2</X1>
           <Y1>222.44000000000003</Y1>
           <X2>684.80000000000007</X2>
-          <Y2>111.23999999999998</Y2>
+          <Y2>109.63999999999999</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000066" Type="NetworkObservabilityCore.Edge">
@@ -211,9 +211,9 @@
         <DescriptiveAttributes />
         <Position>
           <X1>684.80000000000007</X1>
-          <Y1>111.23999999999998</Y1>
-          <X2>838.40000000000009</X2>
-          <Y2>188.84</Y2>
+          <Y1>109.63999999999999</Y1>
+          <X2>865.90000000000009</X2>
+          <Y2>208.655</Y2>
         </Position>
       </Edge>
     </Edges>

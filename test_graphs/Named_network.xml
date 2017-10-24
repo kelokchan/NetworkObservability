@@ -18,12 +18,12 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000005</Label>
+        <Label>Switch 1</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
-          <X>723.69999999999993</X>
-          <Y>141.025</Y>
+          <X>721.3</X>
+          <Y>140.22500000000002</Y>
         </Position>
         <Width>55</Width>
         <Height>39.63</Height>
@@ -33,7 +33,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000004</Label>
+        <Label>switch 2</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -48,7 +48,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000003</Label>
+        <Label>Router</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -63,7 +63,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000006</Label>
+        <Label>switch 3</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -78,7 +78,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000007</Label>
+        <Label>switch 4</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -93,7 +93,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000008</Label>
+        <Label>PC 10</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -108,12 +108,12 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000009</Label>
+        <Label>PC 9</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
           <X>955.2</X>
-          <Y>138.44</Y>
+          <Y>137.64</Y>
         </Position>
         <Width>55</Width>
         <Height>39.63</Height>
@@ -123,7 +123,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000010</Label>
+        <Label>PC 8</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -138,7 +138,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000011</Label>
+        <Label>PC 7</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -153,7 +153,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000012</Label>
+        <Label>PC 6</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -168,7 +168,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000013</Label>
+        <Label>PC 1</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -183,7 +183,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000014</Label>
+        <Label>PC 2</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -198,7 +198,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000015</Label>
+        <Label>PC 3</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -213,7 +213,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000016</Label>
+        <Label>PC 4</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -228,7 +228,7 @@
         <IsObserverInclusive>false</IsObserverInclusive>
         <IsVisible>true</IsVisible>
         <IsBlocked>false</IsBlocked>
-        <Label>N0000017</Label>
+        <Label>PC 5</Label>
         <NumericAttributes />
         <DescriptiveAttributes />
         <Position>
@@ -245,7 +245,9 @@
         <Label>E0000000</Label>
         <To>N0000004</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>344.80000000000007</X1>
@@ -259,7 +261,9 @@
         <Label>E0000001</Label>
         <To>N0000003</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>410.40000000000003</X1>
@@ -273,13 +277,15 @@
         <Label>E0000002</Label>
         <To>N0000007</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>580</X1>
           <Y1>275.24</Y1>
-          <X2>752.80000000000007</X2>
-          <Y2>385.64</Y2>
+          <X2>780.30000000000007</X2>
+          <Y2>405.455</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000003" Type="NetworkObservabilityCore.Edge">
@@ -287,13 +293,15 @@
         <Label>E0000003</Label>
         <To>N0000010</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>752.80000000000007</X1>
-          <Y1>385.64</Y1>
-          <X2>967.2</X2>
-          <Y2>376.03999999999996</Y2>
+          <X1>780.30000000000007</X1>
+          <Y1>405.455</Y1>
+          <X2>994.7</X2>
+          <Y2>395.85499999999996</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000004" Type="NetworkObservabilityCore.Edge">
@@ -301,13 +309,15 @@
         <Label>E0000004</Label>
         <To>N0000007</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>967.2</X1>
-          <Y1>376.03999999999996</Y1>
-          <X2>752.80000000000007</X2>
-          <Y2>385.64</Y2>
+          <X1>994.7</X1>
+          <Y1>395.85499999999996</Y1>
+          <X2>780.30000000000007</X2>
+          <Y2>405.455</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000005" Type="NetworkObservabilityCore.Edge">
@@ -315,11 +325,13 @@
         <Label>E0000005</Label>
         <To>N0000011</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>752.80000000000007</X1>
-          <Y1>385.64</Y1>
+          <X1>780.30000000000007</X1>
+          <Y1>405.455</Y1>
           <X2>919.19999999999993</X2>
           <Y2>515.24</Y2>
         </Position>
@@ -329,13 +341,15 @@
         <Label>E0000006</Label>
         <To>N0000007</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>919.19999999999993</X1>
           <Y1>515.24</Y1>
-          <X2>752.80000000000007</X2>
-          <Y2>385.64</Y2>
+          <X2>780.30000000000007</X2>
+          <Y2>405.455</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000007" Type="NetworkObservabilityCore.Edge">
@@ -343,13 +357,15 @@
         <Label>E0000007</Label>
         <To>N0000012</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>752.80000000000007</X1>
-          <Y1>385.64</Y1>
-          <X2>757.6</X2>
-          <Y2>521.64</Y2>
+          <X1>780.30000000000007</X1>
+          <Y1>405.455</Y1>
+          <X2>785.1</X2>
+          <Y2>541.455</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000008" Type="NetworkObservabilityCore.Edge">
@@ -357,13 +373,15 @@
         <Label>E0000008</Label>
         <To>N0000007</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>757.6</X1>
-          <Y1>521.64</Y1>
-          <X2>752.80000000000007</X2>
-          <Y2>385.64</Y2>
+          <X1>785.1</X1>
+          <Y1>541.455</Y1>
+          <X2>780.30000000000007</X2>
+          <Y2>405.455</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000009" Type="NetworkObservabilityCore.Edge">
@@ -371,11 +389,13 @@
         <Label>E0000009</Label>
         <To>N0000003</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>752.80000000000007</X1>
-          <Y1>385.64</Y1>
+          <X1>780.30000000000007</X1>
+          <Y1>405.455</Y1>
           <X2>580</X2>
           <Y2>275.24</Y2>
         </Position>
@@ -385,7 +405,9 @@
         <Label>E0000010</Label>
         <To>N0000006</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>580</X1>
@@ -399,7 +421,9 @@
         <Label>E0000011</Label>
         <To>N0000017</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>412.8</X1>
@@ -413,7 +437,9 @@
         <Label>E0000012</Label>
         <To>N0000006</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>383.20000000000005</X1>
@@ -427,13 +453,15 @@
         <Label>E0000013</Label>
         <To>N0000016</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>412.8</X1>
           <Y1>408.84000000000003</Y1>
-          <X2>225.60000000000002</X2>
-          <Y2>516.84</Y2>
+          <X2>253.10000000000002</X2>
+          <Y2>536.65500000000009</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000014" Type="NetworkObservabilityCore.Edge">
@@ -441,11 +469,13 @@
         <Label>E0000014</Label>
         <To>N0000006</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>225.60000000000002</X1>
-          <Y1>516.84</Y1>
+          <X1>253.10000000000002</X1>
+          <Y1>536.65500000000009</Y1>
           <X2>412.8</X2>
           <Y2>408.84000000000003</Y2>
         </Position>
@@ -455,13 +485,15 @@
         <Label>E0000015</Label>
         <To>N0000015</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>412.8</X1>
           <Y1>408.84000000000003</Y1>
-          <X2>220</X2>
-          <Y2>372.84000000000003</Y2>
+          <X2>247.5</X2>
+          <Y2>392.65500000000003</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000016" Type="NetworkObservabilityCore.Edge">
@@ -469,11 +501,13 @@
         <Label>E0000016</Label>
         <To>N0000006</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>220</X1>
-          <Y1>372.84000000000003</Y1>
+          <X1>247.5</X1>
+          <Y1>392.65500000000003</Y1>
           <X2>412.8</X2>
           <Y2>408.84000000000003</Y2>
         </Position>
@@ -483,7 +517,9 @@
         <Label>E0000017</Label>
         <To>N0000003</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>412.8</X1>
@@ -497,13 +533,15 @@
         <Label>E0000018</Label>
         <To>N0000005</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>580</X1>
           <Y1>275.24</Y1>
-          <X2>751.19999999999993</X2>
-          <Y2>160.84</Y2>
+          <X2>748.8</X2>
+          <Y2>160.04000000000002</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000019" Type="NetworkObservabilityCore.Edge">
@@ -511,13 +549,15 @@
         <Label>E0000019</Label>
         <To>N0000009</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>751.19999999999993</X1>
-          <Y1>160.84</Y1>
-          <X2>955.2</X2>
-          <Y2>138.44</Y2>
+          <X1>748.8</X1>
+          <Y1>160.04000000000002</Y1>
+          <X2>982.7</X2>
+          <Y2>157.45499999999998</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000020" Type="NetworkObservabilityCore.Edge">
@@ -525,13 +565,15 @@
         <Label>E0000020</Label>
         <To>N0000005</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>955.2</X1>
-          <Y1>138.44</Y1>
-          <X2>751.19999999999993</X2>
-          <Y2>160.84</Y2>
+          <X1>982.7</X1>
+          <Y1>157.45499999999998</Y1>
+          <X2>748.8</X2>
+          <Y2>160.04000000000002</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000021" Type="NetworkObservabilityCore.Edge">
@@ -539,11 +581,13 @@
         <Label>E0000021</Label>
         <To>N0000008</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>751.19999999999993</X1>
-          <Y1>160.84</Y1>
+          <X1>748.8</X1>
+          <Y1>160.04000000000002</Y1>
           <X2>842.40000000000009</X2>
           <Y2>38.440000000000012</Y2>
         </Position>
@@ -553,13 +597,15 @@
         <Label>E0000022</Label>
         <To>N0000005</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>842.40000000000009</X1>
           <Y1>38.440000000000012</Y1>
-          <X2>751.19999999999993</X2>
-          <Y2>160.84</Y2>
+          <X2>748.8</X2>
+          <Y2>160.04000000000002</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000023" Type="NetworkObservabilityCore.Edge">
@@ -567,11 +613,13 @@
         <Label>E0000023</Label>
         <To>N0000003</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>751.19999999999993</X1>
-          <Y1>160.84</Y1>
+          <X1>748.8</X1>
+          <Y1>160.04000000000002</Y1>
           <X2>580</X2>
           <Y2>275.24</Y2>
         </Position>
@@ -581,7 +629,9 @@
         <Label>E0000024</Label>
         <To>N0000004</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>580</X1>
@@ -595,13 +645,15 @@
         <Label>E0000025</Label>
         <To>N0000014</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>410.40000000000003</X1>
           <Y1>163.24</Y1>
-          <X2>242.4</X2>
-          <Y2>117.64000000000002</Y2>
+          <X2>269.9</X2>
+          <Y2>137.455</Y2>
         </Position>
       </Edge>
       <Edge Id="E0000026" Type="NetworkObservabilityCore.Edge">
@@ -609,11 +661,13 @@
         <Label>E0000026</Label>
         <To>N0000004</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
-          <X1>242.4</X1>
-          <Y1>117.64000000000002</Y1>
+          <X1>269.9</X1>
+          <Y1>137.455</Y1>
           <X2>410.40000000000003</X2>
           <Y2>163.24</Y2>
         </Position>
@@ -623,7 +677,9 @@
         <Label>E0000027</Label>
         <To>N0000013</To>
         <IsBlocked>false</IsBlocked>
-        <NumericAttributes />
+        <NumericAttributes>
+          <Attribute Key="Default" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
         <DescriptiveAttributes />
         <Position>
           <X1>410.40000000000003</X1>
@@ -634,5 +690,7 @@
       </Edge>
     </Edges>
   </Graph>
-  <CommonAttributes />
+  <CommonAttributes>
+    <Attribute Key="Default" Value="1" />
+  </CommonAttributes>
 </NetworkObservability>
