@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace NetworkObservability
 {
+    /// <summary>
+    /// Custom control for start window attribute list
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class CheckedListItem<T> : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

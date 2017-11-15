@@ -205,6 +205,11 @@ namespace NetworkObservability
             Canvas.SetTop(node, node.Y);
         }
 
+        /// <summary>
+        /// Display the context menu whenever a component on the canvas is right clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainCanvas_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (this.MainCanvas.ElementBeingDragged != null)
@@ -212,7 +217,6 @@ namespace NetworkObservability
             else
                 this.elementForContextMenu = this.MainCanvas.FindCanvasChild(e.Source as DependencyObject);
         }
-
 
         /// <summary>
         /// Enable drag and drop of node button to the canvas
@@ -226,12 +230,22 @@ namespace NetworkObservability
             DragDrop.DoDragDrop((DependencyObject)sender, data, DragDropEffects.Copy);
         }
 
+        /// <summary>
+        /// Component drop onto canvas listener
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainCanvas_Drop(object sender, DragEventArgs e)
         {
             Point p = e.GetPosition(MainCanvas);
             DrawNode(p);
         }
 
+        /// <summary>
+        /// Display constraint window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             // Create a resultGraph instance
@@ -345,8 +359,12 @@ namespace NetworkObservability
             }
 
 		}
-        
 
+        /// <summary>
+        /// Add edge to the graph, avoid duplicates
+        /// </summary>
+        /// <param name="cgraph"></param>
+        /// <param name="cnode"></param>
         private void AddIfNotContain(CanvasGraph cgraph, CanvasNode cnode)
 		{
 			INode resultNode = cnode.Impl;
@@ -357,6 +375,11 @@ namespace NetworkObservability
 				cgraph.Call(graph => graph.Add(resultNode));
 		}
 
+        /// <summary>
+        /// Draw result edge onto the result graph
+        /// </summary>
+        /// <param name="resultGraph"></param>
+        /// <param name="canvasEdge"></param>
 		private void DrawOutputEdge(ResultGraph resultGraph, CanvasEdge canvasEdge)
 		{
 			resultGraph.ResultCanvas.Children.Add(canvasEdge);
@@ -371,6 +394,13 @@ namespace NetworkObservability
 			resultGraph.ResultCanvas.UpdateLines(tempDestNode);
 		}
 
+        /// <summary>
+        /// Add result edge onto the result graph
+        /// </summary>
+        /// <param name="resultGraph"></param>
+        /// <param name="srcNode"></param>
+        /// <param name="destNode"></param>
+        /// <param name="fullyObserved"></param>
 		private void AddOutputEdge(ResultGraph resultGraph, CanvasNode srcNode, CanvasNode destNode, bool fullyObserved)
 		{
 			CanvasEdge edge = new CanvasEdge(isResult: true)
@@ -392,41 +422,11 @@ namespace NetworkObservability
 			});
 			resultGraph.CGraph[edge.Impl] = edge;
 		}
-		/*
-		private void DrawOutputEdge(ResultGraph resultGraph, CanvasNode tempSrcNode, CanvasNode tempDestNode)
-		{
-			AddIfNotContain(resultGraph.CGraph, tempSrcNode);
-			AddIfNotContain(resultGraph.CGraph, tempDestNode);
-			CanvasEdge tempEdge = new CanvasEdge(isResult: true)
-			{
-				Stroke = Brushes.DarkOrange,
-				HorizontalAlignment = HorizontalAlignment.Center,
-				VerticalAlignment = VerticalAlignment.Center,
-				StrokeThickness = 3,
-				X1 = tempSrcNode.X,
-				Y1 = tempSrcNode.Y,
-				X2 = tempDestNode.X,
-				Y2 = tempDestNode.Y,
-				IsDirected = ArcType.SelectedItem == DirectedArc,
-			};
 
-			//graph.Call(graph =>
-			//{
-			//    graph.ConnectNodeToWith(tempSrcNode.Impl, tempDestNode.Impl, tempEdge.Impl);
-			//});
-			//graph[tempEdge.Impl] = tempEdge;
-
-			resultGraph.ResultCanvas.Children.Add(tempEdge);
-			Canvas.SetZIndex(tempEdge, -1);
-
-			tempSrcNode.OutLines.Add(tempEdge);
-			tempDestNode.InLines.Add(tempEdge);
-
-			resultGraph.ResultCanvas.UpdateLines(tempSrcNode);
-			resultGraph.ResultCanvas.UpdateLines(tempDestNode);
-		}
-		*/
-
+        /// <summary>
+        /// Display the attributes on the side panel when a canvas edge is selected
+        /// </summary>
+        /// <param name="edge"></param>
         public void PopulateAttributesPanel(CanvasEdge edge)
         {
             edgeNumAttrList.Clear();
@@ -449,6 +449,11 @@ namespace NetworkObservability
             DescAttrList.ItemsSource = edgeDescAttrList;
         }
 
+        /// <summary>
+        /// Display attribute window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddAttributeBtn_Click(object sender, RoutedEventArgs e)
         {
             if (MainCanvas.SelectedEdge == null) return;
@@ -501,6 +506,11 @@ namespace NetworkObservability
             }
         }
 
+        /// <summary>
+        /// Delete selected component from the canvas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ___Button___Delete__Click(object sender, RoutedEventArgs e)
         {
             if (MainCanvas.SelectedNode != null)
@@ -531,6 +541,11 @@ namespace NetworkObservability
             }
         }
 
+        /// <summary>
+        /// Allow user to load xml file. User is prompted to save unsaved graph
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
             if (!MainCanvas.IsEmpty())
@@ -559,14 +574,19 @@ namespace NetworkObservability
             }
         }
 
-
+        /// <summary>
+        /// XML Save listener
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ___MenuItem___Save___Click(object sender, RoutedEventArgs e)
         {
             SaveToFile();
         }
 
-
-
+        /// <summary>
+        /// Save the graph onto xml file
+        /// </summary>
         private void SaveToFile()
         {
             SaveFileDialog dialog = new SaveFileDialog();
@@ -579,6 +599,11 @@ namespace NetworkObservability
             }
         }
 
+        /// <summary>
+        /// Delete edge numeric attribute 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NumAttributeDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             string key = ((Button)sender).Tag as string;
@@ -605,6 +630,11 @@ namespace NetworkObservability
             PopulateAttributesPanel(MainCanvas.SelectedEdge);
         }
 
+        /// <summary>
+        /// Clear the graph if not empty
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuReset_Click(object sender, RoutedEventArgs e)
         {
             if (!MainCanvas.IsEmpty())
@@ -631,6 +661,11 @@ namespace NetworkObservability
             }
         }
 
+        /// <summary>
+        /// Delete edge descriptive attribute
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DescAttributeDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             string key = ((Button)sender).Tag as string;
@@ -655,6 +690,11 @@ namespace NetworkObservability
             PopulateAttributesPanel(MainCanvas.SelectedEdge);
         }
 
+        /// <summary>
+        /// Edit edit numeric attribute
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NumAttributeEditButton_Click(object sender, RoutedEventArgs e)
         {
             var pair = (KeyValuePair<string, double>) ((Button)sender).Tag;
@@ -688,6 +728,11 @@ namespace NetworkObservability
             }
         }
 
+        /// <summary>
+        /// Edit edit descriptive attribute
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DescAttributeEditButton_Click(object sender, RoutedEventArgs e)
         {
             var pair = (KeyValuePair<string, string>)((Button)sender).Tag;
@@ -718,6 +763,9 @@ namespace NetworkObservability
             }
         }
 
+        /// <summary>
+        /// Open and load graph from xml
+        /// </summary>
         private void OpenFromFile()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -758,7 +806,10 @@ namespace NetworkObservability
             }
         }
 
-
+        /// <summary>
+        /// Terminate the application when main window is closed
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             if (!MainCanvas.IsEmpty())

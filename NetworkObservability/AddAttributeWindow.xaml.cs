@@ -32,12 +32,22 @@ namespace NetworkObservability
             boolRadio.Checked += RadioButton_Checked;
             txtRadio.Checked += RadioButton_Checked;
         }
-
+        
+        /// <summary>
+        /// Window loaded listener
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddAttributeWindow_Loaded(object sender, RoutedEventArgs e)
         {
             attributeTxt.Focus();
         }
 
+        /// <summary>
+        /// Pass new attribute key and value back to the main window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void okBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Attribute = attributeTxt.Text;
@@ -53,11 +63,21 @@ namespace NetworkObservability
             DialogResult = true;
         }
 
+        /// <summary>
+        /// Close the window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        /// Toggle input field for boolean
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             var button = sender as RadioButton;
@@ -73,6 +93,11 @@ namespace NetworkObservability
             }
         }
 
+        /// <summary>
+        /// Parse numberic value to avoid invalid input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void valueTxt_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (numRadio.IsChecked == true)
