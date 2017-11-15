@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="NetworkObservability.CanvasNode"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             HorizontalContentAlignment="Center"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             d:DesignHeight="100" d:DesignWidth="100">
+    <StackPanel Orientation="Vertical" ToolTip="A node that can be dragged onto the canvas to create a graph" VerticalAlignment="Center">
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button.Template>
+                <ControlTemplate>
+                    <Rectangle Height="20" Width="20" Margin="0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="45"/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                        <Rectangle.Style>
+                            <Style TargetType="{x:Type Rectangle}">
+                                <Setter Property="Fill" Value="Black" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Fill" Value="#444444" />
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding IsNodeVisible}" Value="False">
+                                        <Setter Property="Fill" Value="Gray"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsObserver}" Value="True">
+                                        <Setter Property="Stroke" Value="Red"/>
+                                        <Setter Property="StrokeThickness" Value="4"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Rectangle.Style>
+                    </Rectangle>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <TextBlock Height="Auto" Width="55" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" FontWeight="Bold" FontSize="11" Margin="0 5 0 0" Text="{Binding Label}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>                       
+                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                            <Setter Property="Background" Value="LightGreen"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </StackPanel>
+</UserControl>

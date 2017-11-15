@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NetworkObservability>
+  <Dependencies>
+    <Dependency Name="NOCoreForFramework.dll">
+      <Type>NetworkObservabilityCore.Graph</Type>
+      <Type>NetworkObservabilityCore.Node</Type>
+      <Type>NetworkObservabilityCore.Edge</Type>
+    </Dependency>
+  </Dependencies>
+  <IdGenerator>
+    <NodeIdIndex>4</NodeIdIndex>
+    <EdgeIdIndex>6</EdgeIdIndex>
+  </IdGenerator>
+  <Graph Type="NetworkObservabilityCore.Graph">
+    <Nodes>
+      <Node Id="N0000000" Type="NetworkObservabilityCore.Node">
+        <IsObserver>false</IsObserver>
+        <IsObserverInclusive>false</IsObserverInclusive>
+        <IsVisible>true</IsVisible>
+        <IsBlocked>false</IsBlocked>
+        <Label>Node 2</Label>
+        <NumericAttributes />
+        <DescriptiveAttributes />
+        <Position>
+          <X>419.70000000000005</X>
+          <Y>176.22500000000002</Y>
+        </Position>
+        <Width>55</Width>
+        <Height>39.63</Height>
+      </Node>
+      <Node Id="N0000001" Type="NetworkObservabilityCore.Node">
+        <IsObserver>false</IsObserver>
+        <IsObserverInclusive>false</IsObserverInclusive>
+        <IsVisible>true</IsVisible>
+        <IsBlocked>false</IsBlocked>
+        <Label>node 2</Label>
+        <NumericAttributes />
+        <DescriptiveAttributes />
+        <Position>
+          <X>589.3</X>
+          <Y>293.8250000000001</Y>
+        </Position>
+        <Width>55</Width>
+        <Height>39.63</Height>
+      </Node>
+      <Node Id="N0000002" Type="NetworkObservabilityCore.Node">
+        <IsObserver>true</IsObserver>
+        <IsObserverInclusive>true</IsObserverInclusive>
+        <IsVisible>true</IsVisible>
+        <IsBlocked>false</IsBlocked>
+        <Label>Observer</Label>
+        <NumericAttributes />
+        <DescriptiveAttributes />
+        <Position>
+          <X>659.7</X>
+          <Y>134.625</Y>
+        </Position>
+        <Width>55</Width>
+        <Height>39.63</Height>
+      </Node>
+      <Node Id="N0000003" Type="NetworkObservabilityCore.Node">
+        <IsObserver>false</IsObserver>
+        <IsObserverInclusive>false</IsObserverInclusive>
+        <IsVisible>false</IsVisible>
+        <IsBlocked>false</IsBlocked>
+        <Label>invisible node</Label>
+        <NumericAttributes />
+        <DescriptiveAttributes />
+        <Position>
+          <X>843.7</X>
+          <Y>239.425</Y>
+        </Position>
+        <Width>55</Width>
+        <Height>39.63</Height>
+      </Node>
+    </Nodes>
+    <Edges>
+      <Edge Id="E0000000" Type="NetworkObservabilityCore.Edge">
+        <From>N0000003</From>
+        <Label>E0000000</Label>
+        <To>N0000002</To>
+        <IsBlocked>false</IsBlocked>
+        <NumericAttributes>
+          <Attribute Key="gg" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
+        <DescriptiveAttributes />
+        <Position>
+          <X1>871.2</X1>
+          <Y1>259.24</Y1>
+          <X2>687.2</X2>
+          <Y2>154.44</Y2>
+        </Position>
+      </Edge>
+      <Edge Id="E0000001" Type="NetworkObservabilityCore.Edge">
+        <From>N0000002</From>
+        <Label>E0000001</Label>
+        <To>N0000000</To>
+        <IsBlocked>false</IsBlocked>
+        <NumericAttributes>
+          <Attribute Key="gg" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
+        <DescriptiveAttributes />
+        <Position>
+          <X1>687.2</X1>
+          <Y1>154.44</Y1>
+          <X2>447.20000000000005</X2>
+          <Y2>196.04000000000002</Y2>
+        </Position>
+      </Edge>
+      <Edge Id="E0000002" Type="NetworkObservabilityCore.Edge">
+        <From>N0000001</From>
+        <Label>E0000002</Label>
+        <To>N0000000</To>
+        <IsBlocked>false</IsBlocked>
+        <NumericAttributes>
+          <Attribute Key="gg" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
+        <DescriptiveAttributes />
+        <Position>
+          <X1>616.8</X1>
+          <Y1>313.6400000000001</Y1>
+          <X2>447.20000000000005</X2>
+          <Y2>196.04000000000002</Y2>
+        </Position>
+      </Edge>
+      <Edge Id="E0000003" Type="NetworkObservabilityCore.Edge">
+        <From>N0000003</From>
+        <Label>E0000003</Label>
+        <To>N0000001</To>
+        <IsBlocked>false</IsBlocked>
+        <NumericAttributes>
+          <Attribute Key="gg" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
+        <DescriptiveAttributes />
+        <Position>
+          <X1>871.2</X1>
+          <Y1>259.24</Y1>
+          <X2>616.8</X2>
+          <Y2>313.6400000000001</Y2>
+        </Position>
+      </Edge>
+      <Edge Id="E0000004" Type="NetworkObservabilityCore.Edge">
+        <From>N0000001</From>
+        <Label>E0000004</Label>
+        <To>N0000003</To>
+        <IsBlocked>false</IsBlocked>
+        <NumericAttributes>
+          <Attribute Key="gg" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
+        <DescriptiveAttributes />
+        <Position>
+          <X1>616.8</X1>
+          <Y1>313.6400000000001</Y1>
+          <X2>871.2</X2>
+          <Y2>259.24</Y2>
+        </Position>
+      </Edge>
+      <Edge Id="E0000005" Type="NetworkObservabilityCore.Edge">
+        <From>N0000002</From>
+        <Label>E0000005</Label>
+        <To>N0000003</To>
+        <IsBlocked>false</IsBlocked>
+        <NumericAttributes>
+          <Attribute Key="gg" Value="1" ValueType="System.Double" />
+        </NumericAttributes>
+        <DescriptiveAttributes />
+        <Position>
+          <X1>687.2</X1>
+          <Y1>154.44</Y1>
+          <X2>871.2</X2>
+          <Y2>259.24</Y2>
+        </Position>
+      </Edge>
+    </Edges>
+  </Graph>
+  <CommonAttributes>
+    <Attribute Key="gg" Value="1" />
+  </CommonAttributes>
+</NetworkObservability>
