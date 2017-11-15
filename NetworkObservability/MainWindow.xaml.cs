@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Collections.Generic;
 using NetworkObservabilityCore.Utils;
 using System.Diagnostics;
+using NetworkObservabilityCore.Algorithms;
 
 namespace NetworkObservability
 {
@@ -263,7 +264,8 @@ namespace NetworkObservability
 
                 var observers = graph.Call(graph => graph.AllNodes.Values.Where(node => node.IsObserver)).ToArray();
 
-                var result = new ConnectivityObserver().Observe(graph.Impl, observers, startWindow.returnValue);
+				AllPaths algorithm = new AllPaths();
+                var result = new ConnectivityObserver().Observe(graph.Impl, observers, startWindow.returnValue, algorithm);
 
                 logger.Content += "Observation Completed.\n";
                 ResultGraph resultGraph = new ResultGraph();
