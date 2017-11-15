@@ -113,7 +113,7 @@ namespace NetworkObservability
 			return node;
 		}
 
-		protected override FromToThrough<string, string, IEdge> LoadEdge(XElement xedge)
+		protected override FromToThrough<string, IEdge> LoadEdge(XElement xedge)
 		{
 			var tuple = base.LoadEdge(xedge);
 			var position = xedge.Element("Position");
